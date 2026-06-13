@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Habilidades Blandas | Módulo 1 – La Psicología del Éxito</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',sans-serif;background:#f5f0f5;color:#333;font-size:16px}
+header{background:linear-gradient(135deg,#8b1a3a,#b83255);color:#fff;padding:18px 20px;text-align:center}
+header h1{font-size:1.1em;font-weight:600;letter-spacing:1px;text-transform:uppercase;opacity:.85}
+header h2{font-size:1.6em;font-weight:700;margin-top:4px}
+nav{display:flex;justify-content:center;gap:8px;padding:12px 16px;background:#fff;border-bottom:2px solid #e8d0d8;flex-wrap:wrap}
+nav button{padding:10px 18px;border:2px solid #b83255;border-radius:24px;background:#fff;color:#b83255;font-weight:600;font-size:.9em;cursor:pointer;transition:all .2s;min-height:44px}
+nav button.active,nav button:hover{background:#b83255;color:#fff}
+section{display:none;max-width:860px;margin:24px auto;padding:0 16px 40px}
+section.active{display:block}
+.card{background:#fff;border-radius:12px;padding:24px;margin-bottom:20px;box-shadow:0 2px 8px rgba(0,0,0,.08)}
+.card h3{color:#8b1a3a;font-size:1.2em;margin-bottom:14px;border-bottom:2px solid #f0d0da;padding-bottom:8px}
+.card p,.card li{line-height:1.7;margin-bottom:8px}
+.card ul,.card ol{padding-left:20px}
+.highlight{background:#fdf0f4;border-left:4px solid #b83255;padding:12px 16px;border-radius:0 8px 8px 0;margin:12px 0}
+.btn{display:inline-block;padding:12px 28px;background:#b83255;color:#fff;border:none;border-radius:8px;font-size:1em;font-weight:600;cursor:pointer;min-height:48px;min-width:120px;margin:6px 4px;transition:background .2s}
+.btn:hover{background:#8b1a3a}
+.btn-outline{background:#fff;color:#b83255;border:2px solid #b83255}
+.btn-outline:hover{background:#fdf0f4}
+.badge{display:inline-block;background:#b83255;color:#fff;border-radius:50%;width:28px;height:28px;text-align:center;line-height:28px;font-weight:700;margin-right:8px;font-size:.9em}
+.score-bar{background:#f0d0da;border-radius:8px;height:12px;margin:8px 0}
+.score-fill{background:linear-gradient(90deg,#b83255,#e0607a);height:100%;border-radius:8px;transition:width .6s}
+.question-card{background:#fdf8f9;border:1px solid #e8c0cc;border-radius:10px;padding:20px;margin-bottom:16px}
+.option-btn{display:block;width:100%;text-align:left;padding:12px 16px;margin:6px 0;background:#fff;border:1.5px solid #ddd;border-radius:8px;font-size:.95em;cursor:pointer;transition:all .2s;min-height:48px}
+.option-btn:hover{border-color:#b83255;background:#fdf0f4}
+.option-btn.correct{background:#d4edda;border-color:#28a745;color:#155724}
+.option-btn.wrong{background:#f8d7da;border-color:#dc3545;color:#721c24}
+.feedback{padding:10px 14px;border-radius:8px;margin-top:8px;font-weight:600;display:none}
+.feedback.show{display:block}
+.feedback.ok{background:#d4edda;color:#155724}
+.feedback.fail{background:#f8d7da;color:#721c24}
+.sim-panel{background:#fff9fb;border:1.5px solid #e8c0cc;border-radius:10px;padding:20px;margin:14px 0}
+.sim-label{font-weight:600;color:#8b1a3a;font-size:.9em;margin-bottom:6px}
+input[type=range]{width:100%;accent-color:#b83255;margin:8px 0}
+.meter{display:flex;align-items:center;gap:10px;margin:8px 0}
+.meter-bar{flex:1;background:#f0d0da;border-radius:6px;height:18px;overflow:hidden}
+.meter-fill{height:100%;border-radius:6px;background:linear-gradient(90deg,#b83255,#e0607a);transition:width .3s}
+.meter-val{font-weight:700;color:#b83255;min-width:36px;text-align:right}
+.resultado-box{background:linear-gradient(135deg,#8b1a3a,#b83255);color:#fff;border-radius:12px;padding:24px;text-align:center;margin-top:16px;display:none}
+.resultado-box.show{display:block}
+.emoji-big{font-size:3em;margin-bottom:8px}
+footer{text-align:center;padding:20px;color:#999;font-size:.85em;border-top:1px solid #e0d0d5;margin-top:20px}
+@media(max-width:600px){header h2{font-size:1.3em}nav button{font-size:.82em;padding:9px 14px}}
+</style>
+</head>
+<body>
+<header>
+  <h1>HABILIDADES BLANDAS &middot; M&Oacute;DULO 1</h1>
+  <h2>La Psicolog&iacute;a del &Eacute;xito</h2>
+</header>
+<nav>
+  <button class="active" onclick="showTab('concepto',this)">&#128218; Concepto</button>
+  <button onclick="showTab('simulacion',this)">&#128200; Simulaci&oacute;n</button>
+  <button onclick="showTab('juego',this)">&#127922; Mini-juego</button>
+</nav>
+
+<!-- TAB 1: CONCEPTO -->
+<section id="concepto" class="active">
+  <div class="card">
+    <h3>&#127775; &iquest;Qu&eacute; es la Psicolog&iacute;a del &Eacute;xito?</h3>
+    <p>La psicolog&iacute;a del &eacute;xito estudia los patrones mentales, emocionales y de comportamiento que distinguen a las personas altamente exitosas de las dem&aacute;s. No se trata de suerte ni de circunstancias: el &eacute;xito es predecible y reproducible cuando se adoptan los principios correctos.</p>
+    <div class="highlight">
+      <strong>Principio Fundamental:</strong> El 80% de los resultados en la vida proviene del 20% de nuestras acciones m&aacute;s importantes. Identificar y enfocarse en ese 20% es la clave del alto rendimiento.
+    </div>
+  </div>
+  <div class="card">
+    <h3>&#129504; Los Pilares del &Eacute;xito</h3>
+    <ol>
+      <li><strong>Autoconcepto:</strong> La imagen que tienes de ti mismo determina tu nivel de desempe&ntilde;o en todas las &aacute;reas de la vida. Un autoconcepto positivo genera conductas positivas.</li>
+      <li><strong>Responsabilidad personal:</strong> Las personas exitosas aceptan el 100% de la responsabilidad por sus resultados. Eliminan las excusas y se enfocan en soluciones.</li>
+      <li><strong>Metas claras:</strong> Solo el 3% de los adultos tiene metas escritas. Este grupo logra m&aacute;s que el 97% restante combinado.</li>
+      <li><strong>Acci&oacute;n continua:</strong> El conocimiento sin acci&oacute;n no produce resultados. La velocidad de implementaci&oacute;n es una ventaja competitiva clave.</li>
+      <li><strong>Aprendizaje constante:</strong> Los l&iacute;deres son lectores. Invertir 30-60 minutos diarios en lectura relacionada con tu campo te coloca en el 5% superior de tu profesi&oacute;n en 3 a&ntilde;os.</li>
+    </ol>
+  </div>
+  <div class="card">
+    <h3>&#129504; La Ley de Causa y Efecto</h3>
+    <p>Todo tiene una causa. El &eacute;xito y el fracaso no son accidentes: son el resultado de pensamientos, decisiones y acciones espec&iacute;ficas. Esta ley es la base de toda la psicolog&iacute;a del &eacute;xito.</p>
+    <div class="highlight">
+      <strong>Aplicaci&oacute;n pr&aacute;ctica:</strong> Si quieres resultados diferentes, debes cambiar las causas. Analiza qu&eacute; h&aacute;bitos, creencias y acciones est&aacute;n produciendo tus resultados actuales.
+    </div>
+    <p>Las personas exitosas estudian los patrones de &eacute;xito y los replican. No inventan todo desde cero: aprenden de quienes ya lograron lo que ellos desean.</p>
+  </div>
+  <div class="card">
+    <h3>&#127919; C&oacute;mo Reprogramar tu Mente</h3>
+    <ul>
+      <li><strong>Afirmaciones positivas:</strong> Repite declaraciones en tiempo presente como &quot;Soy una persona organizada y productiva&quot;. La repetici&oacute;n reprograma el subconsciente.</li>
+      <li><strong>Visualizaci&oacute;n:</strong> Dedica 5-10 minutos diarios a visualizar claramente tus metas ya logradas. Los atletas de &eacute;lite usan esta t&eacute;cnica constantemente.</li>
+      <li><strong>Entorno positivo:</strong> El 95% de tu &eacute;xito o fracaso est&aacute; determinado por las personas con quienes te asocias habitualmente.</li>
+      <li><strong>Dieta mental:</strong> Controla qu&eacute; lees, escuchas y ves. El cerebro procesa todo lo que ingiere sin filtrar lo negativo autom&aacute;ticamente.</li>
+    </ul>
+  </div>
+  <div style="text-align:center;margin-top:16px">
+    <button class="btn" onclick="showTab('simulacion',document.querySelectorAll('nav button')[1])">Siguiente: Simulaci&oacute;n &#8594;</button>
+  </div>
+</section>
+<!-- TAB 2: SIMULACION -->
+<section id="simulacion">
+  <div class="card">
+    <h3>&#128200; Diagn&oacute;stico: &iquest;D&oacute;nde est&aacute;s ahora?</h3>
+    <p>Eval&uacute;a tu nivel actual en los 5 pilares del &eacute;xito. Mueve cada control deslizante seg&uacute;n tu autopercepci&oacute;n honesta (0 = muy bajo, 10 = excelente).</p>
+  </div>
+  <div class="card">
+    <div class="sim-panel">
+      <div class="sim-label">1. Autoconcepto y Confianza en m&iacute; mismo</div>
+      <input type="range" id="r1" min="0" max="10" value="5" oninput="updateMeters()">
+      <div class="meter"><span style="font-size:.85em;min-width:160px">Nivel actual:</span><div class="meter-bar"><div class="meter-fill" id="m1" style="width:50%"></div></div><span class="meter-val" id="v1">5</span></div>
+    </div>
+    <div class="sim-panel">
+      <div class="sim-label">2. Responsabilidad personal (evito excusas)</div>
+      <input type="range" id="r2" min="0" max="10" value="5" oninput="updateMeters()">
+      <div class="meter"><span style="font-size:.85em;min-width:160px">Nivel actual:</span><div class="meter-bar"><div class="meter-fill" id="m2" style="width:50%"></div></div><span class="meter-val" id="v2">5</span></div>
+    </div>
+    <div class="sim-panel">
+      <div class="sim-label">3. Tengo metas claras y escritas</div>
+      <input type="range" id="r3" min="0" max="10" value="5" oninput="updateMeters()">
+      <div class="meter"><span style="font-size:.85em;min-width:160px">Nivel actual:</span><div class="meter-bar"><div class="meter-fill" id="m3" style="width:50%"></div></div><span class="meter-val" id="v3">5</span></div>
+    </div>
+    <div class="sim-panel">
+      <div class="sim-label">4. Tomo acci&oacute;n consistente cada d&iacute;a</div>
+      <input type="range" id="r4" min="0" max="10" value="5" oninput="updateMeters()">
+      <div class="meter"><span style="font-size:.85em;min-width:160px">Nivel actual:</span><div class="meter-bar"><div class="meter-fill" id="m4" style="width:50%"></div></div><span class="meter-val" id="v4">5</span></div>
+    </div>
+    <div class="sim-panel">
+      <div class="sim-label">5. Aprendo y me capacito continuamente</div>
+      <input type="range" id="r5" min="0" max="10" value="5" oninput="updateMeters()">
+      <div class="meter"><span style="font-size:.85em;min-width:160px">Nivel actual:</span><div class="meter-bar"><div class="meter-fill" id="m5" style="width:50%"></div></div><span class="meter-val" id="v5">5</span></div>
+    </div>
+    <div style="text-align:center;margin-top:20px">
+      <button class="btn" onclick="calcularDiagnostico()">&#128269; Ver mi diagn&oacute;stico</button>
+    </div>
+  </div>
+  <div class="resultado-box" id="diagResult">
+    <div class="emoji-big" id="diagEmoji">&#127775;</div>
+    <h3 id="diagTitulo" style="font-size:1.4em;margin-bottom:8px"></h3>
+    <p id="diagTexto" style="opacity:.9;line-height:1.6"></p>
+    <div style="margin-top:16px;background:rgba(255,255,255,.2);border-radius:8px;padding:14px">
+      <strong>Tu puntuaci&oacute;n total:</strong> <span id="diagPuntos" style="font-size:1.8em;font-weight:700"></span>/50
+    </div>
+    <p id="diagConsejo" style="margin-top:14px;font-style:italic;opacity:.85"></p>
+  </div>
+  <div style="text-align:center;margin-top:16px">
+    <button class="btn" onclick="showTab('juego',document.querySelectorAll('nav button')[2])">Siguiente: Mini-juego &#8594;</button>
+  </div>
+</section>
+<!-- TAB 3: MINI-JUEGO -->
+<section id="juego">
+  <div class="card">
+    <h3>&#127922; Trivia: Principios del &Eacute;xito</h3>
+    <p>Pon a prueba lo que aprendiste. Selecciona la respuesta correcta en cada pregunta.</p>
+    <div id="quizArea"></div>
+    <div style="text-align:center;margin-top:20px">
+      <button class="btn" onclick="iniciarQuiz()" id="btnStart">&#9654; Iniciar Quiz</button>
+      <button class="btn btn-outline" onclick="reiniciarQuiz()" id="btnReset" style="display:none">&#8635; Intentar de nuevo</button>
+    </div>
+    <div class="resultado-box" id="quizResult">
+      <div class="emoji-big" id="quizEmoji"></div>
+      <h3 id="quizTitulo" style="font-size:1.4em;margin-bottom:8px"></h3>
+      <p>Respondiste correctamente <strong id="quizCorrectas"></strong> de <strong id="quizTotal"></strong> preguntas</p>
+      <div style="margin-top:12px"><div class="score-bar" style="background:rgba(255,255,255,.3)"><div class="score-fill" id="quizBarra" style="width:0%;background:#fff"></div></div></div>
+    </div>
+  </div>
+</section>
+
+<script>
+// Tab navigation
+function showTab(id, btn) {
+  document.querySelectorAll('section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  if (btn) btn.classList.add('active');
+  window.scrollTo(0, 0);
+}
+
+// SIMULATION
+function updateMeters() {
+  for (let i = 1; i <= 5; i++) {
+    const val = parseInt(document.getElementById('r' + i).value);
+    document.getElementById('m' + i).style.width = (val * 10) + '%';
+    document.getElementById('v' + i).textContent = val;
+  }
+}
+
+function calcularDiagnostico() {
+  let total = 0;
+  for (let i = 1; i <= 5; i++) {
+    total += parseInt(document.getElementById('r' + i).value);
+  }
+  const box = document.getElementById('diagResult');
+  document.getElementById('diagPuntos').textContent = total;
+  box.classList.add('show');
+  let emoji, titulo, texto, consejo;
+  if (total <= 20) {
+    emoji = '&#127807;';
+    titulo = 'Etapa inicial &ndash; Gran potencial por desarrollar';
+    texto = 'Tienes una base para construir. La conciencia de donde est&aacute;s es el primer paso. Muchos l&iacute;deres exitosos comenzaron exactamente donde t&uacute; est&aacute;s hoy.';
+    consejo = 'Consejo: Comienza por fortalecer tu autoconcepto. Dedica 15 minutos cada ma&ntilde;ana a leer sobre desarrollo personal.';
+  } else if (total <= 35) {
+    emoji = '&#127810;';
+    titulo = 'Etapa de crecimiento &ndash; Vas por buen camino';
+    texto = 'Est&aacute;s construyendo h&aacute;bitos positivos. Tienes conciencia de lo que necesitas mejorar y est&aacute;s tomando pasos en la direcci&oacute;n correcta.';
+    consejo = 'Consejo: Identifica el pilar con puntuaci&oacute;n m&aacute;s baja y crea un plan de acci&oacute;n espec&iacute;fico para mejorarlo esta semana.';
+  } else {
+    emoji = '&#127775;';
+    titulo = '&iexcl;Excelente! &ndash; Mentalidad de alto rendimiento';
+    texto = 'Tienes una mentalidad s&oacute;lida hacia el &eacute;xito. Tu desaf&iacute;o ahora es mantener la consistencia y seguir elevando el est&aacute;ndar.';
+    consejo = 'Consejo: Convierte estos h&aacute;bitos en parte de tu identidad. Comparte tu mentalidad con quienes te rodean &ndash; el &eacute;xito se multiplica.';
+  }
+  document.getElementById('diagEmoji').innerHTML = emoji;
+  document.getElementById('diagTitulo').innerHTML = titulo;
+  document.getElementById('diagTexto').innerHTML = texto;
+  document.getElementById('diagConsejo').innerHTML = consejo;
+  box.scrollIntoView({ behavior: 'smooth', block: 'center' });
+}
+
+// QUIZ
+const preguntas = [
+  {
+    pregunta: '&iquest;Qu&eacute; principio establece que el &eacute;xito y el fracaso son resultado de causas espec&iacute;ficas y predecibles?',
+    opciones: ['La Ley de la Atraccion', 'La Ley de Causa y Efecto', 'La Ley de los Rendimientos Decrecientes', 'El Principio de Pareto'],
+    correcta: 1,
+    explicacion: 'La Ley de Causa y Efecto es la base de la psicolog&iacute;a del &eacute;xito: cada resultado tiene causas identificables. Si cambias las causas, cambias los resultados.'
+  },
+  {
+    pregunta: 'Seg&uacute;n el principio de Pareto aplicado al rendimiento personal, &iquest;qu&eacute; porcentaje de tus acciones genera el 80% de tus resultados?',
+    opciones: ['5%', '10%', '20%', '50%'],
+    correcta: 2,
+    explicacion: 'El 20% de tus acciones m&aacute;s importantes genera el 80% de tus resultados. Identificar y enfocarse en ese 20% es fundamental para el alto rendimiento.'
+  },
+  {
+    pregunta: '&iquest;Qu&eacute; porcentaje aproximado de los adultos tiene metas escritas?',
+    opciones: ['30%', '15%', '10%', '3%'],
+    correcta: 3,
+    explicacion: 'Solo el 3% de los adultos tiene metas claramente escritas, y este grupo logra m&aacute;s que el 97% restante. Escribir las metas las hace m&aacute;s reales y concretas.'
+  },
+  {
+    pregunta: '&iquest;Cu&aacute;l de las siguientes opciones describe mejor el "autoconcepto"?',
+    opciones: ['El conocimiento t&eacute;cnico que posees', 'La imagen y creencia que tienes sobre ti mismo', 'Tu nivel de inteligencia medido por tests', 'Las opiniones que otros tienen de ti'],
+    correcta: 1,
+    explicacion: 'El autoconcepto es la imagen que tienes de ti mismo. Determina tu nivel de desempe&ntilde;o en todas las &aacute;reas de la vida porque actuamos consistentemente con nuestra imagen interna.'
+  },
+  {
+    pregunta: '&iquest;Qu&eacute; factor determina aproximadamente el 95% del &eacute;xito o fracaso seg&uacute;n la psicolog&iacute;a del &eacute;xito?',
+    opciones: ['La inteligencia innata', 'Las circunstancias econ&oacute;micas', 'Las personas con quienes te asocias', 'La educaci&oacute;n formal recibida'],
+    correcta: 2,
+    explicacion: 'El 95% de tu &eacute;xito o fracaso est&aacute; determinado por las personas con quienes te asocias habitualmente. El entorno social moldea h&aacute;bitos, creencias y expectativas.'
+  },
+  {
+    pregunta: '&iquest;Cu&aacute;ntos minutos de lectura diaria en tu campo profesional te colocan en el 5% superior de tu profesi&oacute;n en 3 a&ntilde;os?',
+    opciones: ['5-10 minutos', '30-60 minutos', '2-3 horas', 'Depende del campo'],
+    correcta: 1,
+    explicacion: 'Solo 30-60 minutos de lectura diaria en tu &aacute;rea de especialidad te posiciona en el 5% superior en aproximadamente 3 a&ntilde;os, porque la mayor&iacute;a de personas no lo hace.'
+  }
+];
+
+let quizActivo = false;
+let respuestas = [];
+
+function iniciarQuiz() {
+  quizActivo = true;
+  respuestas = [];
+  document.getElementById('btnStart').style.display = 'none';
+  document.getElementById('btnReset').style.display = 'inline-block';
+  document.getElementById('quizResult').classList.remove('show');
+  let html = '';
+  preguntas.forEach((p, i) => {
+    html += '<div class="question-card" id="q' + i + '">';
+    html += '<p><span class="badge">' + (i+1) + '</span>' + p.pregunta + '</p>';
+    p.opciones.forEach((op, j) => {
+      html += '<button class="option-btn" onclick="responder(' + i + ',' + j + ',this)" id="opt' + i + '_' + j + '">' + op + '</button>';
+    });
+    html += '<div class="feedback" id="fb' + i + '"></div>';
+    html += '</div>';
+  });
+  document.getElementById('quizArea').innerHTML = html;
+}
+
+function responder(pregIdx, opIdx, btn) {
+  const p = preguntas[pregIdx];
+  const card = document.getElementById('q' + pregIdx);
+  const fb = document.getElementById('fb' + pregIdx);
+  // Disable all options in this question
+  card.querySelectorAll('.option-btn').forEach(b => b.disabled = true);
+  if (opIdx === p.correcta) {
+    btn.classList.add('correct');
+    fb.className = 'feedback show ok';
+    fb.innerHTML = '&#9989; &iexcl;Correcto! ' + p.explicacion;
+    respuestas[pregIdx] = true;
+  } else {
+    btn.classList.add('wrong');
+    document.getElementById('opt' + pregIdx + '_' + p.correcta).classList.add('correct');
+    fb.className = 'feedback show fail';
+    fb.innerHTML = '&#10060; Respuesta correcta: opci&oacute;n ' + (p.correcta + 1) + '. ' + p.explicacion;
+    respuestas[pregIdx] = false;
+  }
+  // Check if all answered
+  if (respuestas.filter(r => r !== undefined).length === preguntas.length) {
+    setTimeout(mostrarResultadoQuiz, 800);
+  }
+}
+
+function mostrarResultadoQuiz() {
+  const correctas = respuestas.filter(r => r === true).length;
+  const total = preguntas.length;
+  const pct = Math.round((correctas / total) * 100);
+  const box = document.getElementById('quizResult');
+  document.getElementById('quizCorrectas').textContent = correctas;
+  document.getElementById('quizTotal').textContent = total;
+  document.getElementById('quizBarra').style.width = pct + '%';
+  let emoji, titulo;
+  if (pct >= 83) { emoji = '&#127881;'; titulo = '&iexcl;Excelente dominio del tema!'; }
+  else if (pct >= 50) { emoji = '&#128077;'; titulo = 'Buen resultado &ndash; sigue practicando'; }
+  else { emoji = '&#128218;'; titulo = 'Repasa el material y vuelve a intentarlo'; }
+  document.getElementById('quizEmoji').innerHTML = emoji;
+  document.getElementById('quizTitulo').innerHTML = titulo;
+  box.classList.add('show');
+  box.scrollIntoView({ behavior: 'smooth', block: 'center' });
+}
+
+function reiniciarQuiz() {
+  document.getElementById('quizArea').innerHTML = '';
+  document.getElementById('quizResult').classList.remove('show');
+  document.getElementById('btnStart').style.display = 'inline-block';
+  document.getElementById('btnReset').style.display = 'none';
+  quizActivo = false;
+}
+</script>
+
+<footer>Juan Carlos Reyes &middot; juancreyes.hn@gmail.com</footer>
+</body>
+</html>
