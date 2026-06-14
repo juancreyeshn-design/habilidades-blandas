@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Habilidades Blandas | Módulo 8 – Comunicación Asertiva</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',Arial,sans-serif;background:#f5f0f5;color:#2d2d2d;font-size:16px}
+header{background:linear-gradient(135deg,#8b1a3a 0%,#b83255 100%);color:#fff;padding:20px;text-align:center}
+header small{display:block;font-size:13px;letter-spacing:2px;opacity:.85;text-transform:uppercase}
+header h1{font-size:1.5rem;margin-top:4px}
+nav{display:flex;background:#6d1430;overflow-x:auto}
+nav button{flex:1;min-width:110px;padding:14px 10px;background:none;border:none;color:#f5c6d3;font-size:15px;cursor:pointer;border-bottom:3px solid transparent;transition:all .2s;white-space:nowrap}
+nav button.active,nav button:hover{color:#fff;border-bottom-color:#f7b2c4;background:rgba(255,255,255,.08)}
+.section{display:none;padding:20px;max-width:900px;margin:0 auto}
+.section.active{display:block}
+.card{background:#fff;border-radius:12px;padding:20px;margin-bottom:16px;box-shadow:0 2px 8px rgba(0,0,0,.07)}
+.card h3{color:#8b1a3a;font-size:1.1rem;margin-bottom:8px}
+.card p{line-height:1.7;color:#444}
+.card ul{padding-left:20px;line-height:1.9;color:#444}
+.badge{display:inline-block;background:#f5e6ea;color:#8b1a3a;border-radius:20px;padding:4px 12px;font-size:13px;font-weight:600;margin:4px 4px 4px 0}
+.style-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin:12px 0}
+.style-card{border-radius:10px;padding:16px;text-align:center}
+.style-card .ico{font-size:2rem;margin-bottom:6px}
+.style-card h4{font-size:.95rem;margin-bottom:6px}
+.style-card p{font-size:.83rem;line-height:1.5}
+.style-pasivo{background:#e8f4fd;color:#1565c0}
+.style-agresivo{background:#fdecea;color:#c62828}
+.style-asertivo{background:#e8f5e9;color:#2e7d32}
+/* Simulación */
+.sim-area{background:#fff;border-radius:12px;padding:24px;box-shadow:0 2px 8px rgba(0,0,0,.07);margin-bottom:16px}
+.sim-area h3{color:#8b1a3a;font-size:1.1rem;margin-bottom:12px}
+.scenario-box{background:#fdf0f4;border-radius:10px;padding:16px;margin-bottom:14px;font-size:15px;line-height:1.6;color:#444}
+.scenario-box strong{color:#8b1a3a;display:block;margin-bottom:6px}
+.resp-options{display:flex;flex-direction:column;gap:10px;margin-bottom:14px}
+.resp-btn{padding:12px 16px;border:2px solid #ddd;border-radius:8px;background:#fff;font-size:14px;cursor:pointer;text-align:left;transition:all .2s;line-height:1.4}
+.resp-btn:hover{border-color:#b83255;background:#f9f0f3}
+.resp-btn.selected-pasivo{background:#e8f4fd;border-color:#1565c0;color:#0d47a1}
+.resp-btn.selected-agresivo{background:#fdecea;border-color:#c62828;color:#b71c1c}
+.resp-btn.selected-asertivo{background:#e8f5e9;border-color:#2e7d32;color:#1b5e20}
+.analysis-box{display:none;border-radius:8px;padding:14px;margin-top:4px;font-size:14px;line-height:1.5}
+.analysis-box.show{display:block}
+.analysis-pasivo{background:#e3f2fd;border-left:4px solid #1976d2}
+.analysis-agresivo{background:#ffebee;border-left:4px solid #d32f2f}
+.analysis-asertivo{background:#e8f5e9;border-left:4px solid #388e3c}
+.nav-btns{display:flex;gap:10px;margin-top:14px;flex-wrap:wrap}
+.nav-btn{padding:10px 20px;border:none;border-radius:8px;font-size:14px;cursor:pointer}
+.nav-prev{background:#eee;color:#444}
+.nav-next{background:#b83255;color:#fff}
+/* Generador MSG */
+.msg-tool{background:#fdf0f4;border-radius:10px;padding:20px}
+.msg-tool label{display:block;font-size:14px;font-weight:600;color:#555;margin-bottom:6px;margin-top:12px}
+.msg-tool input,.msg-tool select,.msg-tool textarea{width:100%;padding:10px;border:1px solid #ddd;border-radius:8px;font-size:14px;font-family:inherit;color:#333}
+.msg-tool textarea{min-height:60px;resize:vertical}
+.gen-btn{margin-top:14px;padding:12px 24px;background:#b83255;color:#fff;border:none;border-radius:8px;font-size:15px;cursor:pointer}
+.gen-btn:hover{background:#8b1a3a}
+.msg-output{display:none;background:#e8f5e9;border:2px solid #388e3c;border-radius:8px;padding:14px;margin-top:12px}
+.msg-output h4{color:#1b5e20;margin-bottom:8px;font-size:14px}
+.msg-output p{color:#1b5e20;font-size:14px;line-height:1.7;font-style:italic}
+/* Quiz */
+.quiz-box{background:#fff;border-radius:12px;padding:24px;box-shadow:0 2px 8px rgba(0,0,0,.07)}
+.quiz-box h3{color:#8b1a3a;font-size:1.1rem;margin-bottom:6px}
+.quiz-progress{font-size:13px;color:#888;margin-bottom:16px}
+.quiz-q{font-size:1rem;font-weight:600;margin-bottom:16px;line-height:1.5;color:#2d2d2d}
+.quiz-opts{display:flex;flex-direction:column;gap:10px;margin-bottom:16px}
+.quiz-opts button{padding:13px 16px;border:2px solid #ddd;border-radius:8px;background:#fff;font-size:15px;cursor:pointer;text-align:left;transition:all .2s;line-height:1.3}
+.quiz-opts button:hover{border-color:#b83255;background:#f9f0f3}
+.quiz-opts button.correct{background:#d4edda;border-color:#28a745;color:#155724}
+.quiz-opts button.wrong{background:#f8d7da;border-color:#dc3545;color:#721c24}
+.quiz-feedback{display:none;padding:12px 16px;border-radius:8px;margin-bottom:14px;font-size:14px;line-height:1.5}
+.quiz-feedback.correct{background:#d4edda;color:#155724}
+.quiz-feedback.wrong{background:#f8d7da;color:#721c24}
+.quiz-next{padding:12px 28px;background:#b83255;color:#fff;border:none;border-radius:8px;font-size:15px;cursor:pointer;display:none}
+.quiz-next:hover{background:#8b1a3a}
+.quiz-result{display:none;text-align:center;padding:20px}
+.quiz-result .score{font-size:2.5rem;font-weight:700;color:#b83255}
+.quiz-result p{color:#555;margin-top:8px}
+.quiz-result button{margin-top:16px;padding:12px 28px;background:#b83255;color:#fff;border:none;border-radius:8px;font-size:15px;cursor:pointer}
+footer{text-align:center;padding:20px;color:#888;font-size:13px;margin-top:20px}
+@media(max-width:600px){header h1{font-size:1.2rem}nav button{font-size:13px;padding:12px 8px}.style-grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<header>
+  <small>Habilidades Blandas · Módulo 8 · Bloque 2</small>
+  <h1>Comunicación Asertiva</h1>
+</header>
+<nav>
+  <button class="active" onclick="showTab('concepto',this)">📖 Concepto</button>
+  <button onclick="showTab('simulacion',this)">💬 Práctica</button>
+  <button onclick="showTab('juego',this)">🎯 Mini-juego</button>
+</nav>
+
+<div id="concepto" class="section active">
+  <div class="card">
+    <h3>¿Qué es la Comunicación Asertiva?</h3>
+    <p>La comunicación asertiva es la capacidad de expresar pensamientos, sentimientos y necesidades de forma <strong>clara, directa y respetuosa</strong>, sin agresividad ni sumisión. Es el punto de equilibrio entre dos extremos dañinos: la pasividad y la agresividad.</p>
+    <p style="margin-top:10px">Una persona asertiva defiende sus derechos sin violar los derechos de los demás. En el entorno profesional, esto se traduce en mejores negociaciones, relaciones más sanas y mayor credibilidad personal.</p>
+  </div>
+  <div class="card">
+    <h3>Los 3 Estilos de Comunicación</h3>
+    <div class="style-grid">
+      <div class="style-card style-pasivo"><div class="ico">😶</div><h4>Pasivo</h4><p>Evita el conflicto cediendo siempre. No expresa necesidades. Genera resentimiento acumulado.</p></div>
+      <div class="style-card style-agresivo"><div class="ico">😤</div><h4>Agresivo</h4><p>Impone su punto de vista sin respetar al otro. Genera defensividad y daña relaciones.</p></div>
+      <div class="style-card style-asertivo"><div class="ico">😊</div><h4>Asertivo</h4><p>Expresa con claridad y respeto. Escucha activamente. Busca soluciones que funcionen para ambos.</p></div>
+    </div>
+  </div>
+  <div class="card">
+    <h3>La Fórmula del Mensaje Asertivo (DESC)</h3>
+    <ul>
+      <li><strong>D – Describe:</strong> Menciona el comportamiento específico sin juicios. "Cuando entregas los reportes después del plazo..."</li>
+      <li><strong>E – Expresa:</strong> Comunica cómo te afecta. "...me genera dificultades para consolidar los informes a tiempo..."</li>
+      <li><strong>S – Solicita:</strong> Pide un cambio concreto y viable. "...necesito que me avises con 24 horas de anticipación si habrá retraso..."</li>
+      <li><strong>C – Consecuencias:</strong> Menciona el beneficio del cambio. "...así podemos coordinar mejor y evitar errores en la entrega final."</li>
+    </ul>
+  </div>
+  <div class="card">
+    <h3>Derechos Asertivos Fundamentales</h3>
+    <ul>
+      <li>Derecho a expresar opiniones, ideas y sentimientos propios.</li>
+      <li>Derecho a decir "no" sin sentirse culpable.</li>
+      <li>Derecho a cometer errores y aprender de ellos.</li>
+      <li>Derecho a cambiar de opinión.</li>
+      <li>Derecho a pedir lo que se necesita.</li>
+      <li>Derecho a no justificar cada decisión ante todos.</li>
+    </ul>
+  </div>
+  <div class="card">
+    <h3>Errores Comunes que Bloquean la Asertividad</h3>
+    <div style="margin-top:8px">
+      <span class="badge">Disculparse en exceso</span>
+      <span class="badge">Usar "siempre" y "nunca"</span>
+      <span class="badge">Hablar en nombre de otros</span>
+      <span class="badge">Tono acusatorio</span>
+      <span class="badge">Generalizar comportamientos</span>
+      <span class="badge">Interrumpir constantemente</span>
+    </div>
+  </div>
+</div>
+
+<div id="simulacion" class="section">
+  <div class="sim-area">
+    <h3>💬 Escenarios: ¿Cómo responderías?</h3>
+    <p style="color:#666;font-size:14px;margin-bottom:16px">Selecciona una respuesta para cada situación y descubre si es pasiva, agresiva o asertiva.</p>
+    <div id="scenarioArea"></div>
+  </div>
+  <div class="sim-area">
+    <h3>✍️ Generador de Mensaje Asertivo (DESC)</h3>
+    <p style="color:#666;font-size:14px;margin-bottom:4px">Completa los campos y obtén tu mensaje asertivo listo para usar.</p>
+    <div class="msg-tool">
+      <label>¿Qué comportamiento quieres abordar?</label>
+      <input type="text" id="descD" placeholder="Ej: cuando cancelas reuniones a última hora">
+      <label>¿Cómo te afecta?</label>
+      <input type="text" id="descE" placeholder="Ej: me impide planificar mis actividades del día">
+      <label>¿Qué cambio solicitas?</label>
+      <input type="text" id="descS" placeholder="Ej: avisarme con al menos 2 horas de anticipación">
+      <label>¿Cuál sería el beneficio?</label>
+      <input type="text" id="descC" placeholder="Ej: así puedo reorganizar mi agenda sin perder productividad">
+      <button class="gen-btn" onclick="generateDESC()">💬 Generar mensaje asertivo</button>
+      <div class="msg-output" id="msgOutput">
+        <h4>Tu mensaje asertivo:</h4>
+        <p id="msgText"></p>
+      </div>
+    </div>
+  </div>
+</div>
+<div id="juego" class="section">
+  <div class="quiz-box">
+    <h3>🎯 Mini-juego: Comunicación Asertiva</h3>
+    <div class="quiz-progress" id="quizProgress">Pregunta 1 de 6</div>
+    <div id="quizArea">
+      <div class="quiz-q" id="quizQ"></div>
+      <div class="quiz-opts" id="quizOpts"></div>
+      <div class="quiz-feedback" id="quizFeedback"></div>
+      <button class="quiz-next" id="quizNext" onclick="nextQuestion()">Siguiente →</button>
+    </div>
+    <div class="quiz-result" id="quizResult">
+      <div class="score" id="quizScore"></div>
+      <p id="quizMsg"></p>
+      <button onclick="restartQuiz()">Jugar de nuevo</button>
+    </div>
+  </div>
+</div>
+<footer>Juan Carlos Reyes · juancreyes.hn@gmail.com</footer>
+
+<script>
+function showTab(id,btn){
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  btn.classList.add('active');
+}
+
+// ── Escenarios ──
+const scenarios=[
+  {
+    situation:'Tu jefe te pide hacer una tarea que no es de tu responsabilidad sin explicación.',
+    options:[
+      {text:'"Está bien, lo hago sin problema." (aunque estás sobrecargado)',type:'pasivo',analysis:'Respuesta pasiva: aceptas sin expresar tu situación real. A largo plazo genera resentimiento y sobrecarga sin visibilidad.'},
+      {text:'"¿Por qué siempre me asignas cosas que no me corresponden?"',type:'agresivo',analysis:'Respuesta agresiva: el tono acusatorio crea defensividad y daña la relación con tu jefe sin resolver el problema.'},
+      {text:'"Puedo ayudar, pero quiero entender el contexto. ¿Es urgente? Actualmente tengo estas prioridades..."',type:'asertivo',analysis:'Respuesta asertiva: expresas disponibilidad, pides información y visibilizas tu carga actual de forma respetuosa.'}
+    ]
+  },
+  {
+    situation:'Un colega interrumpe frecuentemente tus explicaciones en reuniones de equipo.',
+    options:[
+      {text:'Dejas de hablar y cedes el turno sin decir nada.',type:'pasivo',analysis:'Respuesta pasiva: el comportamiento continúa porque no se aborda. Tu opinión queda fuera de la conversación sistemáticamente.'},
+      {text:'"¡Siempre me interrumpes! No me dejas hablar nunca."',type:'agresivo',analysis:'Respuesta agresiva: el uso de "siempre" y "nunca" generaliza y hace que el otro se ponga a la defensiva.'},
+      {text:'"Necesito terminar mi punto antes de escuchar tu perspectiva. Dame un minuto."',type:'asertivo',analysis:'Respuesta asertiva: calm, directa y en el momento. Establece un límite sin atacar a la persona.'}
+    ]
+  },
+  {
+    situation:'Un cliente exige un descuento mayor al que puedes ofrecer, con tono presionante.',
+    options:[
+      {text:'Aceptas el descuento para no perder al cliente, aunque afecta tu margen.',type:'pasivo',analysis:'Respuesta pasiva: ceder ante la presión sin negociar establece un precedente de que la presión funciona.'},
+      {text:'"Lo que usted pide es imposible. Así no hacemos negocios."',type:'agresivo',analysis:'Respuesta agresiva: corta el diálogo y cierra oportunidades de encontrar una solución creativa para ambas partes.'},
+      {text:'"Entiendo que el precio es importante para usted. El descuento máximo que puedo ofrecer es X. ¿Qué otras condiciones podríamos ajustar?"',type:'asertivo',analysis:'Respuesta asertiva: validas la preocupación del cliente, estableces tu límite con claridad y abres la negociación.'}
+    ]
+  }
+];
+
+const typeLabels={pasivo:'😶 Pasiva',agresivo:'😤 Agresiva',asertivo:'✅ Asertiva'};
+const typeClasses={pasivo:'selected-pasivo',agresivo:'selected-agresivo',asertivo:'selected-asertivo'};
+const analysisClasses={pasivo:'analysis-pasivo',agresivo:'analysis-agresivo',asertivo:'analysis-asertivo'};
+let currentSc=0;
+
+function buildScenario(){
+  const sc=scenarios[currentSc];
+  const area=document.getElementById('scenarioArea');
+  area.innerHTML='';
+  const sbox=document.createElement('div');
+  sbox.className='scenario-box';
+  sbox.innerHTML='<strong>Situación '+(currentSc+1)+' de '+scenarios.length+':</strong>'+sc.situation;
+  area.appendChild(sbox);
+  const opts=document.createElement('div');
+  opts.className='resp-options';
+  sc.options.forEach((o,i)=>{
+    const btn=document.createElement('button');
+    btn.className='resp-btn';
+    btn.textContent=o.text;
+    const abox=document.createElement('div');
+    abox.className='analysis-box '+analysisClasses[o.type];
+    abox.innerHTML='<strong>'+typeLabels[o.type]+'</strong> — '+o.analysis;
+    btn.onclick=()=>{
+      opts.querySelectorAll('.resp-btn').forEach(b=>{b.className='resp-btn';});
+      btn.classList.add(typeClasses[o.type]);
+      document.querySelectorAll('.analysis-box').forEach(a=>a.classList.remove('show'));
+      abox.classList.add('show');
+    };
+    opts.appendChild(btn);
+    opts.appendChild(abox);
+  });
+  area.appendChild(opts);
+  const nav=document.createElement('div');
+  nav.className='nav-btns';
+  if(currentSc>0){const p=document.createElement('button');p.className='nav-btn nav-prev';p.textContent='← Anterior';p.onclick=()=>{currentSc--;buildScenario();};nav.appendChild(p);}
+  if(currentSc<scenarios.length-1){const n=document.createElement('button');n.className='nav-btn nav-next';n.textContent='Siguiente →';n.onclick=()=>{currentSc++;buildScenario();};nav.appendChild(n);}
+  area.appendChild(nav);
+}
+buildScenario();
+
+// ── Generador DESC ──
+function generateDESC(){
+  const d=document.getElementById('descD').value.trim();
+  const e=document.getElementById('descE').value.trim();
+  const s=document.getElementById('descS').value.trim();
+  const c=document.getElementById('descC').value.trim();
+  if(!d||!e||!s||!c){alert('Por favor completa todos los campos para generar el mensaje.');return;}
+  const msg='"Quiero hablarte de algo importante. '+
+    'He notado que '+d+'. '+
+    'Esto '+e+'. '+
+    'Lo que necesito es que '+s+'. '+
+    'De esa manera, '+c+'. '+
+    'Espero que podamos trabajar juntos en esto."';
+  document.getElementById('msgText').textContent=msg;
+  document.getElementById('msgOutput').style.display='block';
+}
+
+// ── Mini-juego ──
+const questions=[
+  {q:'¿Qué significa la letra "D" en la fórmula DESC de comunicación asertiva?',opts:['Decidir','Describir el comportamiento específico','Defender tu postura','Delegar la tarea'],ans:1,exp:'La D de DESC significa Describir: mencionar el comportamiento concreto sin juicios ni generalizaciones, para que el otro entienda exactamente de qué se habla.'},
+  {q:'Una persona que acepta todo sin expresar sus necesidades reales utiliza un estilo de comunicación:',opts:['Asertivo','Agresivo','Pasivo','Empático'],ans:2,exp:'El estilo pasivo evita el conflicto cediendo constantemente. Aunque parece amable, genera resentimiento acumulado y no resuelve los problemas reales.'},
+  {q:'¿Cuál de estas frases es un ejemplo de comunicación asertiva?',opts:['"Siempre llegas tarde y no te importa el equipo"','"Está bien, no hay problema" (aunque sí lo hay)','"He notado que en las últimas tres reuniones llegaste después de la hora acordada, lo que afecta nuestro tiempo grupal"','Ignorar la situación y no mencionar nada'],ans:2,exp:'La frase asertiva describe hechos concretos ("últimas tres reuniones"), expresa el impacto sin atacar a la persona y abre la puerta al diálogo.'},
+  {q:'¿Cuál es el objetivo principal de la comunicación asertiva?',opts:['Ganar siempre en cualquier discusión','Evitar todo tipo de conflicto','Expresar necesidades con claridad y respeto sin dañar la relación','Conseguir que los demás hagan lo que uno quiere'],ans:2,exp:'La asertividad busca equilibrar la expresión propia con el respeto hacia el otro, no la "victoria" en una discusión.'},
+  {q:'¿Qué derecho asertivo permite a una persona negarse a una petición sin explicar extensamente el motivo?',opts:['Derecho a equivocarse','Derecho a decir "no" sin sentirse culpable','Derecho a cambiar de opinión','Derecho a pedir lo que necesita'],ans:1,exp:'El derecho asertivo a decir "no" reconoce que rechazar peticiones es legítimo y no requiere justificaciones elaboradas para ser válido.'},
+  {q:'En la fórmula DESC, la letra "C" corresponde a:',opts:['Confirmar que el otro entendió el mensaje','Ceder algo para mantener la relación','Mencionar las consecuencias o beneficios del cambio solicitado','Controlar el tono de voz durante la conversación'],ans:2,exp:'La C describe las consecuencias positivas que se obtendrán si el cambio solicitado ocurre, lo que hace el mensaje más motivador y orientado a soluciones.'}
+];
+
+let qIndex=0,score=0,answered=false;
+function loadQuestion(){
+  const q=questions[qIndex];
+  document.getElementById('quizProgress').textContent='Pregunta '+(qIndex+1)+' de '+questions.length;
+  document.getElementById('quizQ').textContent=q.q;
+  const opts=document.getElementById('quizOpts');
+  opts.innerHTML='';
+  q.opts.forEach((o,i)=>{
+    const btn=document.createElement('button');btn.textContent=o;
+    btn.onclick=()=>selectAnswer(i,btn);
+    opts.appendChild(btn);
+  });
+  document.getElementById('quizFeedback').style.display='none';
+  document.getElementById('quizNext').style.display='none';
+  answered=false;
+}
+function selectAnswer(i,btn){
+  if(answered)return;answered=true;
+  const q=questions[qIndex];const fb=document.getElementById('quizFeedback');
+  document.querySelectorAll('.quiz-opts button').forEach((b,idx)=>{
+    b.disabled=true;
+    if(idx===q.ans)b.classList.add('correct');
+    else if(b===btn)b.classList.add('wrong');
+  });
+  if(i===q.ans){score++;fb.className='quiz-feedback correct';fb.textContent='✅ '+q.exp;}
+  else{fb.className='quiz-feedback wrong';fb.textContent='❌ '+q.exp;}
+  fb.style.display='block';document.getElementById('quizNext').style.display='inline-block';
+}
+function nextQuestion(){qIndex++;if(qIndex>=questions.length)showResult();else loadQuestion();}
+function showResult(){
+  document.getElementById('quizArea').style.display='none';
+  document.getElementById('quizProgress').style.display='none';
+  document.getElementById('quizResult').style.display='block';
+  document.getElementById('quizScore').textContent=score+'/'+questions.length;
+  const msgs=['Practica los estilos de comunicación en situaciones cotidianas.','Buen inicio. Identifica cuándo eres pasivo o agresivo.','¡Bien! Conoces los fundamentos de la asertividad.','¡Muy bien! Tu comunicación asertiva está en forma.','¡Sobresaliente! Dominas la comunicación asertiva.'];
+  document.getElementById('quizMsg').textContent=msgs[Math.min(score,4)];
+}
+function restartQuiz(){
+  qIndex=0;score=0;answered=false;
+  document.getElementById('quizArea').style.display='block';
+  document.getElementById('quizProgress').style.display='block';
+  document.getElementById('quizResult').style.display='none';
+  loadQuestion();
+}
+loadQuestion();
+</script>
+</body>
+</html>
