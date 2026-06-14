@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Habilidades Blandas | Módulo 11 – Resiliencia</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',Arial,sans-serif;background:#f5f0f5;color:#2d2d2d;font-size:16px}
+header{background:linear-gradient(135deg,#8b1a3a 0%,#b83255 100%);color:#fff;padding:20px;text-align:center}
+header small{display:block;font-size:13px;letter-spacing:2px;opacity:.85;text-transform:uppercase}
+header h1{font-size:1.5rem;margin-top:4px}
+nav{display:flex;background:#6d1430;overflow-x:auto}
+nav button{flex:1;min-width:110px;padding:14px 10px;background:none;border:none;color:#f5c6d3;font-size:15px;cursor:pointer;border-bottom:3px solid transparent;transition:all .2s;white-space:nowrap}
+nav button.active,nav button:hover{color:#fff;border-bottom-color:#f7b2c4;background:rgba(255,255,255,.08)}
+.section{display:none;padding:20px;max-width:900px;margin:0 auto}
+.section.active{display:block}
+.card{background:#fff;border-radius:12px;padding:20px;margin-bottom:16px;box-shadow:0 2px 8px rgba(0,0,0,.07)}
+.card h3{color:#8b1a3a;font-size:1.1rem;margin-bottom:8px}
+.card p{line-height:1.7;color:#444}
+.card ul{padding-left:20px;line-height:1.9;color:#444}
+.badge{display:inline-block;background:#f5e6ea;color:#8b1a3a;border-radius:20px;padding:4px 12px;font-size:13px;font-weight:600;margin:4px 4px 4px 0}
+.pillar-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px;margin:12px 0}
+.pillar-card{border-radius:10px;padding:16px;text-align:center;background:#fdf0f4}
+.pillar-card .pico{font-size:2rem;margin-bottom:6px}
+.pillar-card h4{color:#8b1a3a;font-size:.9rem;font-weight:700;margin-bottom:4px}
+.pillar-card p{font-size:.8rem;color:#666;line-height:1.4}
+/* Simulación */
+.sim-area{background:#fff;border-radius:12px;padding:24px;box-shadow:0 2px 8px rgba(0,0,0,.07);margin-bottom:16px}
+.sim-area h3{color:#8b1a3a;font-size:1.1rem;margin-bottom:12px}
+.resil-sliders{display:flex;flex-direction:column;gap:14px;margin-bottom:20px}
+.rs-row label{display:block;font-size:14px;font-weight:600;color:#555;margin-bottom:4px}
+.rs-row input[type=range]{width:100%;accent-color:#b83255}
+.rs-row .sv{font-size:13px;color:#888;text-align:right}
+.resil-result{border-left:4px solid #b83255;background:#f5e6ea;border-radius:8px;padding:16px;margin-top:8px}
+.resil-result h4{color:#8b1a3a;margin-bottom:6px}
+.resil-result p{font-size:14px;color:#444;line-height:1.6}
+/* Plan ACE */
+.ace-tool{background:#fdf0f4;border-radius:10px;padding:20px}
+.ace-tool label{display:block;font-size:14px;font-weight:600;color:#555;margin-bottom:6px;margin-top:12px}
+.ace-tool textarea{width:100%;padding:10px;border:1px solid #ddd;border-radius:8px;font-size:14px;font-family:inherit;color:#333;resize:vertical;min-height:65px}
+.ace-btn{margin-top:14px;padding:12px 24px;background:#b83255;color:#fff;border:none;border-radius:8px;font-size:15px;cursor:pointer}
+.ace-btn:hover{background:#8b1a3a}
+.ace-output{display:none;background:#e8f5e9;border:2px solid #388e3c;border-radius:8px;padding:16px;margin-top:12px}
+.ace-output h4{color:#1b5e20;margin-bottom:10px}
+.ace-step{background:#fff;border-radius:8px;padding:12px;margin-bottom:8px;border-left:3px solid #388e3c}
+.ace-step strong{color:#1b5e20;display:block;margin-bottom:4px;font-size:13px}
+.ace-step p{font-size:13px;color:#2e7d32;line-height:1.5}
+/* Quiz */
+.quiz-box{background:#fff;border-radius:12px;padding:24px;box-shadow:0 2px 8px rgba(0,0,0,.07)}
+.quiz-box h3{color:#8b1a3a;font-size:1.1rem;margin-bottom:6px}
+.quiz-progress{font-size:13px;color:#888;margin-bottom:16px}
+.quiz-q{font-size:1rem;font-weight:600;margin-bottom:16px;line-height:1.5}
+.quiz-opts{display:flex;flex-direction:column;gap:10px;margin-bottom:16px}
+.quiz-opts button{padding:13px 16px;border:2px solid #ddd;border-radius:8px;background:#fff;font-size:15px;cursor:pointer;text-align:left;transition:all .2s;line-height:1.3}
+.quiz-opts button:hover{border-color:#b83255;background:#f9f0f3}
+.quiz-opts button.correct{background:#d4edda;border-color:#28a745;color:#155724}
+.quiz-opts button.wrong{background:#f8d7da;border-color:#dc3545;color:#721c24}
+.quiz-feedback{display:none;padding:12px 16px;border-radius:8px;margin-bottom:14px;font-size:14px;line-height:1.5}
+.quiz-feedback.correct{background:#d4edda;color:#155724}
+.quiz-feedback.wrong{background:#f8d7da;color:#721c24}
+.quiz-next{padding:12px 28px;background:#b83255;color:#fff;border:none;border-radius:8px;font-size:15px;cursor:pointer;display:none}
+.quiz-next:hover{background:#8b1a3a}
+.quiz-result{display:none;text-align:center;padding:20px}
+.quiz-result .score{font-size:2.5rem;font-weight:700;color:#b83255}
+.quiz-result p{color:#555;margin-top:8px}
+.quiz-result button{margin-top:16px;padding:12px 28px;background:#b83255;color:#fff;border:none;border-radius:8px;font-size:15px;cursor:pointer}
+footer{text-align:center;padding:20px;color:#888;font-size:13px;margin-top:20px}
+@media(max-width:600px){header h1{font-size:1.2rem}nav button{font-size:13px;padding:12px 8px}.pillar-grid{grid-template-columns:repeat(2,1fr)}}
+</style>
+</head>
+<body>
+<header>
+  <small>Habilidades Blandas · Módulo 11 · Bloque 2</small>
+  <h1>Resiliencia</h1>
+</header>
+<nav>
+  <button class="active" onclick="showTab('concepto',this)">📖 Concepto</button>
+  <button onclick="showTab('simulacion',this)">💪 Evaluación</button>
+  <button onclick="showTab('juego',this)">🎯 Mini-juego</button>
+</nav>
+
+<div id="concepto" class="section active">
+  <div class="card">
+    <h3>¿Qué es la Resiliencia?</h3>
+    <p>La resiliencia es la capacidad de adaptarse y recuperarse ante la adversidad, los fracasos, el estrés o las situaciones difíciles, manteniendo o incluso fortaleciendo el bienestar y el rendimiento. No es ausencia de sufrimiento: es la habilidad de atravesarlo y salir transformado.</p>
+    <p style="margin-top:10px">Una persona resiliente no es invulnerable: siente el dolor, el miedo y la frustración como cualquier otra. La diferencia está en cómo procesa esas experiencias y qué hace con ellas.</p>
+  </div>
+  <div class="card">
+    <h3>Los 5 Pilares de la Resiliencia</h3>
+    <div class="pillar-grid">
+      <div class="pillar-card"><div class="pico">🧠</div><h4>Autoconciencia</h4><p>Reconocer tus emociones y reacciones sin ser dominado por ellas.</p></div>
+      <div class="pillar-card"><div class="pico">🎯</div><h4>Sentido de propósito</h4><p>Tener un "para qué" que supere el dolor del "cómo".</p></div>
+      <div class="pillar-card"><div class="pico">🤝</div><h4>Red de apoyo</h4><p>Contar con personas confiables en momentos de crisis.</p></div>
+      <div class="pillar-card"><div class="pico">🔄</div><h4>Flexibilidad cognitiva</h4><p>Reencuadrar situaciones difíciles y ver opciones que otros no ven.</p></div>
+      <div class="pillar-card"><div class="pico">⚡</div><h4>Autoeficacia</h4><p>Creer en tu capacidad para influir en los resultados de tu vida.</p></div>
+    </div>
+  </div>
+  <div class="card">
+    <h3>Resiliencia vs. Resistencia</h3>
+    <p>La <strong>resistencia</strong> es aguantar sin doblegarse (rigidez). La <strong>resiliencia</strong> es doblarse sin romperse (flexibilidad). La persona resistente intenta que nada la afecte; la persona resiliente permite que la afecte y elige cómo responder. A largo plazo, la resistencia se agota; la resiliencia se fortalece con cada adversidad bien procesada.</p>
+  </div>
+  <div class="card">
+    <h3>El Modelo ACE de Respuesta Resiliente</h3>
+    <ul>
+      <li><strong>A – Acepta:</strong> Reconoce la realidad tal como es, sin negarla ni catastrofizarla. "Esto ocurrió y es difícil."</li>
+      <li><strong>C – Conecta:</strong> Busca el aprendizaje, el sentido o la oportunidad oculta en la adversidad. "¿Qué puedo extraer de esto?"</li>
+      <li><strong>E – Ejecuta:</strong> Define el siguiente paso pequeño y concreto que puedes dar hoy. "¿Qué haré ahora mismo?"</li>
+    </ul>
+  </div>
+  <div class="card">
+    <h3>Lo Que NO es Resiliencia</h3>
+    <ul>
+      <li>No es ignorar el dolor o fingir que "todo está bien".</li>
+      <li>No es no pedir ayuda cuando la necesitas.</li>
+      <li>No es aguantar situaciones tóxicas sin límites.</li>
+      <li>No es recuperarse inmediatamente: el tiempo varía para cada persona y situación.</li>
+      <li>No es una característica fija con la que se nace: se desarrolla conscientemente.</li>
+    </ul>
+  </div>
+</div>
+
+<div id="simulacion" class="section">
+  <div class="sim-area">
+    <h3>💪 Evaluación de Resiliencia Personal</h3>
+    <p style="color:#666;font-size:14px;margin-bottom:16px">Evalúa tu nivel en los 5 pilares y obtén tu perfil de resiliencia.</p>
+    <div class="resil-sliders">
+      <div class="rs-row"><label>🧠 Autoconciencia emocional</label><input type="range" min="0" max="10" value="5" oninput="updateResil()" id="r1"><div class="sv" id="rv1">5/10</div></div>
+      <div class="rs-row"><label>🎯 Claridad de propósito personal</label><input type="range" min="0" max="10" value="5" oninput="updateResil()" id="r2"><div class="sv" id="rv2">5/10</div></div>
+      <div class="rs-row"><label>🤝 Fortaleza de tu red de apoyo</label><input type="range" min="0" max="10" value="5" oninput="updateResil()" id="r3"><div class="sv" id="rv3">5/10</div></div>
+      <div class="rs-row"><label>🔄 Flexibilidad ante los cambios</label><input type="range" min="0" max="10" value="5" oninput="updateResil()" id="r4"><div class="sv" id="rv4">5/10</div></div>
+      <div class="rs-row"><label>⚡ Confianza en tu capacidad de superar obstáculos</label><input type="range" min="0" max="10" value="5" oninput="updateResil()" id="r5"><div class="sv" id="rv5">5/10</div></div>
+    </div>
+    <div class="resil-result" id="resilResult">
+      <h4 id="resilTitle">Resiliencia: 50%</h4>
+      <p id="resilAdvice">Ajusta los controles para ver tu perfil de resiliencia.</p>
+    </div>
+  </div>
+  <div class="sim-area">
+    <h3>🛡️ Plan ACE: Respuesta Resiliente</h3>
+    <p style="color:#666;font-size:14px;margin-bottom:4px">Describe una adversidad actual y aplica el modelo ACE para construir tu respuesta.</p>
+    <div class="ace-tool">
+      <label>¿Qué adversidad o situación difícil estás enfrentando?</label>
+      <textarea id="aceA" placeholder="Ej: Perdí un cliente importante y me siento desmotivado"></textarea>
+      <label>¿Qué puedes aprender o qué oportunidad ves en esto?</label>
+      <textarea id="aceC" placeholder="Ej: Puedo mejorar mi proceso de seguimiento a clientes"></textarea>
+      <label>¿Cuál es el siguiente paso concreto que puedes dar hoy?</label>
+      <textarea id="aceE" placeholder="Ej: Llamar a 2 clientes actuales para fortalecer la relación"></textarea>
+      <button class="ace-btn" onclick="buildACE()">🛡️ Generar plan ACE</button>
+      <div class="ace-output" id="aceOutput">
+        <h4>Tu Plan ACE de Respuesta Resiliente:</h4>
+        <div class="ace-step"><strong>A — ACEPTA la realidad:</strong><p id="aceOutA"></p></div>
+        <div class="ace-step"><strong>C — CONECTA con el aprendizaje:</strong><p id="aceOutC"></p></div>
+        <div class="ace-step"><strong>E — EJECUTA el siguiente paso:</strong><p id="aceOutE"></p></div>
+      </div>
+    </div>
+  </div>
+</div>
+<div id="juego" class="section">
+  <div class="quiz-box">
+    <h3>🎯 Mini-juego: Resiliencia</h3>
+    <div class="quiz-progress" id="quizProgress">Pregunta 1 de 6</div>
+    <div id="quizArea">
+      <div class="quiz-q" id="quizQ"></div>
+      <div class="quiz-opts" id="quizOpts"></div>
+      <div class="quiz-feedback" id="quizFeedback"></div>
+      <button class="quiz-next" id="quizNext" onclick="nextQuestion()">Siguiente →</button>
+    </div>
+    <div class="quiz-result" id="quizResult">
+      <div class="score" id="quizScore"></div>
+      <p id="quizMsg"></p>
+      <button onclick="restartQuiz()">Jugar de nuevo</button>
+    </div>
+  </div>
+</div>
+<footer>Juan Carlos Reyes · juancreyes.hn@gmail.com</footer>
+
+<script>
+function showTab(id,btn){
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  btn.classList.add('active');
+}
+
+// ── Evaluación ──
+const resilLevels=[
+  {max:25,title:'Resiliencia baja — área de trabajo prioritaria',color:'#f44336',advice:'Tus pilares de resiliencia necesitan desarrollo urgente. Comienza con el pilar con puntaje más bajo y enfócate en una sola práctica diaria durante 30 días. Considera buscar apoyo profesional si enfrentas situaciones de alta exigencia.'},
+  {max:50,title:'Resiliencia en desarrollo',color:'#ff9800',advice:'Tienes bases pero son frágiles bajo presión intensa. Trabaja en fortalecer tu red de apoyo y clarificar tu propósito. En momentos difíciles, activa el modelo ACE antes de reaccionar impulsivamente.'},
+  {max:70,title:'Resiliencia moderada',color:'#ffc107',advice:'Funciona bien en adversidades cotidianas. Para situaciones de alta intensidad, refuerza los pilares con puntuación más baja. Practica el modelo ACE en situaciones pequeñas para automatizarlo.'},
+  {max:85,title:'Buena resiliencia',color:'#8bc34a',advice:'Tu resiliencia es sólida. Úsala como base para afrontar retos mayores y para apoyar a otros en su desarrollo. Documenta tus estrategias exitosas para tenerlas disponibles en crisis futuras.'},
+  {max:100,title:'Alta resiliencia',color:'#4caf50',advice:'Excelente capacidad de recuperación. Tu fortaleza puede ser un recurso para quienes te rodean. Recuerda que la resiliencia no elimina el dolor: significa procesarlo con herramientas efectivas.'}
+];
+
+function updateResil(){
+  let total=0;
+  for(let i=1;i<=5;i++){
+    const v=parseInt(document.getElementById('r'+i).value);
+    document.getElementById('rv'+i).textContent=v+'/10';
+    total+=v;
+  }
+  const pct=Math.round((total/50)*100);
+  const level=resilLevels.find(l=>pct<=l.max)||resilLevels[4];
+  const res=document.getElementById('resilResult');
+  res.style.borderLeftColor=level.color;
+  document.getElementById('resilTitle').textContent='Resiliencia: '+pct+'% — '+level.title;
+  document.getElementById('resilAdvice').textContent=level.advice;
+}
+updateResil();
+
+// ── Plan ACE ──
+function buildACE(){
+  const a=document.getElementById('aceA').value.trim();
+  const c=document.getElementById('aceC').value.trim();
+  const e=document.getElementById('aceE').value.trim();
+  if(!a||!c||!e){alert('Por favor completa los tres campos para generar tu plan ACE.');return;}
+  document.getElementById('aceOutA').textContent='"Reconozco que '+a+'. Es una situación difícil y es válido sentir lo que siento."';
+  document.getElementById('aceOutC').textContent='"En esta situación, '+c+'. Esto me fortalece y me prepara para lo que viene."';
+  document.getElementById('aceOutE').textContent='"Hoy mismo voy a '+e+'. Este paso concreto me devuelve el control."';
+  document.getElementById('aceOutput').style.display='block';
+}
+
+// ── Quiz ──
+const questions=[
+  {q:'¿Cuál es la diferencia principal entre resiliencia y resistencia?',opts:['La resistencia es más efectiva en crisis prolongadas','La resiliencia significa no sentir dolor ante la adversidad','La resistencia aguanta sin doblarse; la resiliencia se dobla pero no se rompe','La resiliencia solo aplica a contextos personales, no profesionales'],ans:2,exp:'La resistencia es rigidez: aguantar a cualquier costo. La resiliencia es flexibilidad: adaptarse, aprender y seguir. La resistencia se agota; la resiliencia se fortalece.'},
+  {q:'¿Qué significa la letra "A" en el Modelo ACE de respuesta resiliente?',opts:['Actuar de inmediato sin reflexión','Aceptar la realidad tal como es, sin negarla ni catastrofizarla','Ayudar a otros antes que a uno mismo','Analizar todas las causas del problema'],ans:1,exp:'Aceptar es el primer paso resiliente: reconocer lo que ocurrió sin negarlo (lo cual bloquea el aprendizaje) ni catastrofizarlo (lo cual paraliza la acción).'},
+  {q:'¿Cuál de los siguientes NO es un pilar de la resiliencia?',opts:['Autoconciencia emocional','Red de apoyo social','Perfeccionismo en los resultados','Flexibilidad cognitiva'],ans:2,exp:'El perfeccionismo es enemigo de la resiliencia: genera miedo al fracaso y rigidez. Los pilares son autoconciencia, propósito, red de apoyo, flexibilidad y autoeficacia.'},
+  {q:'Una persona resiliente frente a una pérdida laboral probablemente haría:',opts:['Ignorar sus emociones y enfocarse solo en buscar otro empleo','Esperar a sentirse mejor para volver a actuar','Reconocer el impacto, extraer aprendizajes y definir un paso concreto de avance','Evitar hablar del tema para no revivir el dolor'],ans:2,exp:'La respuesta resiliente integra las tres fases ACE: acepta el impacto real, conecta con el aprendizaje y ejecuta una acción concreta sin esperar recuperación total.'},
+  {q:'¿Por qué la resiliencia se considera una habilidad que se desarrolla y no una característica fija?',opts:['Porque varía según el contexto geográfico','Porque con práctica y herramientas conscientes, la capacidad de recuperación mejora con el tiempo','Porque solo la desarrollan las personas con formación universitaria','Porque depende exclusivamente del apoyo familiar durante la infancia'],ans:1,exp:'La resiliencia se construye con prácticas conscientes: reflexión, red de apoyo, propósito y herramientas como el modelo ACE. Cada adversidad bien procesada la fortalece.'},
+  {q:'¿Qué rol juega el "sentido de propósito" como pilar de la resiliencia?',opts:['Ayuda a evitar situaciones difíciles antes de que ocurran','Permite que el dolor tenga un significado mayor que justifica seguir adelante','Elimina el estrés relacionado con las metas personales','Solo es útil en contextos religiosos o espirituales'],ans:1,exp:'El propósito actúa como ancla: cuando el "para qué" es suficientemente poderoso, el "cómo" (el sufrimiento, el esfuerzo) se vuelve manejable. Da dirección en la oscuridad.'}
+];
+
+let qIndex=0,score=0,answered=false;
+function loadQuestion(){
+  const q=questions[qIndex];
+  document.getElementById('quizProgress').textContent='Pregunta '+(qIndex+1)+' de '+questions.length;
+  document.getElementById('quizQ').textContent=q.q;
+  const opts=document.getElementById('quizOpts');opts.innerHTML='';
+  q.opts.forEach((o,i)=>{const btn=document.createElement('button');btn.textContent=o;btn.onclick=()=>selectAnswer(i,btn);opts.appendChild(btn);});
+  document.getElementById('quizFeedback').style.display='none';document.getElementById('quizNext').style.display='none';answered=false;
+}
+function selectAnswer(i,btn){
+  if(answered)return;answered=true;
+  const q=questions[qIndex];const fb=document.getElementById('quizFeedback');
+  document.querySelectorAll('.quiz-opts button').forEach((b,idx)=>{b.disabled=true;if(idx===q.ans)b.classList.add('correct');else if(b===btn)b.classList.add('wrong');});
+  if(i===q.ans){score++;fb.className='quiz-feedback correct';fb.textContent='✅ '+q.exp;}
+  else{fb.className='quiz-feedback wrong';fb.textContent='❌ '+q.exp;}
+  fb.style.display='block';document.getElementById('quizNext').style.display='inline-block';
+}
+function nextQuestion(){qIndex++;if(qIndex>=questions.length)showResult();else loadQuestion();}
+function showResult(){
+  document.getElementById('quizArea').style.display='none';document.getElementById('quizProgress').style.display='none';
+  document.getElementById('quizResult').style.display='block';document.getElementById('quizScore').textContent=score+'/'+questions.length;
+  const msgs=['Sigue: recuerda que la resiliencia se construye con práctica diaria.','Buen inicio. Identifica cuál de los 5 pilares necesitas fortalecer más.','¡Bien! Comprendes los fundamentos de la resiliencia.','¡Muy bien! Tu conocimiento sobre resiliencia es sólido.','¡Sobresaliente! Eres un referente de resiliencia y adaptación.'];
+  document.getElementById('quizMsg').textContent=msgs[Math.min(score,4)];
+}
+function restartQuiz(){
+  qIndex=0;score=0;answered=false;
+  document.getElementById('quizArea').style.display='block';document.getElementById('quizProgress').style.display='block';
+  document.getElementById('quizResult').style.display='none';loadQuestion();
+}
+loadQuestion();
+</script>
+</body>
+</html>
