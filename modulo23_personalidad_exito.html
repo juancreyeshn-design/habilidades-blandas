@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Habilidades Blandas | Módulo 23 – Cómo Desarrollar una Personalidad de Éxito</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',Arial,sans-serif;background:#f5f0f5;color:#2d2d2d;font-size:16px}
+header{background:linear-gradient(135deg,#8b1a3a 0%,#b83255 100%);color:#fff;padding:20px;text-align:center}
+header small{display:block;font-size:13px;letter-spacing:2px;opacity:.85;text-transform:uppercase}
+header h1{font-size:1.5rem;margin-top:4px}
+nav{display:flex;background:#6d1430;overflow-x:auto}
+nav button{flex:1;min-width:110px;padding:14px 10px;background:none;border:none;color:#f5c6d3;font-size:15px;cursor:pointer;border-bottom:3px solid transparent;transition:all .2s;white-space:nowrap}
+nav button.active,nav button:hover{color:#fff;border-bottom-color:#f7b2c4;background:rgba(255,255,255,.08)}
+.section{display:none;padding:20px;max-width:900px;margin:0 auto}
+.section.active{display:block}
+.card{background:#fff;border-radius:12px;padding:20px;margin-bottom:16px;box-shadow:0 2px 8px rgba(0,0,0,.07)}
+.card h3{color:#8b1a3a;font-size:1.1rem;margin-bottom:8px}
+.card p{line-height:1.7;color:#444}
+.card ul,.card ol{padding-left:20px;line-height:1.9;color:#444}
+.trait-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px;margin:12px 0}
+.trait-card{border-radius:10px;padding:16px;text-align:center;background:#fdf0f4}
+.trait-card .pico{font-size:2rem;margin-bottom:6px}
+.trait-card h4{color:#8b1a3a;font-size:.9rem;font-weight:700;margin-bottom:4px}
+.trait-card p{font-size:.8rem;color:#666;line-height:1.4}
+.sim-area{background:#fff;border-radius:12px;padding:24px;box-shadow:0 2px 8px rgba(0,0,0,.07);margin-bottom:16px}
+.sim-area h3{color:#8b1a3a;font-size:1.1rem;margin-bottom:12px}
+.rs-row{margin-bottom:14px}
+.rs-row label{display:block;font-size:14px;font-weight:600;color:#555;margin-bottom:4px}
+.rs-row input[type=range]{width:100%;accent-color:#b83255}
+.rs-row .sv{font-size:13px;color:#888;text-align:right}
+.sim-result{border-left:4px solid #b83255;background:#f5e6ea;border-radius:8px;padding:16px;margin-top:8px;display:none}
+.sim-result h4{color:#8b1a3a;margin-bottom:6px}
+.sim-result p{font-size:14px;color:#444;line-height:1.6}
+.sim-btn{margin-top:14px;padding:12px 24px;background:#b83255;color:#fff;border:none;border-radius:8px;font-size:15px;cursor:pointer}
+.sim-btn:hover{background:#8b1a3a}
+.quiz-box{background:#fff;border-radius:12px;padding:24px;box-shadow:0 2px 8px rgba(0,0,0,.07)}
+.quiz-box h3{color:#8b1a3a;font-size:1.1rem;margin-bottom:6px}
+.quiz-progress{font-size:13px;color:#888;margin-bottom:16px}
+.quiz-q{font-size:1rem;font-weight:600;margin-bottom:16px;line-height:1.5}
+.quiz-opts{display:flex;flex-direction:column;gap:10px;margin-bottom:16px}
+.quiz-opts button{padding:13px 16px;border:2px solid #ddd;border-radius:8px;background:#fff;font-size:15px;cursor:pointer;text-align:left;transition:all .2s;line-height:1.3}
+.quiz-opts button:hover{border-color:#b83255;background:#f9f0f3}
+.quiz-opts button.correct{background:#d4edda;border-color:#28a745;color:#155724}
+.quiz-opts button.wrong{background:#f8d7da;border-color:#dc3545;color:#721c24}
+.quiz-feedback{display:none;padding:12px 16px;border-radius:8px;margin-bottom:14px;font-size:14px;line-height:1.5}
+.quiz-feedback.show{display:block}
+.quiz-feedback.correct{background:#d4edda;color:#155724}
+.quiz-feedback.wrong{background:#f8d7da;color:#721c24}
+.quiz-next{padding:12px 28px;background:#b83255;color:#fff;border:none;border-radius:8px;font-size:15px;cursor:pointer;display:none}
+.quiz-next:hover{background:#8b1a3a}
+.quiz-result{display:none;text-align:center;padding:20px}
+.quiz-result .score{font-size:2.5rem;font-weight:700;color:#b83255}
+.quiz-result p{color:#555;margin-top:8px}
+.quiz-result button{margin-top:16px;padding:12px 28px;background:#b83255;color:#fff;border:none;border-radius:8px;font-size:15px;cursor:pointer}
+footer{text-align:center;padding:20px;color:#888;font-size:13px;margin-top:20px}
+@media(max-width:600px){header h1{font-size:1.2rem}nav button{font-size:13px;padding:12px 8px}}
+</style>
+</head>
+<body>
+<header>
+<small>Habilidades Blandas · Módulo 23 · Bloque 6</small>
+<h1>Cómo Desarrollar una Personalidad de Éxito</h1>
+</header>
+<nav>
+<button class="active" onclick="showTab('concepto',this)">📖 Concepto</button>
+<button onclick="showTab('simulacion',this)">🌟 Perfil Personal</button>
+<button onclick="showTab('juego',this)">🎯 Mini-juego</button>
+</nav>
+<div id="concepto" class="section active">
+<div class="card">
+<h3>La Personalidad: ¿Destino o Elección?</h3>
+<p>Durante décadas, se pensó que la personalidad era fija después de la adolescencia. La neurociencia moderna ha refutado esto: la personalidad es plástica y puede desarrollarse deliberadamente a cualquier edad. Las personas más exitosas del mundo no nacieron con una personalidad de éxito: la construyeron hábito a hábito, decisión a decisión, durante años.</p>
+<p style="margin-top:10px">La personalidad de éxito no es un tipo de carácter (introvertido o extrovertido, tímido o atrevido): es un conjunto de hábitos mentales, emocionales y conductuales que cualquiera puede adoptar.</p>
+</div>
+<div class="card">
+<h3>Los 10 Rasgos de la Personalidad de Éxito</h3>
+<div class="trait-grid">
+<div class="trait-card"><div class="pico">🎯</div><h4>Orientación a metas</h4><p>Claridad sobre hacia dónde van y por qué.</p></div>
+<div class="trait-card"><div class="pico">💪</div><h4>Autodisciplina</h4><p>Hacen lo que deben hacer, sientan ganas o no.</p></div>
+<div class="trait-card"><div class="pico">🔄</div><h4>Adaptabilidad</h4><p>Se ajustan a los cambios con agilidad y apertura.</p></div>
+<div class="trait-card"><div class="pico">🤝</div><h4>Integridad</h4><p>Sus palabras y acciones están alineadas siempre.</p></div>
+<div class="trait-card"><div class="pico">💡</div><h4>Iniciativa</h4><p>Actúan sin esperar permiso ni condiciones perfectas.</p></div>
+<div class="trait-card"><div class="pico">📈</div><h4>Mentalidad de crecimiento</h4><p>Ven cada fracaso como información y aprendizaje.</p></div>
+<div class="trait-card"><div class="pico">❤️</div><h4>Empatía activa</h4><p>Comprenden y conectan genuinamente con otros.</p></div>
+<div class="trait-card"><div class="pico">🌟</div><h4>Confianza genuina</h4><p>Creen en su capacidad sin necesitar aprobación.</p></div>
+</div>
+</div>
+<div class="card">
+<h3>Las 5 Estrategias para Desarrollar la Personalidad de Éxito</h3>
+<ol>
+<li><strong>Actúa "como si":</strong> Actúa como actuaría la versión más exitosa de ti mismo. No esperes sentirte seguro para actuar con seguridad. La acción genera el sentimiento, no al revés.</li>
+<li><strong>Rodéate de modelos de rol:</strong> Estudia las biografías, entrevistas y hábitos de personas que admirás y deseas emular. El cerebro aprende por imitación.</li>
+<li><strong>Hábitos de identidad:</strong> En lugar de "quiero leer más", dí "soy una persona que lee 10 páginas al día". La identidad dirige el comportamiento automáticamente.</li>
+<li><strong>Mejora del 1% diario:</strong> Pequeñas mejoras consistentes compuestas durante un año producen resultados extraordinarios. No busques transformaciones radicales: busca progreso constante.</li>
+<li><strong>Elimina hábitos que contradicen quién quieres ser:</strong> Identifica los 3 comportamientos que más contradicen tu personalidad de éxito ideal y trabaja específicamente en ellos.</li>
+</ol>
+</div>
+<div class="card">
+<h3>El Principio de la Identidad en los Hábitos (James Clear)</h3>
+<p>Las personas que logran cambios duraderos no cambian su comportamiento: cambian su identidad. No intentan dejar de fumar: se convierten en "una persona que no fuma". No intentan hacer ejercicio: se convierten en "una persona activa". El comportamiento es la consecuencia natural de la identidad. Por eso, trabaja primero en quién quieres ser, no solo en qué quieres hacer.</p>
+</div>
+</div>
+<div id="simulacion" class="section">
+<div class="sim-area">
+<h3>🌟 Evaluación de tu Personalidad de Éxito Actual</h3>
+<p style="font-size:14px;color:#666;margin-bottom:16px">Evalúa qué tan desarrollado tienes cada rasgo (1=muy poco, 10=muy desarrollado):</p>
+<div class="rs-row">
+<label>1. Orientación a metas y disciplina</label>
+<input type="range" id="r1" min="1" max="10" value="5" oninput="document.getElementById('v1').textContent=this.value">
+<div class="sv">Valor: <span id="v1">5</span></div>
+</div>
+<div class="rs-row">
+<label>2. Adaptabilidad e iniciativa</label>
+<input type="range" id="r2" min="1" max="10" value="5" oninput="document.getElementById('v2').textContent=this.value">
+<div class="sv">Valor: <span id="v2">5</span></div>
+</div>
+<div class="rs-row">
+<label>3. Integridad y congruencia (palabras = acciones)</label>
+<input type="range" id="r3" min="1" max="10" value="5" oninput="document.getElementById('v3').textContent=this.value">
+<div class="sv">Valor: <span id="v3">5</span></div>
+</div>
+<div class="rs-row">
+<label>4. Mentalidad de crecimiento (fracasos = aprendizaje)</label>
+<input type="range" id="r4" min="1" max="10" value="5" oninput="document.getElementById('v4').textContent=this.value">
+<div class="sv">Valor: <span id="v4">5</span></div>
+</div>
+<button class="sim-btn" onclick="calcPersonalidad()">Ver mi Perfil de Personalidad de Éxito</button>
+<div class="sim-result" id="simResult">
+<h4 id="resTitle"></h4>
+<p id="resText"></p>
+</div>
+</div>
+</div>
+<div id="juego" class="section">
+<div class="quiz-box">
+<h3>🎯 Quiz: Personalidad de Éxito</h3>
+<div class="quiz-progress" id="qProgress">Pregunta 1 de 6</div>
+<div id="quizArea">
+<div class="quiz-q" id="qText"></div>
+<div class="quiz-opts" id="qOpts"></div>
+<div class="quiz-feedback" id="qFeedback"></div>
+<button class="quiz-next" id="qNext" onclick="nextQuestion()">Siguiente →</button>
+</div>
+<div class="quiz-result" id="quizResult">
+<div class="score" id="finalScore"></div>
+<p id="finalMsg"></p>
+<button onclick="restartQuiz()">Reintentar 🔄</button>
+</div>
+</div>
+</div>
+<footer>Habilidades Blandas · Seminario Fénix · Módulo 23</footer>
+<script>
+function showTab(id,btn){document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));document.getElementById(id).classList.add('active');btn.classList.add('active');}
+function calcPersonalidad(){const v=[+r1.value,+r2.value,+r3.value,+r4.value];const avg=(v[0]+v[1]+v[2]+v[3])/4;const el=document.getElementById('simResult');el.style.display='block';let t,tx;if(avg>=8){t='🌟 Personalidad de Alto Impacto';tx='¡Tienes los rasgos de una personalidad de éxito muy desarrollada! Sigue refinando y usando el principio de identidad para consolidar cada rasgo como parte de quién eres.';}else if(avg>=6){t='📈 Personalidad en Construcción';tx='Tienes bases sólidas con rasgos en desarrollo. Identifica el rasgo con puntuación más baja y trabaja en él específicamente durante 30 días.';}else if(avg>=4){t='⚙️ Personalidad con Gran Potencial';tx='Tienes la base para desarrollar una personalidad poderosa. Comienza aplicando la estrategia de "actúa como si" esta semana en una situación concreta.';}else{t='🔧 Gran Oportunidad de Transformación';tx='Tu punto de partida es ideal para una transformación genuina. Empieza cambiando una sola identidad: "Soy una persona que cumple sus compromisos". Ese cambio transforma todo lo demás.';}document.getElementById('resTitle').textContent=t;document.getElementById('resText').textContent=tx;}
+const questions=[{q:'¿Qué ha demostrado la neurociencia moderna sobre la personalidad?',opts:['Es completamente fija desde el nacimiento','Se fija en la adolescencia y no cambia','Es plástica y puede desarrollarse deliberadamente a cualquier edad','Solo puede cambiarse con medicación'],ans:2,fb:'La neurociencia moderna ha demostrado que la personalidad es plástica gracias a la neuroplasticidad. Puede desarrollarse deliberadamente a cualquier edad.'},
+{q:'¿Qué principio de James Clear afirma que el comportamiento es consecuencia de la identidad?',opts:['El principio de las señales','El principio de la identidad en los hábitos','El principio de la recompensa inmediata','El principio de la rutina'],ans:1,fb:'Clear demostró que los cambios duraderos vienen de cambiar la identidad, no solo el comportamiento: "Soy una persona activa" vs "Quiero hacer ejercicio".'},
+{q:'¿Qué significa "actúa como si"?',opts:['Fingir ser alguien que no eres','Actuar como la versión más exitosa de ti mismo sin esperar el sentimiento','Copiar exactamente a alguien famoso','Pretender que no tienes problemas'],ans:1,fb:'"Actúa como si" significa comportarte como la persona que quieres llegar a ser, sin esperar sentirte listo. La acción genera el sentimiento, no al revés.'},
+{q:'¿Qué produce la mejora del 1% diario compuesta durante un año?',opts:['Un progreso modesto y gradual','Resultados extraordinarios (mejora de más del 37 veces)','El mismo resultado que sin mejorar','Estrés por la presión constante'],ans:1,fb:'Mejorar apenas un 1% diario durante 365 días produce una mejora de 37 veces (1.01^365 ≈ 37.78). La consistencia es más poderosa que la intensidad.'},
+{q:'¿Cuál es la diferencia entre introvertido/extrovertido y personalidad de éxito?',opts:['Los extrovertidos tienen más éxito naturalmente','La personalidad de éxito no se puede desarrollar siendo introvertido','La personalidad de éxito es un conjunto de hábitos que cualquiera puede adoptar','Los introvertidos son más inteligentes'],ans:2,fb:'La personalidad de éxito no depende del tipo de carácter: es un conjunto de hábitos mentales, emocionales y conductuales que cualquier persona puede desarrollar.'},
+{q:'¿Cuál es el primer paso para eliminar hábitos que contradicen tu personalidad de éxito?',opts:['Castigarte cada vez que recaes','Identificar los 3 comportamientos que más contradicen quién quieres ser','Cambiar todos los hábitos a la vez','Evitar situaciones difíciles'],ans:1,fb:'Identificar específicamente los 3 comportamientos más contradictorios permite crear estrategias focalizadas. Intentar cambiar todo a la vez genera fracaso por sobrecarga.'}];
+let cur=0,sc=0,answ=false;
+function loadQ(){const q=questions[cur];document.getElementById('qProgress').textContent='Pregunta '+(cur+1)+' de '+questions.length;document.getElementById('qText').textContent=q.q;const fb=document.getElementById('qFeedback');fb.className='quiz-feedback';fb.textContent='';document.getElementById('qNext').style.display='none';answ=false;const op=document.getElementById('qOpts');op.innerHTML='';q.opts.forEach((o,i)=>{const b=document.createElement('button');b.textContent=o;b.onclick=()=>answer(i,b);op.appendChild(b);});}
+function answer(i,btn){if(answ)return;answ=true;const q=questions[cur];document.querySelectorAll('.quiz-opts button').forEach(b=>b.style.pointerEvents='none');const fb=document.getElementById('qFeedback');if(i===q.ans){btn.classList.add('correct');sc++;fb.className='quiz-feedback show correct';fb.textContent='✅ '+q.fb;}else{btn.classList.add('wrong');document.querySelectorAll('.quiz-opts button')[q.ans].classList.add('correct');fb.className='quiz-feedback show wrong';fb.textContent='❌ '+q.fb;}document.getElementById('qNext').style.display='inline-block';}
+function nextQuestion(){cur++;if(cur<questions.length){loadQ();}else{document.getElementById('quizArea').style.display='none';const r=document.getElementById('quizResult');r.style.display='block';document.getElementById('finalScore').textContent=sc+'/'+questions.length;const p=sc/questions.length;document.getElementById('finalMsg').textContent=p>=0.83?'🌟 ¡Excelente! Tienes una personalidad de éxito poderosa.':p>=0.5?'📈 Buen trabajo. Trabaja en los rasgos menos desarrollados.':'💪 Sigue adelante. ¡Tu personalidad de éxito se construye hoy!';}}
+function restartQuiz(){cur=0;sc=0;answ=false;document.getElementById('quizArea').style.display='block';document.getElementById('quizResult').style.display='none';loadQ();}
+loadQ();
+</script>
+</body>
+</html>
