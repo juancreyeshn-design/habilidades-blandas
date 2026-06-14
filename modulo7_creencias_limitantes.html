@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Habilidades Blandas | Módulo 7 – Creencias Limitantes</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',Arial,sans-serif;background:#f5f0f5;color:#2d2d2d;font-size:16px}
+header{background:linear-gradient(135deg,#8b1a3a 0%,#b83255 100%);color:#fff;padding:20px;text-align:center}
+header small{display:block;font-size:13px;letter-spacing:2px;opacity:.85;text-transform:uppercase}
+header h1{font-size:1.5rem;margin-top:4px}
+nav{display:flex;background:#6d1430;overflow-x:auto}
+nav button{flex:1;min-width:110px;padding:14px 10px;background:none;border:none;color:#f5c6d3;font-size:15px;cursor:pointer;border-bottom:3px solid transparent;transition:all .2s;white-space:nowrap}
+nav button.active,nav button:hover{color:#fff;border-bottom-color:#f7b2c4;background:rgba(255,255,255,.08)}
+.section{display:none;padding:20px;max-width:900px;margin:0 auto}
+.section.active{display:block}
+.card{background:#fff;border-radius:12px;padding:20px;margin-bottom:16px;box-shadow:0 2px 8px rgba(0,0,0,.07)}
+.card h3{color:#8b1a3a;font-size:1.1rem;margin-bottom:8px}
+.card p{line-height:1.7;color:#444}
+.card ul{padding-left:20px;line-height:1.9;color:#444}
+.badge{display:inline-block;background:#f5e6ea;color:#8b1a3a;border-radius:20px;padding:4px 12px;font-size:13px;font-weight:600;margin:4px 4px 4px 0}
+/* Simulación */
+.sim-area{background:#fff;border-radius:12px;padding:24px;box-shadow:0 2px 8px rgba(0,0,0,.07);margin-bottom:16px}
+.sim-area h3{color:#8b1a3a;font-size:1.1rem;margin-bottom:16px}
+.belief-list{display:flex;flex-direction:column;gap:10px;margin-bottom:20px}
+.belief-item{display:flex;align-items:center;gap:12px;background:#fdf0f4;border-radius:10px;padding:14px;cursor:pointer;border:2px solid transparent;transition:all .2s}
+.belief-item:hover{border-color:#b83255}
+.belief-item.selected{border-color:#b83255;background:#f5e6ea}
+.belief-icon{font-size:1.5rem;min-width:32px;text-align:center}
+.belief-text{flex:1;font-size:14px;color:#444;line-height:1.4}
+.belief-text strong{display:block;color:#8b1a3a;margin-bottom:3px;font-size:15px}
+.reframe-box{display:none;background:#f0f9f4;border-left:4px solid #28a745;padding:16px;border-radius:8px;margin-top:8px}
+.reframe-box h4{color:#155724;margin-bottom:8px;font-size:14px}
+.reframe-box p{color:#155724;font-size:14px;line-height:1.6}
+/* Transformador */
+.transform-tool{background:#fdf0f4;border-radius:10px;padding:20px}
+.transform-tool label{display:block;font-size:14px;font-weight:600;color:#555;margin-bottom:6px}
+.transform-tool textarea{width:100%;padding:10px;border:1px solid #ddd;border-radius:8px;font-size:14px;resize:vertical;min-height:70px;font-family:inherit;color:#333}
+.transform-steps{display:flex;flex-direction:column;gap:8px;margin:14px 0}
+.ts{background:#fff;border-radius:8px;padding:12px;border-left:3px solid #b83255;font-size:14px;color:#444;line-height:1.5}
+.ts strong{color:#8b1a3a;display:block;margin-bottom:4px}
+button.run-btn{padding:12px 24px;background:#b83255;color:#fff;border:none;border-radius:8px;font-size:15px;cursor:pointer;margin-top:8px}
+button.run-btn:hover{background:#8b1a3a}
+.output-box{display:none;background:#f0f9f4;border-radius:8px;padding:16px;margin-top:12px;border:2px solid #28a745}
+.output-box h4{color:#155724;margin-bottom:8px}
+.output-box p{font-size:14px;color:#155724;line-height:1.6;font-style:italic}
+/* Mini-juego */
+.quiz-box{background:#fff;border-radius:12px;padding:24px;box-shadow:0 2px 8px rgba(0,0,0,.07)}
+.quiz-box h3{color:#8b1a3a;font-size:1.1rem;margin-bottom:6px}
+.quiz-progress{font-size:13px;color:#888;margin-bottom:16px}
+.quiz-q{font-size:1rem;font-weight:600;margin-bottom:16px;line-height:1.5;color:#2d2d2d}
+.quiz-opts{display:flex;flex-direction:column;gap:10px;margin-bottom:16px}
+.quiz-opts button{padding:13px 16px;border:2px solid #ddd;border-radius:8px;background:#fff;font-size:15px;cursor:pointer;text-align:left;transition:all .2s;line-height:1.3}
+.quiz-opts button:hover{border-color:#b83255;background:#f9f0f3}
+.quiz-opts button.correct{background:#d4edda;border-color:#28a745;color:#155724}
+.quiz-opts button.wrong{background:#f8d7da;border-color:#dc3545;color:#721c24}
+.quiz-feedback{display:none;padding:12px 16px;border-radius:8px;margin-bottom:14px;font-size:14px;line-height:1.5}
+.quiz-feedback.correct{background:#d4edda;color:#155724}
+.quiz-feedback.wrong{background:#f8d7da;color:#721c24}
+.quiz-next{padding:12px 28px;background:#b83255;color:#fff;border:none;border-radius:8px;font-size:15px;cursor:pointer;display:none}
+.quiz-next:hover{background:#8b1a3a}
+.quiz-result{display:none;text-align:center;padding:20px}
+.quiz-result .score{font-size:2.5rem;font-weight:700;color:#b83255}
+.quiz-result p{color:#555;margin-top:8px;font-size:1rem}
+.quiz-result button{margin-top:16px;padding:12px 28px;background:#b83255;color:#fff;border:none;border-radius:8px;font-size:15px;cursor:pointer}
+footer{text-align:center;padding:20px;color:#888;font-size:13px;margin-top:20px}
+@media(max-width:600px){header h1{font-size:1.2rem}nav button{font-size:13px;padding:12px 8px}}
+</style>
+</head>
+<body>
+<header>
+  <small>Habilidades Blandas · Módulo 7 · Bloque 2</small>
+  <h1>Creencias Limitantes</h1>
+</header>
+<nav>
+  <button class="active" onclick="showTab('concepto',this)">📖 Concepto</button>
+  <button onclick="showTab('simulacion',this)">🔄 Transformador</button>
+  <button onclick="showTab('juego',this)">🎯 Mini-juego</button>
+</nav>
+
+<div id="concepto" class="section active">
+  <div class="card">
+    <h3>¿Qué son las Creencias Limitantes?</h3>
+    <p>Las creencias limitantes son ideas que hemos interiorizado sobre nosotros mismos, los demás o el mundo que <strong>restringen</strong> nuestro potencial y nuestras acciones. No son hechos objetivos: son interpretaciones que aceptamos como verdades y que con el tiempo se convierten en barreras invisibles.</p>
+    <p style="margin-top:10px">Se forman en la infancia, la educación, experiencias negativas pasadas y el entorno social. Aunque protegieron en algún momento, en la adultez pueden frenar el crecimiento personal y profesional.</p>
+  </div>
+  <div class="card">
+    <h3>Las 3 Categorías de Creencias Limitantes</h3>
+    <ul>
+      <li><strong>Creencias de incapacidad:</strong> "No soy capaz de...", "No tengo el talento para...", "Nunca podré..."</li>
+      <li><strong>Creencias de indignidad:</strong> "No merezco el éxito", "Soy demasiado joven/mayor/diferente", "Otros lo hacen mejor que yo siempre"</li>
+      <li><strong>Creencias de impotencia:</strong> "No hay nada que pueda hacer", "El sistema está en mi contra", "Así es la vida y no cambia"</li>
+    </ul>
+  </div>
+  <div class="card">
+    <h3>Cómo Identificar una Creencia Limitante</h3>
+    <p>Una creencia limitante suele aparecer cuando estás a punto de tomar una acción importante. Señales para reconocerlas:</p>
+    <div style="margin-top:10px">
+      <span class="badge">Uso de "nunca" o "siempre"</span>
+      <span class="badge">Generalización negativa</span>
+      <span class="badge">Comparación desfavorable</span>
+      <span class="badge">Pensamiento catastrófico</span>
+      <span class="badge">Frases con "no puedo"</span>
+      <span class="badge">Excusas repetitivas</span>
+    </div>
+  </div>
+  <div class="card">
+    <h3>El Ciclo de las Creencias</h3>
+    <p>Las creencias siguen un ciclo que se refuerza a sí mismo: <strong>Creencia → Acción (o inacción) → Resultado → Confirmación de la creencia</strong>. Si crees que "no eres bueno en ventas", no te preparas, obtienes malos resultados y confirmas tu creencia inicial. Romper el ciclo requiere intervenir en la creencia primero.</p>
+  </div>
+  <div class="card">
+    <h3>Creencias Potenciadoras vs. Limitantes</h3>
+    <ul>
+      <li><strong>Limitante:</strong> "Cometí un error grave, soy un fracasado" → <em>Potenciadora:</em> "Cometí un error, aprendí y seré más cuidadoso"</li>
+      <li><strong>Limitante:</strong> "No tengo experiencia para ese puesto" → <em>Potenciadora:</em> "Tengo habilidades valiosas y puedo aprender lo que me falta"</li>
+      <li><strong>Limitante:</strong> "El éxito es para personas con contactos" → <em>Potenciadora:</em> "Puedo construir mi red con constancia y valor genuino"</li>
+      <li><strong>Limitante:</strong> "Soy contador, no tengo habilidades de liderazgo" → <em>Potenciadora:</em> "El liderazgo es una habilidad que se aprende y practica"</li>
+    </ul>
+  </div>
+</div>
+
+<div id="simulacion" class="section">
+  <div class="sim-area">
+    <h3>🔍 Reconoce tus Creencias Limitantes</h3>
+    <p style="color:#666;font-size:14px;margin-bottom:16px">Selecciona cualquier creencia que hayas tenido o tengas para descubrir cómo reformularla.</p>
+    <div class="belief-list" id="beliefList"></div>
+  </div>
+  <div class="sim-area">
+    <h3>✍️ Transformador de Creencias</h3>
+    <p style="color:#666;font-size:14px;margin-bottom:16px">Escribe una creencia limitante propia y aplica el proceso de transformación de 4 pasos.</p>
+    <div class="transform-tool">
+      <label>Escribe tu creencia limitante:</label>
+      <textarea id="beliefInput" placeholder="Ej: No soy suficientemente bueno para..."></textarea>
+      <button class="run-btn" onclick="transformBelief()">🔄 Transformar creencia</button>
+      <div class="output-box" id="transformOutput">
+        <h4>Tu creencia transformada:</h4>
+        <p id="transformText"></p>
+      </div>
+    </div>
+    <div class="transform-steps" style="margin-top:20px">
+      <div class="ts"><strong>Paso 1 — CUESTIONA:</strong> ¿Es absolutamente verdad esta creencia? Busca evidencia real que la contradiga.</div>
+      <div class="ts"><strong>Paso 2 — COSTO:</strong> ¿Qué te ha costado creer esto? ¿Qué oportunidades has perdido?</div>
+      <div class="ts"><strong>Paso 3 — REFORMULA:</strong> Transforma la frase negativa en una afirmación de crecimiento posible.</div>
+      <div class="ts"><strong>Paso 4 — ACTÚA:</strong> Define una acción pequeña hoy que demuestre que la nueva creencia es posible.</div>
+    </div>
+  </div>
+</div>
+<div id="juego" class="section">
+  <div class="quiz-box">
+    <h3>🎯 Mini-juego: Creencias Limitantes</h3>
+    <div class="quiz-progress" id="quizProgress">Pregunta 1 de 6</div>
+    <div id="quizArea">
+      <div class="quiz-q" id="quizQ"></div>
+      <div class="quiz-opts" id="quizOpts"></div>
+      <div class="quiz-feedback" id="quizFeedback"></div>
+      <button class="quiz-next" id="quizNext" onclick="nextQuestion()">Siguiente →</button>
+    </div>
+    <div class="quiz-result" id="quizResult">
+      <div class="score" id="quizScore"></div>
+      <p id="quizMsg"></p>
+      <button onclick="restartQuiz()">Jugar de nuevo</button>
+    </div>
+  </div>
+</div>
+
+<footer>Juan Carlos Reyes · juancreyes.hn@gmail.com</footer>
+
+<script>
+function showTab(id,btn){
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  btn.classList.add('active');
+}
+
+// ── Creencias limitantes ──
+const beliefs=[
+  {icon:'💼',title:'"No tengo experiencia suficiente"',text:'Creencia de incapacidad frecuente al inicio de la carrera.',reframe:'La experiencia se construye actuando. Cada tarea nueva, aunque sea pequeña, amplía tu capital de experiencia real.'},
+  {icon:'🎓',title:'"Necesito más estudios para avanzar"',text:'Creencia que paraliza la acción mientras se espera el momento "perfecto".',reframe:'El conocimiento mínimo necesario para el siguiente paso ya lo tienes. Actúa ahora y aprende en el camino.'},
+  {icon:'💰',title:'"El dinero es difícil de ganar"',text:'Creencia de escasez que limita la búsqueda de oportunidades económicas.',reframe:'El dinero fluye hacia quienes crean valor genuino. Tu enfoque debe estar en aumentar el valor que ofreces.'},
+  {icon:'🤝',title:'"No soy bueno relacionándome con personas"',text:'Creencia de incapacidad social que limita redes y oportunidades.',reframe:'Las habilidades sociales se practican y mejoran. Cada conversación real es un entrenamiento.'},
+  {icon:'⏰',title:'"No tengo tiempo para mejorar"',text:'Creencia que justifica la inacción y el estancamiento.',reframe:'Todos tienen 24 horas. La clave es priorizar conscientemente 30 minutos diarios de crecimiento.'},
+  {icon:'🌟',title:'"El éxito es solo para personas con suerte"',text:'Creencia de impotencia que desconecta el esfuerzo del resultado.',reframe:'El éxito es el resultado predecible de hábitos correctos aplicados con consistencia durante suficiente tiempo.'},
+];
+
+function buildBeliefs(){
+  const list=document.getElementById('beliefList');
+  list.innerHTML='';
+  beliefs.forEach((b,i)=>{
+    const item=document.createElement('div');
+    item.className='belief-item';
+    item.innerHTML='<div class="belief-icon">'+b.icon+'</div><div class="belief-text"><strong>'+b.title+'</strong>'+b.text+'</div>';
+    const rbox=document.createElement('div');
+    rbox.className='reframe-box';
+    rbox.id='rb'+i;
+    rbox.innerHTML='<h4>💡 Reformulación potenciadora:</h4><p>'+b.reframe+'</p>';
+    item.onclick=()=>{
+      item.classList.toggle('selected');
+      rbox.classList.toggle('show');
+    };
+    list.appendChild(item);
+    list.appendChild(rbox);
+  });
+}
+buildBeliefs();
+
+function transformBelief(){
+  const input=document.getElementById('beliefInput').value.trim();
+  if(!input){alert('Por favor escribe una creencia limitante antes de transformar.');return;}
+  const lower=input.toLowerCase();
+  let transformed='';
+  if(lower.includes('no puedo')||lower.includes('no soy capaz')){
+    transformed='Aún no domino esto completamente, y eso está bien. Con práctica deliberada y consistencia, puedo desarrollar esta habilidad.';
+  } else if(lower.includes('no merezco')||lower.includes('no soy suficiente')){
+    transformed='Soy una persona en desarrollo constante. Merezco el éxito cuando aporto valor genuino, y ese camino ya empezó.';
+  } else if(lower.includes('nunca')){
+    transformed='Hasta ahora no ha ocurrido, pero cada día que actúo de forma diferente creo una nueva posibilidad real.';
+  } else if(lower.includes('siempre')||lower.includes('todo el tiempo')){
+    transformed='Habrá patrones del pasado, pero tengo la capacidad de elegir respuestas diferentes a partir de hoy.';
+  } else if(lower.includes('no tengo tiempo')){
+    transformed='Tengo el mismo tiempo que cualquier persona exitosa. Puedo redirigir al menos 30 minutos diarios hacia lo que más importa.';
+  } else if(lower.includes('es muy difícil')||lower.includes('es imposible')){
+    transformed='Parece difícil desde donde estoy ahora. Con el aprendizaje correcto y pasos pequeños, lo complejo se vuelve manejable.';
+  } else {
+    transformed='Esta creencia me ha limitado hasta hoy. Elijo reemplazarla por: tengo los recursos, la capacidad de aprender y el tiempo para avanzar hacia mis metas.';
+  }
+  document.getElementById('transformText').textContent=transformed;
+  document.getElementById('transformOutput').style.display='block';
+}
+
+// ── Mini-juego ──
+const questions=[
+  {q:"¿Cuál de estas afirmaciones es un ejemplo de creencia limitante de 'indignidad'?",opts:["No tengo tiempo para estudiar","No merezco ese ascenso porque otros son mejores","El sistema económico no me deja avanzar","Cometí muchos errores este mes"],ans:1,exp:"Las creencias de indignidad giran en torno a la sensación de no merecer el éxito, el reconocimiento o las oportunidades."},
+  {q:"¿Qué nombre se le da al ciclo en el que una creencia genera comportamientos que confirman esa misma creencia?",opts:["Ciclo de aprendizaje","Ciclo de retroalimentación negativa","Ciclo de las creencias (profecía autocumplida)","Espiral de crecimiento"],ans:2,exp:"El ciclo creencia→acción→resultado→confirmación es una profecía autocumplida: la creencia crea la realidad que la justifica."},
+  {q:"¿En qué momento del proceso de transformación de creencias se busca evidencia real que contradiga la creencia?",opts:["Paso 2 (Costo)","Paso 3 (Reformula)","Paso 1 (Cuestiona)","Paso 4 (Actúa)"],ans:2,exp:"El primer paso es cuestionar: ¿es absolutamente verdad? Buscar evidencia contraria a la creencia debilita su poder sobre nosotros."},
+  {q:"¿Cuál de estas es una creencia POTENCIADORA?",opts:["No tengo experiencia suficiente para ese puesto","El éxito es para personas con más suerte que yo","Puedo aprender lo que me falta con esfuerzo y práctica","Nunca fui bueno en esa área"],ans:2,exp:"Las creencias potenciadoras abren posibilidades y movilizan hacia la acción, en lugar de cerrar puertas con generalizaciones negativas."},
+  {q:"¿En qué categoría de creencias limitantes cae la frase 'así es la vida y no cambia'?",opts:["Creencia de incapacidad","Creencia de indignidad","Creencia de impotencia","Creencia de perfeccionismo"],ans:2,exp:"Las creencias de impotencia perciben el entorno como inamovible y eliminan la sensación de agencia personal sobre los resultados."},
+  {q:"Según el proceso de transformación de 4 pasos, ¿cuál es el último paso?",opts:["Reformular la creencia","Cuestionar su validez","Actuar de forma que demuestre la nueva creencia","Identificar el costo emocional"],ans:2,exp:"El paso final es actuar: una acción pequeña hoy que demuestre que la nueva creencia es posible rompe el ciclo de la profecía autocumplida."}
+];
+
+let qIndex=0,score=0,answered=false;
+
+function loadQuestion(){
+  const q=questions[qIndex];
+  document.getElementById('quizProgress').textContent='Pregunta '+(qIndex+1)+' de '+questions.length;
+  document.getElementById('quizQ').textContent=q.q;
+  const opts=document.getElementById('quizOpts');
+  opts.innerHTML='';
+  q.opts.forEach((o,i)=>{
+    const btn=document.createElement('button');
+    btn.textContent=o;
+    btn.onclick=()=>selectAnswer(i,btn);
+    opts.appendChild(btn);
+  });
+  document.getElementById('quizFeedback').style.display='none';
+  document.getElementById('quizNext').style.display='none';
+  answered=false;
+}
+
+function selectAnswer(i,btn){
+  if(answered) return;
+  answered=true;
+  const q=questions[qIndex];
+  const fb=document.getElementById('quizFeedback');
+  document.querySelectorAll('.quiz-opts button').forEach((b,idx)=>{
+    b.disabled=true;
+    if(idx===q.ans) b.classList.add('correct');
+    else if(b===btn) b.classList.add('wrong');
+  });
+  if(i===q.ans){score++;fb.className='quiz-feedback correct';fb.textContent='✅ '+q.exp;}
+  else{fb.className='quiz-feedback wrong';fb.textContent='❌ '+q.exp;}
+  fb.style.display='block';
+  document.getElementById('quizNext').style.display='inline-block';
+}
+
+function nextQuestion(){
+  qIndex++;
+  if(qIndex>=questions.length) showResult();
+  else loadQuestion();
+}
+
+function showResult(){
+  document.getElementById('quizArea').style.display='none';
+  document.getElementById('quizProgress').style.display='none';
+  document.getElementById('quizResult').style.display='block';
+  document.getElementById('quizScore').textContent=score+'/'+questions.length;
+  const msgs=['Sigue: identificar creencias es el primer paso del cambio.','Buen inicio. La reflexión constante transforma las creencias.','¡Bien! Entiendes cómo las creencias moldean el comportamiento.','¡Muy bien! Tienes un dominio sólido del tema.','¡Sobresaliente! Eres capaz de transformar tus propias creencias.'];
+  document.getElementById('quizMsg').textContent=msgs[Math.min(score,4)];
+}
+
+function restartQuiz(){
+  qIndex=0;score=0;answered=false;
+  document.getElementById('quizArea').style.display='block';
+  document.getElementById('quizProgress').style.display='block';
+  document.getElementById('quizResult').style.display='none';
+  loadQuestion();
+}
+
+loadQuestion();
+</script>
+</body>
+</html>
