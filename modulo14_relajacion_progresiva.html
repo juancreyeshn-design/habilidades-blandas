@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Habilidades Blandas | Módulo 14 – Relajación Progresiva con Música</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',Arial,sans-serif;background:#f5f0f5;color:#2d2d2d;font-size:16px}
+header{background:linear-gradient(135deg,#8b1a3a 0%,#b83255 100%);color:#fff;padding:20px;text-align:center}
+header small{display:block;font-size:13px;letter-spacing:2px;opacity:.85;text-transform:uppercase}
+header h1{font-size:1.5rem;margin-top:4px}
+nav{display:flex;background:#6d1430;overflow-x:auto}
+nav button{flex:1;min-width:110px;padding:14px 10px;background:none;border:none;color:#f5c6d3;font-size:15px;cursor:pointer;border-bottom:3px solid transparent;transition:all .2s;white-space:nowrap}
+nav button.active,nav button:hover{color:#fff;border-bottom-color:#f7b2c4;background:rgba(255,255,255,.08)}
+.section{display:none;padding:20px;max-width:900px;margin:0 auto}
+.section.active{display:block}
+.card{background:#fff;border-radius:12px;padding:20px;margin-bottom:16px;box-shadow:0 2px 8px rgba(0,0,0,.07)}
+.card h3{color:#8b1a3a;font-size:1.1rem;margin-bottom:8px}
+.card p{line-height:1.7;color:#444}
+.card ul,.card ol{padding-left:20px;line-height:1.9;color:#444}
+.pillar-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px;margin:12px 0}
+.pillar-card{border-radius:10px;padding:16px;text-align:center;background:#fdf0f4}
+.pillar-card .pico{font-size:2rem;margin-bottom:6px}
+.pillar-card h4{color:#8b1a3a;font-size:.9rem;font-weight:700;margin-bottom:4px}
+.pillar-card p{font-size:.8rem;color:#666;line-height:1.4}
+.sim-area{background:#fff;border-radius:12px;padding:24px;box-shadow:0 2px 8px rgba(0,0,0,.07);margin-bottom:16px}
+.sim-area h3{color:#8b1a3a;font-size:1.1rem;margin-bottom:12px}
+.rs-row{margin-bottom:14px}
+.rs-row label{display:block;font-size:14px;font-weight:600;color:#555;margin-bottom:4px}
+.rs-row input[type=range]{width:100%;accent-color:#b83255}
+.rs-row .sv{font-size:13px;color:#888;text-align:right}
+.sim-result{border-left:4px solid #b83255;background:#f5e6ea;border-radius:8px;padding:16px;margin-top:8px;display:none}
+.sim-result h4{color:#8b1a3a;margin-bottom:6px}
+.sim-result p{font-size:14px;color:#444;line-height:1.6}
+.sim-btn{margin-top:14px;padding:12px 24px;background:#b83255;color:#fff;border:none;border-radius:8px;font-size:15px;cursor:pointer}
+.sim-btn:hover{background:#8b1a3a}
+.relax-step{background:#f0f4ff;border-radius:10px;padding:16px;margin-bottom:10px;border-left:4px solid #5c7cfa}
+.relax-step h4{color:#364fc7;font-size:.95rem;margin-bottom:6px}
+.relax-step p{font-size:14px;color:#555;line-height:1.6}
+.breath-box{background:#fdf0f4;border-radius:12px;padding:24px;text-align:center}
+.breath-circle{width:120px;height:120px;border-radius:50%;background:linear-gradient(135deg,#8b1a3a,#b83255);margin:0 auto 16px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:14px;font-weight:600;cursor:pointer;transition:transform 2s ease;user-select:none}
+.breath-circle.inhale{transform:scale(1.4)}
+.breath-circle.exhale{transform:scale(1)}
+.breath-status{font-size:1.1rem;font-weight:600;color:#8b1a3a;margin-bottom:8px}
+.breath-count{font-size:2rem;font-weight:700;color:#b83255}
+.quiz-box{background:#fff;border-radius:12px;padding:24px;box-shadow:0 2px 8px rgba(0,0,0,.07)}
+.quiz-box h3{color:#8b1a3a;font-size:1.1rem;margin-bottom:6px}
+.quiz-progress{font-size:13px;color:#888;margin-bottom:16px}
+.quiz-q{font-size:1rem;font-weight:600;margin-bottom:16px;line-height:1.5}
+.quiz-opts{display:flex;flex-direction:column;gap:10px;margin-bottom:16px}
+.quiz-opts button{padding:13px 16px;border:2px solid #ddd;border-radius:8px;background:#fff;font-size:15px;cursor:pointer;text-align:left;transition:all .2s;line-height:1.3}
+.quiz-opts button:hover{border-color:#b83255;background:#f9f0f3}
+.quiz-opts button.correct{background:#d4edda;border-color:#28a745;color:#155724}
+.quiz-opts button.wrong{background:#f8d7da;border-color:#dc3545;color:#721c24}
+.quiz-feedback{display:none;padding:12px 16px;border-radius:8px;margin-bottom:14px;font-size:14px;line-height:1.5}
+.quiz-feedback.show{display:block}
+.quiz-feedback.correct{background:#d4edda;color:#155724}
+.quiz-feedback.wrong{background:#f8d7da;color:#721c24}
+.quiz-next{padding:12px 28px;background:#b83255;color:#fff;border:none;border-radius:8px;font-size:15px;cursor:pointer;display:none}
+.quiz-next:hover{background:#8b1a3a}
+.quiz-result{display:none;text-align:center;padding:20px}
+.quiz-result .score{font-size:2.5rem;font-weight:700;color:#b83255}
+.quiz-result p{color:#555;margin-top:8px}
+.quiz-result button{margin-top:16px;padding:12px 28px;background:#b83255;color:#fff;border:none;border-radius:8px;font-size:15px;cursor:pointer}
+footer{text-align:center;padding:20px;color:#888;font-size:13px;margin-top:20px}
+@media(max-width:600px){header h1{font-size:1.2rem}nav button{font-size:13px;padding:12px 8px}}
+</style>
+</head>
+<body>
+<header>
+<small>Habilidades Blandas · Módulo 14 · Bloque 3</small>
+<h1>Relajación Progresiva con Música</h1>
+</header>
+<nav>
+<button class="active" onclick="showTab('concepto',this)">📖 Concepto</button>
+<button onclick="showTab('simulacion',this)">🎵 Práctica</button>
+<button onclick="showTab('juego',this)">🎯 Mini-juego</button>
+</nav>
+<div id="concepto" class="section active">
+<div class="card">
+<h3>¿Qué es la Relajación Progresiva?</h3>
+<p>La Relajación Muscular Progresiva (RMP) es una técnica desarrollada por el médico Edmund Jacobson en los años 1920, basada en el ciclo de tensión-relajación de grupos musculares específicos. Al tensar conscientemente un músculo y luego liberarlo, experimentas una relajación más profunda que sin la tensión previa.</p>
+<p style="margin-top:10px">Combinada con música especialmente diseñada (frecuencias entre 60-80 BPM con tonos graves suaves), la relajación progresiva reduce el cortisol hasta un 25%, disminuye la presión arterial y prepara al cerebro para un aprendizaje más eficiente.</p>
+</div>
+<div class="card">
+<h3>Beneficios Comprobados Científicamente</h3>
+<div class="pillar-grid">
+<div class="pillar-card"><div class="pico">🧠</div><h4>Claridad mental</h4><p>Reduce el ruido mental y mejora la concentración hasta un 40%.</p></div>
+<div class="pillar-card"><div class="pico">😴</div><h4>Calidad de sueño</h4><p>Practica 20 minutos antes de dormir para dormir más profundo.</p></div>
+<div class="pillar-card"><div class="pico">💪</div><h4>Reducción del estrés</h4><p>Disminuye el cortisol y la tensión muscular crónica significativamente.</p></div>
+<div class="pillar-card"><div class="pico">❤️</div><h4>Salud cardiovascular</h4><p>Reduce la presión arterial y la frecuencia cardíaca en reposo.</p></div>
+</div>
+</div>
+<div class="card">
+<h3>El Protocolo de 5 Pasos</h3>
+<div class="relax-step">
+<h4>Paso 1: Preparación del entorno (2 min)</h4>
+<p>Busca un lugar tranquilo, atenúa la luz, pon música instrumental de baja frecuencia (60-70 BPM). Siéntate o recuéstate en una posición cómoda. Cierra los ojos.</p>
+</div>
+<div class="relax-step">
+<h4>Paso 2: Respiración abdominal (3 min)</h4>
+<p>Inhala por la nariz contando hasta 4, mantén 2 segundos, exhala por la boca contando hasta 6. Siente cómo el abdomen se eleva en la inhalación y desciende en la exhalación.</p>
+</div>
+<div class="relax-step">
+<h4>Paso 3: Tensión-relajación (10 min)</h4>
+<p>Tensa cada grupo muscular 7 segundos y luego suéltalo completamente 20 segundos. Orden: pies → pantorrillas → muslos → abdomen → manos → brazos → hombros → cuello → cara.</p>
+</div>
+<div class="relax-step">
+<h4>Paso 4: Visualización guiada (3 min)</h4>
+<p>Con el cuerpo relajado, imagina un lugar seguro y tranquilo (playa, bosque, jardín). Involucra todos los sentidos: colores, sonidos, temperaturas, olores.</p>
+</div>
+<div class="relax-step">
+<h4>Paso 5: Retorno suave (2 min)</h4>
+<p>Comienza a mover suavemente los dedos. Abre los ojos lentamente. Estira el cuerpo. Toma un vaso de agua. Anota cómo te sientes.</p>
+</div>
+</div>
+<div class="card">
+<h3>Música Ideal para la Relajación</h3>
+<ul>
+<li><strong>Frecuencia óptima:</strong> 60-80 BPM sincroniza con el ritmo cardíaco en reposo.</li>
+<li><strong>Tonos:</strong> Instrumentales con cuerdas graves (cello, contrabajo), cuencos tibetanos o sonidos de la naturaleza.</li>
+<li><strong>Sin letra:</strong> La letra activa el hemisferio izquierdo (analítico) dificultando la relajación profunda.</li>
+<li><strong>Frecuencias binaurales:</strong> Frecuencias entre 4-8 Hz (theta) inducen estados de relajación profunda y creatividad.</li>
+</ul>
+</div>
+</div>
+<div id="simulacion" class="section">
+<div class="sim-area">
+<h3>🌬️ Ejercicio de Respiración 4-2-6</h3>
+<p style="font-size:14px;color:#666;margin-bottom:16px">Practica la respiración abdominal. Haz clic en el círculo para comenzar:</p>
+<div class="breath-box">
+<div class="breath-circle" id="breathCircle" onclick="startBreath()">Iniciar</div>
+<div class="breath-status" id="breathStatus">Haz clic para comenzar</div>
+<div class="breath-count" id="breathCount"></div>
+<p style="font-size:13px;color:#888;margin-top:8px">Completa 5 ciclos completos para experimentar la relajación</p>
+<div id="cycleCount" style="font-size:14px;font-weight:600;color:#8b1a3a;margin-top:8px"></div>
+</div>
+</div>
+<div class="sim-area">
+<h3>📊 Nivel de Tensión: Antes y Después</h3>
+<p style="font-size:14px;color:#666;margin-bottom:16px">Evalúa tu nivel de tensión ahora y después de practicar la técnica:</p>
+<div class="rs-row">
+<label>Nivel de tensión corporal AHORA (1=muy relajado, 10=muy tenso)</label>
+<input type="range" id="rAntes" min="1" max="10" value="6" oninput="document.getElementById('vAntes').textContent=this.value">
+<div class="sv">Valor: <span id="vAntes">6</span></div>
+</div>
+<div class="rs-row">
+<label>Calidad de tu sueño esta semana (1=muy malo, 10=excelente)</label>
+<input type="range" id="rSueno" min="1" max="10" value="5" oninput="document.getElementById('vSueno').textContent=this.value">
+<div class="sv">Valor: <span id="vSueno">5</span></div>
+</div>
+<button class="sim-btn" onclick="calcRelax()">Ver mi plan de relajación</button>
+<div class="sim-result" id="simResult">
+<h4 id="resTitle"></h4>
+<p id="resText"></p>
+</div>
+</div>
+</div>
+<div id="juego" class="section">
+<div class="quiz-box">
+<h3>🎯 Quiz: Relajación Progresiva</h3>
+<div class="quiz-progress" id="qProgress">Pregunta 1 de 6</div>
+<div id="quizArea">
+<div class="quiz-q" id="qText"></div>
+<div class="quiz-opts" id="qOpts"></div>
+<div class="quiz-feedback" id="qFeedback"></div>
+<button class="quiz-next" id="qNext" onclick="nextQuestion()">Siguiente →</button>
+</div>
+<div class="quiz-result" id="quizResult">
+<div class="score" id="finalScore"></div>
+<p id="finalMsg"></p>
+<button onclick="restartQuiz()">Reintentar 🔄</button>
+</div>
+</div>
+</div>
+<footer>Habilidades Blandas · Seminario Fénix · Módulo 14</footer>
+<script>
+function showTab(id,btn){document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));document.getElementById(id).classList.add('active');btn.classList.add('active');}
+let breathPhase=0,breathInterval=null,cycles=0,counting=false;
+function startBreath(){
+  if(counting)return;
+  counting=true;
+  const circle=document.getElementById('breathCircle');
+  const status=document.getElementById('breathStatus');
+  const count=document.getElementById('breathCount');
+  const cycleEl=document.getElementById('cycleCount');
+  function runCycle(){
+    if(cycles>=5){status.textContent='🌟 ¡Sesión completada!';count.textContent='';circle.textContent='✓';counting=false;cycleEl.textContent='Has completado 5 ciclos de respiración. Tu sistema nervioso está activando la respuesta de relajación.';return;}
+    status.textContent='Inhala...';circle.classList.add('inhale');circle.classList.remove('exhale');let n=4;count.textContent=n;
+    const inhale=setInterval(()=>{n--;if(n>0){count.textContent=n;}else{clearInterval(inhale);status.textContent='Mantén...';count.textContent='';
+      setTimeout(()=>{status.textContent='Exhala lentamente...';circle.classList.remove('inhale');circle.classList.add('exhale');let e=6;count.textContent=e;
+        const exhale=setInterval(()=>{e--;if(e>0){count.textContent=e;}else{clearInterval(exhale);cycles++;cycleEl.textContent='Ciclos completados: '+cycles+'/5';runCycle();}},1000);
+      },2000);
+    }},1000);
+  }
+  runCycle();
+}
+function calcRelax(){const t=+document.getElementById('rAntes').value;const s=+document.getElementById('rSueno').value;const el=document.getElementById('simResult');el.style.display='block';let ti,tx;if(t>=8){ti='🔴 Tensión Alta Detectada';tx='Tu nivel de tensión es elevado. Te recomendamos practicar la relajación progresiva completa (20 min) cada noche antes de dormir durante 21 días. Los resultados son notables a partir de la primera semana.';}else if(t>=5){ti='🟡 Tensión Moderada';tx='Tienes tensión acumulada que afecta tu rendimiento. Practica el ejercicio de respiración 4-2-6 dos veces al día: al despertar y al acostarte.';}else{ti='🟢 Nivel Saludable';tx='Tu tensión está bien manejada. Mantén tu práctica actual y agrega 5 minutos de visualización guiada para potenciar aún más tu bienestar.';}document.getElementById('resTitle').textContent=ti;document.getElementById('resText').textContent=tx;}
+const questions=[{q:'¿Quién desarrolló la técnica de Relajación Muscular Progresiva?',opts:['Sigmund Freud','Edmund Jacobson','Carl Rogers','Albert Ellis'],ans:1,fb:'Edmund Jacobson desarrolló la RMP en los años 1920 basándose en el ciclo tensión-relajación muscular consciente.'},
+{q:'¿Cuánto cortisol puede reducir la relajación progresiva?',opts:['Hasta un 5%','Hasta un 10%','Hasta un 25%','No tiene efecto en el cortisol'],ans:2,fb:'Combinada con música adecuada, la relajación progresiva puede reducir el cortisol (hormona del estrés) hasta un 25%.'},
+{q:'¿Cuál es la frecuencia de BPM ideal en la música para relajación?',opts:['120-140 BPM','100-120 BPM','80-100 BPM','60-80 BPM'],ans:3,fb:'Los 60-80 BPM sincronizan con el ritmo cardíaco en reposo, facilitando la transición al estado de relajación profunda.'},
+{q:'En la técnica de respiración 4-2-6, ¿qué significa el 6?',opts:['Inhalar 6 segundos','Mantener 6 segundos','Exhalar 6 segundos','Repetir 6 veces'],ans:2,fb:'El patrón es: inhalar 4 segundos, mantener 2 segundos y exhalar 6 segundos. La exhalación larga activa el sistema nervioso parasimpático.'},
+{q:'¿Por qué se recomienda música SIN letra para la relajación?',opts:['La letra distrae con el volumen','La letra activa el hemisferio analítico dificultando la relajación','La música con letra no tiene buen ritmo','Por razones de copyright'],ans:1,fb:'La letra activa el hemisferio izquierdo (analítico), manteniendo la mente en modo "procesamiento activo" en lugar de relajación.'},
+{q:'¿Cuál es el orden correcto en la técnica de tensión-relajación?',opts:['Cara → cuello → hombros → pies','Pies → pantorrillas → muslos → abdomen → manos → brazos → hombros → cuello → cara','Manos → brazos → pecho → pies','Cualquier orden funciona igual'],ans:1,fb:'El orden de abajo hacia arriba (pies a cara) permite una relajación progresiva sistemática que recorre todo el cuerpo de forma coherente.'}];
+let cur=0,sc=0,answ=false;
+function loadQ(){const q=questions[cur];document.getElementById('qProgress').textContent='Pregunta '+(cur+1)+' de '+questions.length;document.getElementById('qText').textContent=q.q;const fb=document.getElementById('qFeedback');fb.className='quiz-feedback';fb.textContent='';document.getElementById('qNext').style.display='none';answ=false;const op=document.getElementById('qOpts');op.innerHTML='';q.opts.forEach((o,i)=>{const b=document.createElement('button');b.textContent=o;b.onclick=()=>answer(i,b);op.appendChild(b);});}
+function answer(i,btn){if(answ)return;answ=true;const q=questions[cur];document.querySelectorAll('.quiz-opts button').forEach(b=>b.style.pointerEvents='none');const fb=document.getElementById('qFeedback');if(i===q.ans){btn.classList.add('correct');sc++;fb.className='quiz-feedback show correct';fb.textContent='✅ '+q.fb;}else{btn.classList.add('wrong');document.querySelectorAll('.quiz-opts button')[q.ans].classList.add('correct');fb.className='quiz-feedback show wrong';fb.textContent='❌ '+q.fb;}document.getElementById('qNext').style.display='inline-block';}
+function nextQuestion(){cur++;if(cur<questions.length){loadQ();}else{document.getElementById('quizArea').style.display='none';const r=document.getElementById('quizResult');r.style.display='block';document.getElementById('finalScore').textContent=sc+'/'+questions.length;const p=sc/questions.length;document.getElementById('finalMsg').textContent=p>=0.83?'🌟 ¡Excelente! Dominas la relajación progresiva.':p>=0.5?'📈 Buen resultado. Practica la técnica y consolida el conocimiento.':'🔧 Sigue aprendiendo. ¡La relajación es una habilidad que se desarrolla!';}}
+function restartQuiz(){cur=0;sc=0;answ=false;document.getElementById('quizArea').style.display='block';document.getElementById('quizResult').style.display='none';loadQ();}
+loadQ();
+</script>
+</body>
+</html>
