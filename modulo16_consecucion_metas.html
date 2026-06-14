@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Habilidades Blandas | Módulo 16 – 12 Pasos hacia la Consecución de Metas</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',Arial,sans-serif;background:#f5f0f5;color:#2d2d2d;font-size:16px}
+header{background:linear-gradient(135deg,#8b1a3a 0%,#b83255 100%);color:#fff;padding:20px;text-align:center}
+header small{display:block;font-size:13px;letter-spacing:2px;opacity:.85;text-transform:uppercase}
+header h1{font-size:1.5rem;margin-top:4px}
+nav{display:flex;background:#6d1430;overflow-x:auto}
+nav button{flex:1;min-width:110px;padding:14px 10px;background:none;border:none;color:#f5c6d3;font-size:15px;cursor:pointer;border-bottom:3px solid transparent;transition:all .2s;white-space:nowrap}
+nav button.active,nav button:hover{color:#fff;border-bottom-color:#f7b2c4;background:rgba(255,255,255,.08)}
+.section{display:none;padding:20px;max-width:900px;margin:0 auto}
+.section.active{display:block}
+.card{background:#fff;border-radius:12px;padding:20px;margin-bottom:16px;box-shadow:0 2px 8px rgba(0,0,0,.07)}
+.card h3{color:#8b1a3a;font-size:1.1rem;margin-bottom:8px}
+.card p{line-height:1.7;color:#444}
+.card ul{padding-left:20px;line-height:1.9;color:#444}
+.step-item{display:flex;gap:14px;align-items:flex-start;padding:14px;background:#fdf0f4;border-radius:10px;margin-bottom:10px}
+.step-num{background:#b83255;color:#fff;border-radius:50%;min-width:36px;height:36px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:1rem;flex-shrink:0}
+.step-body h4{color:#8b1a3a;font-size:.95rem;margin-bottom:4px;font-weight:700}
+.step-body p{font-size:14px;color:#555;line-height:1.6}
+.sim-area{background:#fff;border-radius:12px;padding:24px;box-shadow:0 2px 8px rgba(0,0,0,.07);margin-bottom:16px}
+.sim-area h3{color:#8b1a3a;font-size:1.1rem;margin-bottom:12px}
+.checklist-item{display:flex;align-items:center;gap:12px;padding:12px;background:#fdf0f4;border-radius:8px;margin-bottom:8px;cursor:pointer;transition:background .2s}
+.checklist-item:hover{background:#f5e0e7}
+.checklist-item.done{background:#d4edda;text-decoration:line-through;color:#888}
+.checklist-item input[type=checkbox]{width:20px;height:20px;accent-color:#b83255;cursor:pointer;flex-shrink:0}
+.checklist-item label{font-size:14px;color:#444;cursor:pointer;line-height:1.5}
+.checklist-item.done label{color:#888}
+.progress-bar{background:#f0d0da;border-radius:8px;height:14px;margin:12px 0}
+.progress-fill{background:linear-gradient(90deg,#b83255,#e0607a);height:100%;border-radius:8px;transition:width .5s}
+.progress-text{font-size:13px;color:#8b1a3a;font-weight:600;text-align:center;margin-bottom:8px}
+.quiz-box{background:#fff;border-radius:12px;padding:24px;box-shadow:0 2px 8px rgba(0,0,0,.07)}
+.quiz-box h3{color:#8b1a3a;font-size:1.1rem;margin-bottom:6px}
+.quiz-progress{font-size:13px;color:#888;margin-bottom:16px}
+.quiz-q{font-size:1rem;font-weight:600;margin-bottom:16px;line-height:1.5}
+.quiz-opts{display:flex;flex-direction:column;gap:10px;margin-bottom:16px}
+.quiz-opts button{padding:13px 16px;border:2px solid #ddd;border-radius:8px;background:#fff;font-size:15px;cursor:pointer;text-align:left;transition:all .2s;line-height:1.3}
+.quiz-opts button:hover{border-color:#b83255;background:#f9f0f3}
+.quiz-opts button.correct{background:#d4edda;border-color:#28a745;color:#155724}
+.quiz-opts button.wrong{background:#f8d7da;border-color:#dc3545;color:#721c24}
+.quiz-feedback{display:none;padding:12px 16px;border-radius:8px;margin-bottom:14px;font-size:14px;line-height:1.5}
+.quiz-feedback.show{display:block}
+.quiz-feedback.correct{background:#d4edda;color:#155724}
+.quiz-feedback.wrong{background:#f8d7da;color:#721c24}
+.quiz-next{padding:12px 28px;background:#b83255;color:#fff;border:none;border-radius:8px;font-size:15px;cursor:pointer;display:none}
+.quiz-next:hover{background:#8b1a3a}
+.quiz-result{display:none;text-align:center;padding:20px}
+.quiz-result .score{font-size:2.5rem;font-weight:700;color:#b83255}
+.quiz-result p{color:#555;margin-top:8px}
+.quiz-result button{margin-top:16px;padding:12px 28px;background:#b83255;color:#fff;border:none;border-radius:8px;font-size:15px;cursor:pointer}
+footer{text-align:center;padding:20px;color:#888;font-size:13px;margin-top:20px}
+@media(max-width:600px){header h1{font-size:1.2rem}nav button{font-size:13px;padding:12px 8px}}
+</style>
+</head>
+<body>
+<header>
+<small>Habilidades Blandas · Módulo 16 · Bloque 4</small>
+<h1>12 Pasos hacia la Consecución de Metas</h1>
+</header>
+<nav>
+<button class="active" onclick="showTab('concepto',this)">📖 Concepto</button>
+<button onclick="showTab('simulacion',this)">✅ Lista de Progreso</button>
+<button onclick="showTab('juego',this)">🎯 Mini-juego</button>
+</nav>
+<div id="concepto" class="section active">
+<div class="card">
+<h3>El Camino Sistemático al Éxito</h3>
+<p>Establecer una meta es el comienzo, pero conseguirla requiere un sistema de ejecución probado. Las personas altamente exitosas no tienen más talento: tienen mejores sistemas. Los siguientes 12 pasos representan el proceso completo desde el deseo hasta la realidad.</p>
+</div>
+<div class="card">
+<h3>Los 12 Pasos para Conseguir Cualquier Meta</h3>
+<div class="step-item"><div class="step-num">1</div><div class="step-body"><h4>Decide exactamente lo que quieres</h4><p>La claridad es poder. Una decisión vaga produce resultados vagos. Define con precisión quirúrgica el resultado final que deseas.</p></div></div>
+<div class="step-item"><div class="step-num">2</div><div class="step-body"><h4>Escríbela con todos sus detalles</h4><p>El acto de escribir una meta la hace un 42% más probable de lograrse (Universidad Dominicana). Usa papel, no solo digital. Escribe en presente y positivo.</p></div></div>
+<div class="step-item"><div class="step-num">3</div><div class="step-body"><h4>Establece una fecha límite</h4><p>Sin fecha es un sueño. Con fecha es un plan. Si el plazo es largo, crea hitos intermedios cada 30-90 días para mantener el impulso.</p></div></div>
+<div class="step-item"><div class="step-num">4</div><div class="step-body"><h4>Identifica todos los obstáculos</h4><p>Anticipa qué podría interponerse: falta de dinero, de tiempo, de habilidades, miedos. Quien no planifica obstáculos, los sufre como sorpresas.</p></div></div>
+<div class="step-item"><div class="step-num">5</div><div class="step-body"><h4>Determina el conocimiento y habilidades que necesitas</h4><p>¿Qué sabes que ya tienes? ¿Qué necesitas aprender? Busca mentores que ya hayan logrado lo que tú deseas y sigue su camino.</p></div></div>
+<div class="step-item"><div class="step-num">6</div><div class="step-body"><h4>Identifica quién puede ayudarte</h4><p>Ningún gran logro se alcanza solo. Construye un equipo de apoyo: mentores, aliados, asesores. El capital humano supera al capital financiero.</p></div></div>
+<div class="step-item"><div class="step-num">7</div><div class="step-body"><h4>Haz una lista de todas las acciones necesarias</h4><p>Lluvia de ideas sin filtros: escribe todo lo que se te ocurra que podría llevarte a tu meta. Luego organiza por prioridad e impacto.</p></div></div>
+<div class="step-item"><div class="step-num">8</div><div class="step-body"><h4>Organiza la lista como un plan</h4><p>Convierte la lista en un plan secuencial: ¿qué va primero? ¿qué depende de qué? Un plan es una lista organizada por orden y prioridad.</p></div></div>
+<div class="step-item"><div class="step-num">9</div><div class="step-body"><h4>Decide cuánto tiempo diario dedicarás</h4><p>El tiempo es el único recurso no renovable. Agenda bloques específicos en tu calendario para trabajar en tu meta. Lo que se agenda, se hace.</p></div></div>
+<div class="step-item"><div class="step-num">10</div><div class="step-body"><h4>Visualiza tu meta cada mañana</h4><p>5 minutos de visualización vívida al despertar activan el SAR cerebral para buscar oportunidades durante el día de forma automática.</p></div></div>
+<div class="step-item"><div class="step-num">11</div><div class="step-body"><h4>Toma acción inmediata y persiste</h4><p>La acción imperfecta supera la planificación perfecta. Empieza hoy aunque no estés listo. Ajusta sobre la marcha. La persistencia es la clave final.</p></div></div>
+<div class="step-item"><div class="step-num">12</div><div class="step-body"><h4>Revisa y ajusta tu plan semanalmente</h4><p>Cada domingo dedica 20 minutos a revisar tu progreso: ¿qué funcionó? ¿qué necesita ajustarse? Las metas exitosas evolucionan con la realidad.</p></div></div>
+</div>
+</div>
+<div id="simulacion" class="section">
+<div class="sim-area">
+<h3>✅ Tu Lista de los 12 Pasos</h3>
+<p style="font-size:14px;color:#666;margin-bottom:12px">Marca cada paso que ya completaste para tu meta actual:</p>
+<div class="progress-text" id="progText">Progreso: 0/12 pasos (0%)</div>
+<div class="progress-bar"><div class="progress-fill" id="progFill" style="width:0%"></div></div>
+<div id="checkList"></div>
+</div>
+</div>
+<div id="juego" class="section">
+<div class="quiz-box">
+<h3>🎯 Quiz: 12 Pasos para la Consecución de Metas</h3>
+<div class="quiz-progress" id="qProgress">Pregunta 1 de 6</div>
+<div id="quizArea">
+<div class="quiz-q" id="qText"></div>
+<div class="quiz-opts" id="qOpts"></div>
+<div class="quiz-feedback" id="qFeedback"></div>
+<button class="quiz-next" id="qNext" onclick="nextQuestion()">Siguiente →</button>
+</div>
+<div class="quiz-result" id="quizResult">
+<div class="score" id="finalScore"></div>
+<p id="finalMsg"></p>
+<button onclick="restartQuiz()">Reintentar 🔄</button>
+</div>
+</div>
+</div>
+<footer>Habilidades Blandas · Seminario Fénix · Módulo 16</footer>
+<script>
+function showTab(id,btn){document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));document.getElementById(id).classList.add('active');btn.classList.add('active');}
+const pasos=['Decidir exactamente lo que quiero','Escribirla con todos sus detalles','Establecer una fecha límite específica','Identificar todos los obstáculos posibles','Determinar el conocimiento y habilidades necesarias','Identificar quién puede ayudarme','Listar todas las acciones necesarias','Organizar la lista como un plan secuencial','Decidir cuánto tiempo diario dedicaré','Visualizar mi meta cada mañana','Tomar acción inmediata y persistir','Revisar y ajustar mi plan semanalmente'];
+let checks=new Array(12).fill(false);
+function initChecklist(){const cl=document.getElementById('checkList');cl.innerHTML='';pasos.forEach((p,i)=>{const div=document.createElement('div');div.className='checklist-item'+(checks[i]?' done':'');div.innerHTML='<input type="checkbox" id="cb'+i+'"'+(checks[i]?' checked':'')+' onchange="toggleCheck('+i+')"><label for="cb'+i+'"><strong>Paso '+(i+1)+':</strong> '+p+'</label>';cl.appendChild(div);});}
+function toggleCheck(i){checks[i]=!checks[i];const done=checks.filter(Boolean).length;const pct=Math.round(done/12*100);document.getElementById('progText').textContent='Progreso: '+done+'/12 pasos ('+pct+'%)';document.getElementById('progFill').style.width=pct+'%';initChecklist();}
+initChecklist();
+const questions=[{q:'¿En cuánto aumenta la probabilidad de lograr una meta al escribirla en papel?',opts:['10%','25%','42%','75%'],ans:2,fb:'Un estudio de la Universidad Dominicana confirmó que escribir una meta en papel aumenta un 42% la probabilidad de lograrla.'},
+{q:'¿Cuál es el orden correcto de los primeros 3 pasos?',opts:['Escribir → Decidir → Fecha','Decidir → Escribir → Fecha límite','Visualizar → Decidir → Plan','Fecha → Decidir → Escribir'],ans:1,fb:'El orden es: Decidir exactamente qué quieres → Escribirla → Establecer fecha límite. La decisión clara siempre va primero.'},
+{q:'¿Por qué se recomienda identificar obstáculos ANTES de empezar?',opts:['Para desanimarse y ser realista','Para anticiparlos y no sufrirlos como sorpresas','Es solo un ejercicio teórico','Para justificar no empezar'],ans:1,fb:'Anticipar obstáculos permite prepararar soluciones de antemano. Quien no los planifica los vive como crisis inesperadas.'},
+{q:'¿Qué activan los 5 minutos de visualización matutina?',opts:['El sueño REM','El sistema límbico','El SAR (Sistema de Activación Reticular)','Los reflejos condicionados'],ans:2,fb:'El SAR filtra información relevante para tu meta, haciendo que "veas" oportunidades que antes pasaban desapercibidas.'},
+{q:'¿Qué dice el módulo sobre la revisión semanal del plan?',opts:['Solo cuando sientes que no avanzas','Cada domingo, 20 minutos','Una vez al mes es suficiente','No es necesaria si el plan es bueno'],ans:1,fb:'La revisión dominical de 20 minutos permite ajustar el plan según la realidad. Las metas exitosas evolucionan.'},
+{q:'¿Cuál es la clave final del paso 11?',opts:['Tener el plan perfecto antes de actuar','La persistencia','Esperar el momento ideal','Contar con recursos suficientes'],ans:1,fb:'La persistencia es la clave final. La acción imperfecta supera la planificación perfecta. Empieza hoy y ajusta sobre la marcha.'}];
+let cur=0,sc=0,answ=false;
+function loadQ(){const q=questions[cur];document.getElementById('qProgress').textContent='Pregunta '+(cur+1)+' de '+questions.length;document.getElementById('qText').textContent=q.q;const fb=document.getElementById('qFeedback');fb.className='quiz-feedback';fb.textContent='';document.getElementById('qNext').style.display='none';answ=false;const op=document.getElementById('qOpts');op.innerHTML='';q.opts.forEach((o,i)=>{const b=document.createElement('button');b.textContent=o;b.onclick=()=>answer(i,b);op.appendChild(b);});}
+function answer(i,btn){if(answ)return;answ=true;const q=questions[cur];document.querySelectorAll('.quiz-opts button').forEach(b=>b.style.pointerEvents='none');const fb=document.getElementById('qFeedback');if(i===q.ans){btn.classList.add('correct');sc++;fb.className='quiz-feedback show correct';fb.textContent='✅ '+q.fb;}else{btn.classList.add('wrong');document.querySelectorAll('.quiz-opts button')[q.ans].classList.add('correct');fb.className='quiz-feedback show wrong';fb.textContent='❌ '+q.fb;}document.getElementById('qNext').style.display='inline-block';}
+function nextQuestion(){cur++;if(cur<questions.length){loadQ();}else{document.getElementById('quizArea').style.display='none';const r=document.getElementById('quizResult');r.style.display='block';document.getElementById('finalScore').textContent=sc+'/'+questions.length;const p=sc/questions.length;document.getElementById('finalMsg').textContent=p>=0.83?'🏆 ¡Dominas los 12 pasos! Ahora es hora de aplicarlos.':p>=0.5?'📈 Buen trabajo. Repasa los pasos que no recuerdas bien.':'🎯 ¡Sigue aprendiendo! Cada meta lograda comienza con este sistema.';}}
+function restartQuiz(){cur=0;sc=0;answ=false;document.getElementById('quizArea').style.display='block';document.getElementById('quizResult').style.display='none';loadQ();}
+loadQ();
+</script>
+</body>
+</html>
