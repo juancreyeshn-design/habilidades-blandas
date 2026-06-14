@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Habilidades Blandas | Módulo 17 – Estrategias de Administración del Tiempo</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',Arial,sans-serif;background:#f5f0f5;color:#2d2d2d;font-size:16px}
+header{background:linear-gradient(135deg,#8b1a3a 0%,#b83255 100%);color:#fff;padding:20px;text-align:center}
+header small{display:block;font-size:13px;letter-spacing:2px;opacity:.85;text-transform:uppercase}
+header h1{font-size:1.5rem;margin-top:4px}
+nav{display:flex;background:#6d1430;overflow-x:auto}
+nav button{flex:1;min-width:110px;padding:14px 10px;background:none;border:none;color:#f5c6d3;font-size:15px;cursor:pointer;border-bottom:3px solid transparent;transition:all .2s;white-space:nowrap}
+nav button.active,nav button:hover{color:#fff;border-bottom-color:#f7b2c4;background:rgba(255,255,255,.08)}
+.section{display:none;padding:20px;max-width:900px;margin:0 auto}
+.section.active{display:block}
+.card{background:#fff;border-radius:12px;padding:20px;margin-bottom:16px;box-shadow:0 2px 8px rgba(0,0,0,.07)}
+.card h3{color:#8b1a3a;font-size:1.1rem;margin-bottom:8px}
+.card p{line-height:1.7;color:#444}
+.card ul,.card ol{padding-left:20px;line-height:1.9;color:#444}
+.matrix-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:12px 0}
+.matrix-cell{border-radius:10px;padding:16px}
+.matrix-cell h4{font-size:.9rem;font-weight:700;margin-bottom:6px}
+.matrix-cell p{font-size:.8rem;line-height:1.5}
+.cell-q1{background:#d4edda;border:2px solid #28a745}.cell-q1 h4{color:#155724}
+.cell-q2{background:#fff3cd;border:2px solid #ffc107}.cell-q2 h4{color:#856404}
+.cell-q3{background:#f8d7da;border:2px solid #dc3545}.cell-q3 h4{color:#721c24}
+.cell-q4{background:#d1ecf1;border:2px solid #17a2b8}.cell-q4 h4{color:#0c5460}
+.sim-area{background:#fff;border-radius:12px;padding:24px;box-shadow:0 2px 8px rgba(0,0,0,.07);margin-bottom:16px}
+.sim-area h3{color:#8b1a3a;font-size:1.1rem;margin-bottom:12px}
+.timer-display{text-align:center;padding:20px;background:#fdf0f4;border-radius:12px;margin-bottom:16px}
+.timer-num{font-size:4rem;font-weight:700;color:#b83255;font-variant-numeric:tabular-nums}
+.timer-label{font-size:14px;color:#888;margin-bottom:12px}
+.timer-btns{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.timer-btn{padding:10px 20px;border:none;border-radius:8px;font-size:14px;cursor:pointer;font-weight:600}
+.timer-start{background:#b83255;color:#fff}
+.timer-pause{background:#e0607a;color:#fff}
+.timer-reset{background:#ddd;color:#555}
+.task-input{display:flex;gap:8px;margin-bottom:12px}
+.task-input input{flex:1;padding:10px;border:1px solid #ddd;border-radius:8px;font-size:14px}
+.task-input button{padding:10px 16px;background:#b83255;color:#fff;border:none;border-radius:8px;cursor:pointer;font-size:14px}
+.task-list{list-style:none}
+.task-list li{display:flex;justify-content:space-between;align-items:center;padding:10px 12px;background:#fdf0f4;border-radius:8px;margin-bottom:6px;font-size:14px}
+.task-list li button{background:none;border:none;color:#dc3545;cursor:pointer;font-size:18px}
+.quiz-box{background:#fff;border-radius:12px;padding:24px;box-shadow:0 2px 8px rgba(0,0,0,.07)}
+.quiz-box h3{color:#8b1a3a;font-size:1.1rem;margin-bottom:6px}
+.quiz-progress{font-size:13px;color:#888;margin-bottom:16px}
+.quiz-q{font-size:1rem;font-weight:600;margin-bottom:16px;line-height:1.5}
+.quiz-opts{display:flex;flex-direction:column;gap:10px;margin-bottom:16px}
+.quiz-opts button{padding:13px 16px;border:2px solid #ddd;border-radius:8px;background:#fff;font-size:15px;cursor:pointer;text-align:left;transition:all .2s;line-height:1.3}
+.quiz-opts button:hover{border-color:#b83255;background:#f9f0f3}
+.quiz-opts button.correct{background:#d4edda;border-color:#28a745;color:#155724}
+.quiz-opts button.wrong{background:#f8d7da;border-color:#dc3545;color:#721c24}
+.quiz-feedback{display:none;padding:12px 16px;border-radius:8px;margin-bottom:14px;font-size:14px;line-height:1.5}
+.quiz-feedback.show{display:block}
+.quiz-feedback.correct{background:#d4edda;color:#155724}
+.quiz-feedback.wrong{background:#f8d7da;color:#721c24}
+.quiz-next{padding:12px 28px;background:#b83255;color:#fff;border:none;border-radius:8px;font-size:15px;cursor:pointer;display:none}
+.quiz-next:hover{background:#8b1a3a}
+.quiz-result{display:none;text-align:center;padding:20px}
+.quiz-result .score{font-size:2.5rem;font-weight:700;color:#b83255}
+.quiz-result p{color:#555;margin-top:8px}
+.quiz-result button{margin-top:16px;padding:12px 28px;background:#b83255;color:#fff;border:none;border-radius:8px;font-size:15px;cursor:pointer}
+footer{text-align:center;padding:20px;color:#888;font-size:13px;margin-top:20px}
+@media(max-width:600px){header h1{font-size:1.2rem}nav button{font-size:13px;padding:12px 8px}.matrix-grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<header>
+<small>Habilidades Blandas · Módulo 17 · Bloque 4</small>
+<h1>Estrategias de Administración del Tiempo</h1>
+</header>
+<nav>
+<button class="active" onclick="showTab('concepto',this)">📖 Concepto</button>
+<button onclick="showTab('simulacion',this)">⏱️ Temporizador</button>
+<button onclick="showTab('juego',this)">🎯 Mini-juego</button>
+</nav>
+<div id="concepto" class="section active">
+<div class="card">
+<h3>El Tiempo: El Único Recurso No Renovable</h3>
+<p>Todos tenemos exactamente 24 horas al día. La diferencia entre las personas altamente exitosas y el promedio no es el talento ni la suerte: es cómo administran esas 24 horas. El tiempo no se administra realmente; lo que se administra son las decisiones sobre qué hacer con él.</p>
+<p style="margin-top:10px">La persona promedio desperdicia entre 2-4 horas diarias en actividades de bajo valor. Recuperar solo 2 horas diarias para actividades de alto impacto equivale a agregar más de un mes de trabajo productivo al año.</p>
+</div>
+<div class="card">
+<h3>La Matriz de Eisenhower: La Herramienta más Poderosa</h3>
+<p style="margin-bottom:12px">Clasifica cada actividad en uno de estos 4 cuadrantes:</p>
+<div class="matrix-grid">
+<div class="matrix-cell cell-q1"><h4>Q1: Urgente + Importante ✅</h4><p>Crisis, emergencias, plazos críticos. Hazlo ahora. Minimiza este cuadrante gestionando bien Q2.</p></div>
+<div class="matrix-cell cell-q2"><h4>Q2: No urgente + Importante 🎯</h4><p>Planificación, relaciones, desarrollo personal. Tu zona de máximo rendimiento. Aquí viven los grandes logros.</p></div>
+<div class="matrix-cell cell-q3"><h4>Q3: Urgente + No importante ⚠️</h4><p>Interrupciones, reuniones innecesarias, emails. Delega o elimina. Consume tiempo sin producir valor real.</p></div>
+<div class="matrix-cell cell-q4"><h4>Q4: No urgente + No importante ❌</h4><p>Redes sociales sin propósito, TV excesiva. Elimina radicalmente. Es el ladrón silencioso del éxito.</p></div>
+</div>
+</div>
+<div class="card">
+<h3>Las 7 Estrategias de Administración del Tiempo de Alto Rendimiento</h3>
+<ol>
+<li><strong>Regla de las 3 tareas:</strong> Cada noche identifica las 3 tareas más importantes del día siguiente. Empieza el día por la más difícil (Eat the frog).</li>
+<li><strong>Bloques de tiempo sin interrupciones:</strong> Trabaja en bloques de 90-120 minutos con el teléfono en modo avión. La profundidad produce más que la amplitud.</li>
+<li><strong>La técnica Pomodoro:</strong> 25 minutos de trabajo intenso + 5 de descanso. Tras 4 ciclos, descanso largo de 20-30 minutos.</li>
+<li><strong>Batching (agrupación de tareas):</strong> Agrupa tareas similares. Responde emails en 2-3 bloques fijos al día, no continuamente.</li>
+<li><strong>Regla de los 2 minutos:</strong> Si una tarea toma menos de 2 minutos, hazla ahora. Si tarda más, agéndala específicamente.</li>
+<li><strong>Cierre semanal:</strong> Los viernes, revisa lo logrado, procesa pendientes y planifica la próxima semana. 30 minutos que valen horas de claridad.</li>
+<li><strong>Elimina compromisos de bajo valor:</strong> Di no más. Cada sí a algo de bajo valor es un no a algo de alto valor.</li>
+</ol>
+</div>
+</div>
+<div id="simulacion" class="section">
+<div class="sim-area">
+<h3>⏱️ Temporizador Pomodoro</h3>
+<div class="timer-display">
+<div class="timer-num" id="timerNum">25:00</div>
+<div class="timer-label" id="timerLabel">🍅 Sesión de trabajo</div>
+<div class="timer-btns">
+<button class="timer-btn timer-start" onclick="startTimer()">▶ Iniciar</button>
+<button class="timer-btn timer-pause" onclick="pauseTimer()">⏸ Pausar</button>
+<button class="timer-btn timer-reset" onclick="resetTimer()">↺ Reiniciar</button>
+</div>
+</div>
+<div class="sim-area" style="box-shadow:none;padding:0">
+<h3 style="margin-bottom:12px">📝 Mis 3 Tareas Más Importantes de Hoy</h3>
+<div class="task-input">
+<input type="text" id="taskInput" placeholder="Escribe una tarea importante..." onkeydown="if(event.key==='Enter')addTask()">
+<button onclick="addTask()">+ Agregar</button>
+</div>
+<ul class="task-list" id="taskList"></ul>
+</div>
+</div>
+</div>
+<div id="juego" class="section">
+<div class="quiz-box">
+<h3>🎯 Quiz: Administración del Tiempo</h3>
+<div class="quiz-progress" id="qProgress">Pregunta 1 de 6</div>
+<div id="quizArea">
+<div class="quiz-q" id="qText"></div>
+<div class="quiz-opts" id="qOpts"></div>
+<div class="quiz-feedback" id="qFeedback"></div>
+<button class="quiz-next" id="qNext" onclick="nextQuestion()">Siguiente →</button>
+</div>
+<div class="quiz-result" id="quizResult">
+<div class="score" id="finalScore"></div>
+<p id="finalMsg"></p>
+<button onclick="restartQuiz()">Reintentar 🔄</button>
+</div>
+</div>
+</div>
+<footer>Habilidades Blandas · Seminario Fénix · Módulo 17</footer>
+<script>
+function showTab(id,btn){document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));document.getElementById(id).classList.add('active');btn.classList.add('active');}
+let timerSecs=25*60,timerRunning=false,timerInterval=null,isWork=true,pomodoros=0;
+function updateDisplay(){const m=Math.floor(timerSecs/60),s=timerSecs%60;document.getElementById('timerNum').textContent=String(m).padStart(2,'0')+':'+String(s).padStart(2,'0');}
+function startTimer(){if(timerRunning)return;timerRunning=true;timerInterval=setInterval(()=>{timerSecs--;updateDisplay();if(timerSecs<=0){clearInterval(timerInterval);timerRunning=false;if(isWork){pomodoros++;isWork=false;timerSecs=pomodoros%4===0?30*60:5*60;document.getElementById('timerLabel').textContent=pomodoros%4===0?'☕ Descanso largo':'🌿 Descanso corto';}else{isWork=true;timerSecs=25*60;document.getElementById('timerLabel').textContent='🍅 Sesión de trabajo (Pomodoro '+(pomodoros+1)+')';}updateDisplay();}},1000);}
+function pauseTimer(){clearInterval(timerInterval);timerRunning=false;}
+function resetTimer(){clearInterval(timerInterval);timerRunning=false;isWork=true;timerSecs=25*60;document.getElementById('timerLabel').textContent='🍅 Sesión de trabajo';updateDisplay();}
+let tasks=[];
+function addTask(){const input=document.getElementById('taskInput');const t=input.value.trim();if(!t)return;if(tasks.length>=3){alert('Ya tienes 3 tareas. ¡Enfócate en completarlas antes de agregar más!');return;}tasks.push(t);input.value='';renderTasks();}
+function removeTask(i){tasks.splice(i,1);renderTasks();}
+function renderTasks(){const ul=document.getElementById('taskList');ul.innerHTML='';tasks.forEach((t,i)=>{const li=document.createElement('li');li.innerHTML='<span>'+['🥇','🥈','🥉'][i]+' '+t+'</span><button onclick="removeTask('+i+')" title="Eliminar">✕</button>';ul.appendChild(li);});}
+const questions=[{q:'¿Qué cuadrante de la Matriz de Eisenhower debes priorizar para el máximo rendimiento?',opts:['Q1: Urgente + Importante','Q2: No urgente + Importante','Q3: Urgente + No importante','Q4: No urgente + No importante'],ans:1,fb:'El Q2 (No urgente + Importante) es donde viven la planificación, las relaciones y el desarrollo personal. Es la zona de los grandes logros.'},
+{q:'¿Cuántas horas diarias en promedio desperdicia la persona promedio?',opts:['30 minutos','1 hora','2-4 horas','7-8 horas'],ans:2,fb:'La persona promedio desperdicia entre 2-4 horas en actividades de bajo valor. Recuperar solo 2 de esas horas agrega más de un mes productivo al año.'},
+{q:'¿En qué consiste la Técnica Pomodoro?',opts:['Trabajar 2 horas sin descanso','25 min trabajo + 5 min descanso, con descanso largo cada 4 ciclos','10 min trabajo + 10 min descanso','Trabajar solo en las mañanas'],ans:1,fb:'El Pomodoro: 25 minutos de trabajo intenso + 5 de descanso. Cada 4 pomodoros, un descanso largo de 20-30 minutos.'},
+{q:'¿Qué es el "Batching" en administración del tiempo?',opts:['Trabajar de noche','Agrupar tareas similares para hacerlas juntas','Hacer muchas cosas a la vez','Delegar todas las tareas'],ans:1,fb:'El Batching agrupa tareas similares (ej: revisar emails 2 veces al día) para eliminar el costo cognitivo de cambiar constantemente de tipo de actividad.'},
+{q:'¿Qué dice la Regla de los 2 Minutos?',opts:['Descansar 2 minutos cada hora','Si tarda menos de 2 minutos, hazlo ahora','Planificar en 2 minutos máximo','Responder emails en 2 minutos'],ans:1,fb:'Si la tarea toma menos de 2 minutos, hazla inmediatamente. Si tarda más, agéndala con hora y fecha específica.'},
+{q:'¿Qué significa "Eat the frog"?',opts:['Comer proteínas en el desayuno para rendir mejor','Empezar el día por la tarea más difícil e importante','Eliminar tareas desagradables','Delegar lo que no te gusta'],ans:1,fb:'"Eat the frog" significa hacer primero la tarea más difícil del día. Al completarla, el resto del día fluye con más facilidad y confianza.'}];
+let cur=0,sc=0,answ=false;
+function loadQ(){const q=questions[cur];document.getElementById('qProgress').textContent='Pregunta '+(cur+1)+' de '+questions.length;document.getElementById('qText').textContent=q.q;const fb=document.getElementById('qFeedback');fb.className='quiz-feedback';fb.textContent='';document.getElementById('qNext').style.display='none';answ=false;const op=document.getElementById('qOpts');op.innerHTML='';q.opts.forEach((o,i)=>{const b=document.createElement('button');b.textContent=o;b.onclick=()=>answer(i,b);op.appendChild(b);});}
+function answer(i,btn){if(answ)return;answ=true;const q=questions[cur];document.querySelectorAll('.quiz-opts button').forEach(b=>b.style.pointerEvents='none');const fb=document.getElementById('qFeedback');if(i===q.ans){btn.classList.add('correct');sc++;fb.className='quiz-feedback show correct';fb.textContent='✅ '+q.fb;}else{btn.classList.add('wrong');document.querySelectorAll('.quiz-opts button')[q.ans].classList.add('correct');fb.className='quiz-feedback show wrong';fb.textContent='❌ '+q.fb;}document.getElementById('qNext').style.display='inline-block';}
+function nextQuestion(){cur++;if(cur<questions.length){loadQ();}else{document.getElementById('quizArea').style.display='none';const r=document.getElementById('quizResult');r.style.display='block';document.getElementById('finalScore').textContent=sc+'/'+questions.length;const p=sc/questions.length;document.getElementById('finalMsg').textContent=p>=0.83?'⏱️ ¡Excelente! Administras tu tiempo como un profesional.':p>=0.5?'📈 Buen resultado. Practica las técnicas esta semana.':'🕐 Sigue aprendiendo. ¡Cada minuto bien invertido cambia tu vida!';}}
+function restartQuiz(){cur=0;sc=0;answ=false;document.getElementById('quizArea').style.display='block';document.getElementById('quizResult').style.display='none';loadQ();}
+loadQ();
+</script>
+</body>
+</html>
