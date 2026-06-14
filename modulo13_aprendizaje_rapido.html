@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Habilidades Blandas | Módulo 13 – Técnicas de Aprendizaje Rápido</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',Arial,sans-serif;background:#f5f0f5;color:#2d2d2d;font-size:16px}
+header{background:linear-gradient(135deg,#8b1a3a 0%,#b83255 100%);color:#fff;padding:20px;text-align:center}
+header small{display:block;font-size:13px;letter-spacing:2px;opacity:.85;text-transform:uppercase}
+header h1{font-size:1.5rem;margin-top:4px}
+nav{display:flex;background:#6d1430;overflow-x:auto}
+nav button{flex:1;min-width:110px;padding:14px 10px;background:none;border:none;color:#f5c6d3;font-size:15px;cursor:pointer;border-bottom:3px solid transparent;transition:all .2s;white-space:nowrap}
+nav button.active,nav button:hover{color:#fff;border-bottom-color:#f7b2c4;background:rgba(255,255,255,.08)}
+.section{display:none;padding:20px;max-width:900px;margin:0 auto}
+.section.active{display:block}
+.card{background:#fff;border-radius:12px;padding:20px;margin-bottom:16px;box-shadow:0 2px 8px rgba(0,0,0,.07)}
+.card h3{color:#8b1a3a;font-size:1.1rem;margin-bottom:8px}
+.card p{line-height:1.7;color:#444}
+.card ul,.card ol{padding-left:20px;line-height:1.9;color:#444}
+.pillar-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px;margin:12px 0}
+.pillar-card{border-radius:10px;padding:16px;text-align:center;background:#fdf0f4}
+.pillar-card .pico{font-size:2rem;margin-bottom:6px}
+.pillar-card h4{color:#8b1a3a;font-size:.9rem;font-weight:700;margin-bottom:4px}
+.pillar-card p{font-size:.8rem;color:#666;line-height:1.4}
+.sim-area{background:#fff;border-radius:12px;padding:24px;box-shadow:0 2px 8px rgba(0,0,0,.07);margin-bottom:16px}
+.sim-area h3{color:#8b1a3a;font-size:1.1rem;margin-bottom:12px}
+.rs-row{margin-bottom:14px}
+.rs-row label{display:block;font-size:14px;font-weight:600;color:#555;margin-bottom:4px}
+.rs-row input[type=range]{width:100%;accent-color:#b83255}
+.rs-row .sv{font-size:13px;color:#888;text-align:right}
+.sim-result{border-left:4px solid #b83255;background:#f5e6ea;border-radius:8px;padding:16px;margin-top:8px;display:none}
+.sim-result h4{color:#8b1a3a;margin-bottom:6px}
+.sim-result p{font-size:14px;color:#444;line-height:1.6}
+.sim-btn{margin-top:14px;padding:12px 24px;background:#b83255;color:#fff;border:none;border-radius:8px;font-size:15px;cursor:pointer}
+.sim-btn:hover{background:#8b1a3a}
+.technique-box{background:#fdf0f4;border-radius:10px;padding:18px;margin-bottom:12px;border-left:4px solid #b83255}
+.technique-box h4{color:#8b1a3a;font-size:1rem;margin-bottom:6px}
+.technique-box p{font-size:14px;color:#555;line-height:1.6}
+.quiz-box{background:#fff;border-radius:12px;padding:24px;box-shadow:0 2px 8px rgba(0,0,0,.07)}
+.quiz-box h3{color:#8b1a3a;font-size:1.1rem;margin-bottom:6px}
+.quiz-progress{font-size:13px;color:#888;margin-bottom:16px}
+.quiz-q{font-size:1rem;font-weight:600;margin-bottom:16px;line-height:1.5}
+.quiz-opts{display:flex;flex-direction:column;gap:10px;margin-bottom:16px}
+.quiz-opts button{padding:13px 16px;border:2px solid #ddd;border-radius:8px;background:#fff;font-size:15px;cursor:pointer;text-align:left;transition:all .2s;line-height:1.3}
+.quiz-opts button:hover{border-color:#b83255;background:#f9f0f3}
+.quiz-opts button.correct{background:#d4edda;border-color:#28a745;color:#155724}
+.quiz-opts button.wrong{background:#f8d7da;border-color:#dc3545;color:#721c24}
+.quiz-feedback{display:none;padding:12px 16px;border-radius:8px;margin-bottom:14px;font-size:14px;line-height:1.5}
+.quiz-feedback.show{display:block}
+.quiz-feedback.correct{background:#d4edda;color:#155724}
+.quiz-feedback.wrong{background:#f8d7da;color:#721c24}
+.quiz-next{padding:12px 28px;background:#b83255;color:#fff;border:none;border-radius:8px;font-size:15px;cursor:pointer;display:none}
+.quiz-next:hover{background:#8b1a3a}
+.quiz-result{display:none;text-align:center;padding:20px}
+.quiz-result .score{font-size:2.5rem;font-weight:700;color:#b83255}
+.quiz-result p{color:#555;margin-top:8px}
+.quiz-result button{margin-top:16px;padding:12px 28px;background:#b83255;color:#fff;border:none;border-radius:8px;font-size:15px;cursor:pointer}
+footer{text-align:center;padding:20px;color:#888;font-size:13px;margin-top:20px}
+@media(max-width:600px){header h1{font-size:1.2rem}nav button{font-size:13px;padding:12px 8px}}
+</style>
+</head>
+<body>
+<header>
+<small>Habilidades Blandas · Módulo 13 · Bloque 3</small>
+<h1>Técnicas de Aprendizaje Rápido</h1>
+</header>
+<nav>
+<button class="active" onclick="showTab('concepto',this)">📖 Concepto</button>
+<button onclick="showTab('simulacion',this)">⚡ Simulación</button>
+<button onclick="showTab('juego',this)">🎯 Mini-juego</button>
+</nav>
+<div id="concepto" class="section active">
+<div class="card">
+<h3>¿Por Qué Aprender a Aprender?</h3>
+<p>En el mundo actual, la capacidad de aprender rápidamente es la habilidad más valiosa que puedes tener. Las personas que saben cómo aprender pueden adaptarse a cualquier cambio, dominar cualquier habilidad y superar cualquier obstáculo en un tiempo mucho menor que el promedio. No se trata de ser más inteligente: se trata de usar tu mente de forma más estratégica.</p>
+<p style="margin-top:10px">Estudios demuestran que las personas que aplican técnicas de aprendizaje activo retienen hasta 5 veces más información que quienes usan métodos pasivos como releer o escuchar sin interactuar con el material.</p>
+</div>
+<div class="card">
+<h3>Las 6 Técnicas de Aprendizaje Rápido más Poderosas</h3>
+<div class="technique-box">
+<h4>1. 🧠 La Técnica Feynman</h4>
+<p>Aprende cualquier concepto explicándolo como si se lo contaras a un niño de 12 años. Si no puedes explicarlo con palabras simples, todavía no lo entiendes completamente. Esta técnica fuerza la comprensión real vs. la memorización superficial.</p>
+</div>
+<div class="technique-box">
+<h4>2. 🔁 Repetición Espaciada</h4>
+<p>Revisa el material en intervalos crecientes: 1 día, 3 días, 7 días, 21 días. Esta técnica aprovecha cómo funciona la memoria a largo plazo y puede reducir el tiempo de estudio hasta un 60% mientras duplica la retención.</p>
+</div>
+<div class="technique-box">
+<h4>3. ✍️ Recuperación Activa (Testing Effect)</h4>
+<p>En lugar de releer, cierra el libro y escribe todo lo que recuerdas. Los exámenes son la herramienta de aprendizaje más poderosa que existe. Hacerte preguntas activamente consolida el aprendizaje mejor que cualquier otra técnica pasiva.</p>
+</div>
+<div class="technique-box">
+<h4>4. 🗺️ Mapas Mentales y Conexiones</h4>
+<p>El cerebro aprende por asociación. Conectar nueva información con lo que ya sabes crea rutas neuronales más sólidas. Dibuja mapas conceptuales que relacionen ideas entre sí en lugar de listas lineales.</p>
+</div>
+<div class="technique-box">
+<h4>5. 🎯 El Principio 80/20 del Aprendizaje</h4>
+<p>El 20% del material produce el 80% de los resultados. Identifica el núcleo esencial de lo que necesitas dominar y enfócate en eso primero. Evita el perfeccionismo de querer saberlo todo antes de empezar a aplicar.</p>
+</div>
+<div class="technique-box">
+<h4>6. 🏃 Aprendizaje por Acción Inmediata</h4>
+<p>Aplica lo que aprendiste dentro de las primeras 24 horas. La implementación inmediata consolida el aprendizaje de forma exponencial. Una hora de práctica vale más que diez horas de teoría sin aplicación.</p>
+</div>
+</div>
+<div class="card">
+<h3>El Estado Mental Óptimo para Aprender</h3>
+<ul>
+<li><strong>Estado alfa:</strong> Relajación alerta (ni dormido ni ansioso). Meditación de 5 minutos antes de estudiar mejora la retención.</li>
+<li><strong>Bloques de 25-50 minutos:</strong> El cerebro mantiene concentración de alta calidad en ese rango. Usa descansos de 5-10 minutos entre bloques.</li>
+<li><strong>Eliminación de distracciones:</strong> El multitasking reduce la efectividad del aprendizaje hasta un 40%. Estudia con teléfono en modo avión.</li>
+<li><strong>Sueño de calidad:</strong> El cerebro consolida lo aprendido durante el sueño. Dormir bien la noche después de estudiar es tan importante como el estudio mismo.</li>
+</ul>
+</div>
+</div>
+<div id="simulacion" class="section">
+<div class="sim-area">
+<h3>⚡ Evaluación de tus Hábitos de Aprendizaje</h3>
+<p style="font-size:14px;color:#666;margin-bottom:16px">¿Con qué frecuencia usas estas técnicas? (1=nunca, 10=siempre)</p>
+<div class="rs-row">
+<label>1. Explico con mis propias palabras lo que aprendí (Técnica Feynman)</label>
+<input type="range" id="r1" min="1" max="10" value="5" oninput="document.getElementById('v1').textContent=this.value">
+<div class="sv">Valor: <span id="v1">5</span></div>
+</div>
+<div class="rs-row">
+<label>2. Hago repasos en intervalos espaciados de los materiales</label>
+<input type="range" id="r2" min="1" max="10" value="5" oninput="document.getElementById('v2').textContent=this.value">
+<div class="sv">Valor: <span id="v2">5</span></div>
+</div>
+<div class="rs-row">
+<label>3. Me auto-examino activamente cerrando el libro o apuntes</label>
+<input type="range" id="r3" min="1" max="10" value="5" oninput="document.getElementById('v3').textContent=this.value">
+<div class="sv">Valor: <span id="v3">5</span></div>
+</div>
+<div class="rs-row">
+<label>4. Aplico lo aprendido dentro de las 24 horas siguientes</label>
+<input type="range" id="r4" min="1" max="10" value="5" oninput="document.getElementById('v4').textContent=this.value">
+<div class="sv">Valor: <span id="v4">5</span></div>
+</div>
+<button class="sim-btn" onclick="calcAprendizaje()">Ver mi perfil de aprendizaje</button>
+<div class="sim-result" id="simResult">
+<h4 id="resTitle"></h4>
+<p id="resText"></p>
+</div>
+</div>
+<div class="sim-area">
+<h3>📅 Mi Plan de Estudio con Repetición Espaciada</h3>
+<p style="font-size:14px;color:#666;margin-bottom:12px">¿Qué tema quieres dominar? Escríbelo y crea tu calendario de repaso:</p>
+<input type="text" id="temaEstudio" style="width:100%;padding:10px;border:1px solid #ddd;border-radius:8px;font-size:14px;margin-bottom:10px" placeholder="Ej: Programación en Python, Inglés intermedio...">
+<button class="sim-btn" onclick="crearPlan()">Generar Plan de Repetición Espaciada</button>
+<div id="planResult" style="display:none;margin-top:12px;background:#f0f8f0;border-radius:8px;padding:16px">
+<h4 style="color:#155724;margin-bottom:10px">📅 Tu calendario de repasos para: <span id="planTema"></span></h4>
+<div id="planDias"></div>
+</div>
+</div>
+</div>
+<div id="juego" class="section">
+<div class="quiz-box">
+<h3>🎯 ¿Dominas las Técnicas de Aprendizaje Rápido?</h3>
+<div class="quiz-progress" id="qProgress">Pregunta 1 de 6</div>
+<div id="quizArea">
+<div class="quiz-q" id="qText"></div>
+<div class="quiz-opts" id="qOpts"></div>
+<div class="quiz-feedback" id="qFeedback"></div>
+<button class="quiz-next" id="qNext" onclick="nextQuestion()">Siguiente →</button>
+</div>
+<div class="quiz-result" id="quizResult">
+<div class="score" id="finalScore"></div>
+<p id="finalMsg"></p>
+<button onclick="restartQuiz()">Reintentar 🔄</button>
+</div>
+</div>
+</div>
+<footer>Habilidades Blandas · Seminario Fénix · Módulo 13</footer>
+<script>
+function showTab(id,btn){document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));document.getElementById(id).classList.add('active');btn.classList.add('active');}
+function calcAprendizaje(){const v=[+r1.value,+r2.value,+r3.value,+r4.value];const avg=(v[0]+v[1]+v[2]+v[3])/4;const el=document.getElementById('simResult');el.style.display='block';let t,tx;if(avg>=8){t='🚀 Aprendiz de Alto Rendimiento';tx='Usas técnicas de aprendizaje avanzadas de forma consistente. Tu capacidad de adquirir nuevas habilidades es una ventaja competitiva enorme.';}else if(avg>=6){t='📈 Aprendiz en Desarrollo';tx='Tienes buenos hábitos de estudio con margen de mejora. Implementa la repetición espaciada de forma sistemática y verás resultados notables.';}else if(avg>=4){t='📚 Aprendiz Convencional';tx='Usas métodos tradicionales que son menos eficientes. Empieza con la Técnica Feynman en tu próxima sesión de estudio y notarás la diferencia inmediatamente.';}else{t='⚙️ Aprendiz con Grandes Oportunidades';tx='Hay mucho potencial por desarrollar. Aplica hoy mismo la técnica de recuperación activa: cierra este módulo y escribe todo lo que recuerdas. Ese solo acto triplica la retención.';}document.getElementById('resTitle').textContent=t;document.getElementById('resText').textContent=tx;}
+function crearPlan(){const tema=document.getElementById('temaEstudio').value.trim();if(!tema){alert('Escribe el tema que quieres estudiar');return;}document.getElementById('planTema').textContent=tema;const hoy=new Date();const dias=[1,3,7,14,21,30];const nombres=['Mañana','En 3 días','En 1 semana','En 2 semanas','En 3 semanas','En 1 mes'];const el=document.getElementById('planDias');el.innerHTML='';dias.forEach((d,i)=>{const fecha=new Date(hoy);fecha.setDate(hoy.getDate()+d);const div=document.createElement('div');div.style.cssText='background:#fff;border-radius:6px;padding:10px 14px;margin-bottom:8px;display:flex;justify-content:space-between;align-items:center;border-left:3px solid #388e3c';div.innerHTML='<span style="font-size:14px;color:#555">Repaso '+( i+1)+': '+nombres[i]+'</span><span style="font-size:13px;font-weight:600;color:#1b5e20">'+fecha.toLocaleDateString('es-ES',{weekday:'short',day:'numeric',month:'short'})+'</span>';el.appendChild(div);});document.getElementById('planResult').style.display='block';}
+const questions=[{q:'¿En qué consiste la Técnica Feynman?',opts:['Memorizar con tarjetas de colores','Explicar el concepto como a un niño de 12 años','Estudiar durante 8 horas sin descanso','Subrayar el texto con diferentes colores'],ans:1,fb:'La Técnica Feynman obliga a una comprensión real: si no puedes explicarlo con palabras simples, no lo entiendes completamente.'},
+{q:'¿Qué es la repetición espaciada?',opts:['Estudiar el mismo tema todos los días','Revisar en intervalos crecientes: 1, 3, 7, 21 días','Repetir en voz alta 100 veces seguidas','Estudiar en grupos numerosos'],ans:1,fb:'La repetición espaciada aprovecha cómo funciona la memoria a largo plazo, reduciendo tiempo de estudio hasta 60%.'},
+{q:'Según el Testing Effect, ¿qué es la herramienta de aprendizaje MÁS poderosa?',opts:['Releer el material varias veces','Escuchar podcasts educativos','Hacerse exámenes y preguntas activamente','Ver videos explicativos'],ans:2,fb:'Hacerse exámenes activamente (recuperación activa) consolida el aprendizaje mejor que cualquier técnica pasiva.'},
+{q:'¿Cuánto tiempo de concentración de alta calidad puede mantener el cerebro?',opts:['10-15 minutos','25-50 minutos','2-3 horas continuas','El cerebro no tiene límite si está motivado'],ans:1,fb:'El cerebro mantiene concentración óptima en bloques de 25-50 minutos. Por eso son efectivos los ciclos Pomodoro.'},
+{q:'¿Cuándo debes aplicar lo que aprendiste para maximizar la retención?',opts:['Después de dominar todo el tema','En las primeras 24 horas','Un mes después de terminar el curso','Solo en exámenes formales'],ans:1,fb:'La aplicación dentro de las primeras 24 horas consolida el aprendizaje de forma exponencial.'},
+{q:'Según el principio 80/20 del aprendizaje, ¿qué debes hacer primero?',opts:['Estudiar todo el material de igual forma','Buscar el núcleo esencial (20%) que produce el 80% de resultados','Empezar por los temas más difíciles','Memorizar definiciones antes de conceptos'],ans:1,fb:'Identificar y dominar primero el 20% más importante permite obtener resultados rápidos y mantener motivación.'}];
+let cur=0,sc=0,answ=false;
+function loadQ(){const q=questions[cur];document.getElementById('qProgress').textContent='Pregunta '+(cur+1)+' de '+questions.length;document.getElementById('qText').textContent=q.q;const fb=document.getElementById('qFeedback');fb.className='quiz-feedback';fb.textContent='';document.getElementById('qNext').style.display='none';answ=false;const op=document.getElementById('qOpts');op.innerHTML='';q.opts.forEach((o,i)=>{const b=document.createElement('button');b.textContent=o;b.onclick=()=>answer(i,b);op.appendChild(b);});}
+function answer(i,btn){if(answ)return;answ=true;const q=questions[cur];document.querySelectorAll('.quiz-opts button').forEach(b=>b.style.pointerEvents='none');const fb=document.getElementById('qFeedback');if(i===q.ans){btn.classList.add('correct');sc++;fb.className='quiz-feedback show correct';fb.textContent='✅ '+q.fb;}else{btn.classList.add('wrong');document.querySelectorAll('.quiz-opts button')[q.ans].classList.add('correct');fb.className='quiz-feedback show wrong';fb.textContent='❌ '+q.fb;}document.getElementById('qNext').style.display='inline-block';}
+function nextQuestion(){cur++;if(cur<questions.length){loadQ();}else{document.getElementById('quizArea').style.display='none';const r=document.getElementById('quizResult');r.style.display='block';document.getElementById('finalScore').textContent=sc+'/'+questions.length;const p=sc/questions.length;document.getElementById('finalMsg').textContent=p>=0.83?'🚀 ¡Excelente! Eres un aprendiz de alto rendimiento.':p>=0.5?'📈 Buen trabajo. Aplica las técnicas hoy mismo.':'📚 Sigue practicando. ¡El aprendizaje es una habilidad que se aprende!';}}
+function restartQuiz(){cur=0;sc=0;answ=false;document.getElementById('quizArea').style.display='block';document.getElementById('quizResult').style.display='none';loadQ();}
+loadQ();
+</script>
+</body>
+</html>
