@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Habilidades Blandas | Módulo 19 – Cómo Explotar su Genio Interno</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',Arial,sans-serif;background:#f5f0f5;color:#2d2d2d;font-size:16px}
+header{background:linear-gradient(135deg,#8b1a3a 0%,#b83255 100%);color:#fff;padding:20px;text-align:center}
+header small{display:block;font-size:13px;letter-spacing:2px;opacity:.85;text-transform:uppercase}
+header h1{font-size:1.5rem;margin-top:4px}
+nav{display:flex;background:#6d1430;overflow-x:auto}
+nav button{flex:1;min-width:110px;padding:14px 10px;background:none;border:none;color:#f5c6d3;font-size:15px;cursor:pointer;border-bottom:3px solid transparent;transition:all .2s;white-space:nowrap}
+nav button.active,nav button:hover{color:#fff;border-bottom-color:#f7b2c4;background:rgba(255,255,255,.08)}
+.section{display:none;padding:20px;max-width:900px;margin:0 auto}
+.section.active{display:block}
+.card{background:#fff;border-radius:12px;padding:20px;margin-bottom:16px;box-shadow:0 2px 8px rgba(0,0,0,.07)}
+.card h3{color:#8b1a3a;font-size:1.1rem;margin-bottom:8px}
+.card p{line-height:1.7;color:#444}
+.card ul,.card ol{padding-left:20px;line-height:1.9;color:#444}
+.pillar-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px;margin:12px 0}
+.pillar-card{border-radius:10px;padding:16px;text-align:center;background:#fdf0f4}
+.pillar-card .pico{font-size:2rem;margin-bottom:6px}
+.pillar-card h4{color:#8b1a3a;font-size:.9rem;font-weight:700;margin-bottom:4px}
+.pillar-card p{font-size:.8rem;color:#666;line-height:1.4}
+.genius-form{background:#fdf0f4;border-radius:12px;padding:20px;margin-bottom:14px}
+.genius-form label{display:block;font-size:14px;font-weight:600;color:#555;margin-bottom:6px;margin-top:12px}
+.genius-form input,.genius-form textarea{width:100%;padding:10px;border:1px solid #ddd;border-radius:8px;font-size:14px;font-family:inherit}
+.genius-form textarea{min-height:60px;resize:vertical}
+.sim-btn{margin-top:14px;padding:12px 24px;background:#b83255;color:#fff;border:none;border-radius:8px;font-size:15px;cursor:pointer}
+.sim-btn:hover{background:#8b1a3a}
+.genius-result{display:none;background:#f5e6ea;border-radius:10px;padding:18px;margin-top:14px;border-left:4px solid #b83255}
+.genius-result h4{color:#8b1a3a;margin-bottom:10px}
+.genius-result p{font-size:14px;color:#555;line-height:1.7}
+.quiz-box{background:#fff;border-radius:12px;padding:24px;box-shadow:0 2px 8px rgba(0,0,0,.07)}
+.quiz-box h3{color:#8b1a3a;font-size:1.1rem;margin-bottom:6px}
+.quiz-progress{font-size:13px;color:#888;margin-bottom:16px}
+.quiz-q{font-size:1rem;font-weight:600;margin-bottom:16px;line-height:1.5}
+.quiz-opts{display:flex;flex-direction:column;gap:10px;margin-bottom:16px}
+.quiz-opts button{padding:13px 16px;border:2px solid #ddd;border-radius:8px;background:#fff;font-size:15px;cursor:pointer;text-align:left;transition:all .2s;line-height:1.3}
+.quiz-opts button:hover{border-color:#b83255;background:#f9f0f3}
+.quiz-opts button.correct{background:#d4edda;border-color:#28a745;color:#155724}
+.quiz-opts button.wrong{background:#f8d7da;border-color:#dc3545;color:#721c24}
+.quiz-feedback{display:none;padding:12px 16px;border-radius:8px;margin-bottom:14px;font-size:14px;line-height:1.5}
+.quiz-feedback.show{display:block}
+.quiz-feedback.correct{background:#d4edda;color:#155724}
+.quiz-feedback.wrong{background:#f8d7da;color:#721c24}
+.quiz-next{padding:12px 28px;background:#b83255;color:#fff;border:none;border-radius:8px;font-size:15px;cursor:pointer;display:none}
+.quiz-next:hover{background:#8b1a3a}
+.quiz-result{display:none;text-align:center;padding:20px}
+.quiz-result .score{font-size:2.5rem;font-weight:700;color:#b83255}
+.quiz-result p{color:#555;margin-top:8px}
+.quiz-result button{margin-top:16px;padding:12px 28px;background:#b83255;color:#fff;border:none;border-radius:8px;font-size:15px;cursor:pointer}
+footer{text-align:center;padding:20px;color:#888;font-size:13px;margin-top:20px}
+@media(max-width:600px){header h1{font-size:1.2rem}nav button{font-size:13px;padding:12px 8px}}
+</style>
+</head>
+<body>
+<header>
+<small>Habilidades Blandas · Módulo 19 · Bloque 5</small>
+<h1>Cómo Explotar su Genio Interno</h1>
+</header>
+<nav>
+<button class="active" onclick="showTab('concepto',this)">📖 Concepto</button>
+<button onclick="showTab('simulacion',this)">💡 Descubre tu Genio</button>
+<button onclick="showTab('juego',this)">🎯 Mini-juego</button>
+</nav>
+<div id="concepto" class="section active">
+<div class="card">
+<h3>Todos Tenemos un Genio Interno</h3>
+<p>La palabra "genio" no se refiere a un coeficiente intelectual extraordinario. Se refiere a la zona de máximo rendimiento natural: aquella actividad donde el tiempo vuela, donde das lo mejor de ti sin esfuerzo aparente y donde tus resultados superan consistentemente a los de otros. Howard Gardner identificó que la inteligencia no es una sola: es múltiple y cada persona tiene al menos una forma de genialidad.</p>
+<p style="margin-top:10px">El problema es que la mayoría de las personas nunca identifica su genio único, pasando la vida haciendo cosas para las que son competentes pero no extraordinarios. Encontrar y explotar tu genio es la diferencia entre una carrera exitosa y una vida extraordinaria.</p>
+</div>
+<div class="card">
+<h3>Las 8 Inteligencias Múltiples de Gardner</h3>
+<div class="pillar-grid">
+<div class="pillar-card"><div class="pico">📚</div><h4>Lingüística</h4><p>Facilidad con las palabras, escritura, lectura, idiomas.</p></div>
+<div class="pillar-card"><div class="pico">🔢</div><h4>Lógico-matemática</h4><p>Razonamiento, números, patrones, resolución de problemas.</p></div>
+<div class="pillar-card"><div class="pico">🎵</div><h4>Musical</h4><p>Ritmo, melodía, composición, sensibilidad sonora.</p></div>
+<div class="pillar-card"><div class="pico">🏃</div><h4>Corporal-cinestésica</h4><p>Coordinación física, danza, deportes, manualidades.</p></div>
+<div class="pillar-card"><div class="pico">🗺️</div><h4>Espacial</h4><p>Visualización, diseño, arte, arquitectura, orientación.</p></div>
+<div class="pillar-card"><div class="pico">🤝</div><h4>Interpersonal</h4><p>Empatía, liderazgo, comunicación, trabajo en equipo.</p></div>
+<div class="pillar-card"><div class="pico">🧘</div><h4>Intrapersonal</h4><p>Autoconocimiento, reflexión, filosofía, espiritualidad.</p></div>
+<div class="pillar-card"><div class="pico">🌿</div><h4>Naturalista</h4><p>Conexión con la naturaleza, biología, ecología, animales.</p></div>
+</div>
+</div>
+<div class="card">
+<h3>Las 4 Preguntas para Descubrir tu Genio</h3>
+<ol>
+<li><strong>¿Qué actividades pierdes la noción del tiempo?</strong> Cuando estás tan absorto que olvidas comer o descansar, estás en tu zona de flujo. Esto indica una fortaleza natural.</li>
+<li><strong>¿Qué te resulta fácil pero difícil para otros?</strong> Aquello que haces sin esfuerzo y que otros admiran o les cuesta es frecuentemente tu genio sin reconocer.</li>
+<li><strong>¿De qué temas hablas con pasión infinita?</strong> La energía que sientes al hablar de ciertos temas indica dónde vive tu genio. La pasión es la brújula del talento.</li>
+<li><strong>¿Qué harías aunque no te pagaran?</strong> Cuando el propósito supera a la recompensa económica, has encontrado tu vocación genuina.</li>
+</ol>
+</div>
+<div class="card">
+<h3>Cómo Explotar tu Genio: El Plan de 5 Pasos</h3>
+<ul>
+<li><strong>Paso 1 – Identifica:</strong> Responde las 4 preguntas con honestidad. Busca patrones en las respuestas.</li>
+<li><strong>Paso 2 – Valida:</strong> Prueba tu genio en proyectos pequeños. ¿Los resultados confirman tu fortaleza?</li>
+<li><strong>Paso 3 – Invierte:</strong> Dedica al menos 1 hora diaria a desarrollar tu zona de genialidad. El talento sin práctica deliberada no se convierte en maestría.</li>
+<li><strong>Paso 4 – Especializa:</strong> Sé el mejor en algo específico, no mediocre en todo. La especialización crea valor exponencial.</li>
+<li><strong>Paso 5 – Aplica:</strong> Busca la intersección entre tu genio y las necesidades del mercado. Ahí vive la prosperidad genuina.</li>
+</ul>
+</div>
+</div>
+<div id="simulacion" class="section">
+<div class="genius-form">
+<h3 style="color:#8b1a3a;font-size:1.1rem;margin-bottom:16px">💡 Cuestionario de Descubrimiento del Genio</h3>
+<label>1. ¿Qué actividades te hacen perder la noción del tiempo? (escribe 2-3)</label>
+<textarea id="g1" placeholder="Ej: Diseñar presentaciones, resolver acertijos, cocinar, enseñar a otros..."></textarea>
+<label>2. ¿Qué te resulta fácil pero difícil para las personas de tu entorno?</label>
+<textarea id="g2" placeholder="Ej: Hablar en público, organizar ideas, conectar con personas nuevas..."></textarea>
+<label>3. ¿De qué temas podrías hablar horas sin cansarte?</label>
+<textarea id="g3" placeholder="Ej: Tecnología, historia, psicología, negocios, arte..."></textarea>
+<label>4. ¿Qué harías aunque no te pagaran? ¿Tu vocación genuina?</label>
+<input type="text" id="g4" placeholder="Ej: Enseñar, crear música, emprender, escribir...">
+<button class="sim-btn" onclick="descubrirGenio()">Revelar mi Perfil de Genio</button>
+</div>
+<div class="genius-result" id="geniusResult">
+<h4>🌟 Tu Perfil de Genio Único:</h4>
+<p id="geniusText"></p>
+<p id="geniusNext" style="margin-top:10px;font-weight:600;color:#8b1a3a"></p>
+</div>
+</div>
+<div id="juego" class="section">
+<div class="quiz-box">
+<h3>🎯 Quiz: Explotar el Genio Interno</h3>
+<div class="quiz-progress" id="qProgress">Pregunta 1 de 6</div>
+<div id="quizArea">
+<div class="quiz-q" id="qText"></div>
+<div class="quiz-opts" id="qOpts"></div>
+<div class="quiz-feedback" id="qFeedback"></div>
+<button class="quiz-next" id="qNext" onclick="nextQuestion()">Siguiente →</button>
+</div>
+<div class="quiz-result" id="quizResult">
+<div class="score" id="finalScore"></div>
+<p id="finalMsg"></p>
+<button onclick="restartQuiz()">Reintentar 🔄</button>
+</div>
+</div>
+</div>
+<footer>Habilidades Blandas · Seminario Fénix · Módulo 19</footer>
+<script>
+function showTab(id,btn){document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));document.getElementById(id).classList.add('active');btn.classList.add('active');}
+function descubrirGenio(){const g1=document.getElementById('g1').value.trim();const g4=document.getElementById('g4').value.trim();if(!g1&&!g4){alert('Completa al menos los campos 1 y 4 para descubrir tu perfil');return;}const el=document.getElementById('geniusResult');el.style.display='block';const all=[g1,document.getElementById('g2').value,document.getElementById('g3').value,g4].filter(Boolean).join('. ');document.getElementById('geniusText').textContent='Basándome en tus respuestas: '+all;document.getElementById('geniusNext').textContent='🎯 Tu próximo paso: Dedica 1 hora esta semana exclusivamente a explorar la actividad que describiste en la pregunta 1. Documenta cómo te sientes y qué resultados obtienes. Ese experimento te dará más claridad que cualquier teoría.';}
+const questions=[{q:'¿Cómo define este módulo el concepto de "genio"?',opts:['Un coeficiente intelectual superior a 140','La zona de máximo rendimiento natural de cada persona','Una habilidad matemática extraordinaria','Un don sobrenatural de nacimiento'],ans:1,fb:'El genio es la zona donde el tiempo vuela, das lo mejor sin esfuerzo aparente y superas consistentemente a otros. Es tu fortaleza natural única.'},
+{q:'¿Cuántas inteligencias múltiples identificó Howard Gardner?',opts:['4','6','8','12'],ans:2,fb:'Gardner identificó 8 inteligencias: lingüística, lógico-matemática, musical, corporal-cinestésica, espacial, interpersonal, intrapersonal y naturalista.'},
+{q:'¿Qué indica perder la noción del tiempo en una actividad?',opts:['Que esa actividad es demasiado difícil','Que estás en tu zona de flujo y fortaleza natural','Que tienes un déficit de atención','Que la actividad es poco importante'],ans:1,fb:'Perder la noción del tiempo (estado de flujo) indica que estás en una actividad alineada con tu genio natural. Es la señal más poderosa de talento genuino.'},
+{q:'¿Cuál es el Paso 4 del plan para explotar el genio?',opts:['Identificar el genio','Validarlo con proyectos pequeños','Invertir 1 hora diaria','Especializarse: ser el mejor en algo específico'],ans:3,fb:'La especialización crea valor exponencial. La persona que domina un nicho específico es 10 veces más valiosa que quien es mediocre en todo.'},
+{q:'¿Dónde vive la prosperidad genuina según el módulo?',opts:['En el trabajo mejor pagado','En la intersección entre tu genio y las necesidades del mercado','En las grandes corporaciones','En el trabajo independiente'],ans:1,fb:'La prosperidad genuina está en la intersección entre lo que haces mejor (genio) y lo que el mercado necesita y valora. Esa combinación crea impacto y abundancia.'},
+{q:'¿Por qué es importante la pasión según el módulo?',opts:['Porque hace el trabajo más divertido','Es la brújula que señala hacia tu talento natural','Garantiza el éxito económico','Solo importa en las artes creativas'],ans:1,fb:'La pasión es la brújula del talento. La energía que sientes al hacer o hablar de algo es frecuentemente la señal de que ahí vive tu genio interno.'}];
+let cur=0,sc=0,answ=false;
+function loadQ(){const q=questions[cur];document.getElementById('qProgress').textContent='Pregunta '+(cur+1)+' de '+questions.length;document.getElementById('qText').textContent=q.q;const fb=document.getElementById('qFeedback');fb.className='quiz-feedback';fb.textContent='';document.getElementById('qNext').style.display='none';answ=false;const op=document.getElementById('qOpts');op.innerHTML='';q.opts.forEach((o,i)=>{const b=document.createElement('button');b.textContent=o;b.onclick=()=>answer(i,b);op.appendChild(b);});}
+function answer(i,btn){if(answ)return;answ=true;const q=questions[cur];document.querySelectorAll('.quiz-opts button').forEach(b=>b.style.pointerEvents='none');const fb=document.getElementById('qFeedback');if(i===q.ans){btn.classList.add('correct');sc++;fb.className='quiz-feedback show correct';fb.textContent='✅ '+q.fb;}else{btn.classList.add('wrong');document.querySelectorAll('.quiz-opts button')[q.ans].classList.add('correct');fb.className='quiz-feedback show wrong';fb.textContent='❌ '+q.fb;}document.getElementById('qNext').style.display='inline-block';}
+function nextQuestion(){cur++;if(cur<questions.length){loadQ();}else{document.getElementById('quizArea').style.display='none';const r=document.getElementById('quizResult');r.style.display='block';document.getElementById('finalScore').textContent=sc+'/'+questions.length;const p=sc/questions.length;document.getElementById('finalMsg').textContent=p>=0.83?'💡 ¡Brillante! Has descubierto cómo explotar tu genio interno.':p>=0.5?'📈 Buen trabajo. Aplica las 4 preguntas en tu vida real.':'🔍 Sigue explorando. ¡Tu genio está esperando ser descubierto!';}}
+function restartQuiz(){cur=0;sc=0;answ=false;document.getElementById('quizArea').style.display='block';document.getElementById('quizResult').style.display='none';loadQ();}
+loadQ();
+</script>
+</body>
+</html>
