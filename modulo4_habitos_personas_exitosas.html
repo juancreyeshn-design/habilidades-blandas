@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Habilidades Blandas | Módulo 4 – Hábitos de Personas Exitosas</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',sans-serif;background:#f5f0f5;color:#333;font-size:16px}
+header{background:linear-gradient(135deg,#8b1a3a,#b83255);color:#fff;padding:18px 20px;text-align:center}
+header h1{font-size:1.1em;font-weight:600;letter-spacing:1px;text-transform:uppercase;opacity:.85}
+header h2{font-size:1.6em;font-weight:700;margin-top:4px}
+nav{display:flex;justify-content:center;gap:8px;padding:12px 16px;background:#fff;border-bottom:2px solid #e8d0d8;flex-wrap:wrap}
+nav button{padding:10px 18px;border:2px solid #b83255;border-radius:24px;background:#fff;color:#b83255;font-weight:600;font-size:.9em;cursor:pointer;transition:all .2s;min-height:44px}
+nav button.active,nav button:hover{background:#b83255;color:#fff}
+section{display:none;max-width:860px;margin:24px auto;padding:0 16px 40px}
+section.active{display:block}
+.card{background:#fff;border-radius:12px;padding:24px;margin-bottom:20px;box-shadow:0 2px 8px rgba(0,0,0,.08)}
+.card h3{color:#8b1a3a;font-size:1.2em;margin-bottom:14px;border-bottom:2px solid #f0d0da;padding-bottom:8px}
+.card p,.card li{line-height:1.7;margin-bottom:8px}
+.card ul,.card ol{padding-left:20px}
+.highlight{background:#fdf0f4;border-left:4px solid #b83255;padding:12px 16px;border-radius:0 8px 8px 0;margin:12px 0}
+.btn{display:inline-block;padding:12px 28px;background:#b83255;color:#fff;border:none;border-radius:8px;font-size:1em;font-weight:600;cursor:pointer;min-height:48px;min-width:120px;margin:6px 4px;transition:background .2s}
+.btn:hover{background:#8b1a3a}
+.btn-outline{background:#fff;color:#b83255;border:2px solid #b83255}
+.btn-outline:hover{background:#fdf0f4}
+.badge{display:inline-block;background:#b83255;color:#fff;border-radius:50%;width:28px;height:28px;text-align:center;line-height:28px;font-weight:700;margin-right:8px;font-size:.9em}
+.nav-links{display:flex;justify-content:space-between;margin-top:20px;flex-wrap:wrap;gap:10px}
+.habito-card{background:#fff;border:2px solid #f0d0da;border-radius:12px;padding:18px 20px;margin-bottom:14px;display:flex;gap:16px;align-items:flex-start;transition:border-color .2s}
+.habito-card:hover{border-color:#b83255}
+.habito-num{background:#b83255;color:#fff;border-radius:10px;width:40px;height:40px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:1.1em;flex-shrink:0}
+.habito-body h4{color:#8b1a3a;margin-bottom:6px;font-size:1em}
+.habito-body p{font-size:.92em;line-height:1.6;color:#555}
+.sim-panel{background:#fdf8f9;border:1.5px solid #e8c0cc;border-radius:10px;padding:20px;margin:14px 0}
+.sim-label{font-weight:700;color:#8b1a3a;font-size:.95em;margin-bottom:6px}
+.sim-sub{color:#666;font-size:.86em;margin-bottom:10px;font-style:italic}
+.tracker-row{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid #f0d0da}
+.tracker-row:last-child{border-bottom:none}
+.tracker-name{flex:1;font-size:.92em;font-weight:600;color:#444}
+.days{display:flex;gap:6px}
+.day-btn{width:34px;height:34px;border-radius:8px;border:2px solid #e8c0cc;background:#fff;cursor:pointer;font-size:.75em;font-weight:700;color:#b83255;transition:all .2s}
+.day-btn.done{background:#b83255;color:#fff;border-color:#b83255}
+.resultado-box{background:linear-gradient(135deg,#8b1a3a,#b83255);color:#fff;border-radius:12px;padding:24px;text-align:center;margin-top:16px;display:none}
+.resultado-box.show{display:block}
+.emoji-big{font-size:3em;margin-bottom:8px}
+.progress-bar{background:rgba(255,255,255,.3);border-radius:8px;height:14px;margin:10px 0}
+.progress-fill{background:#fff;height:100%;border-radius:8px;transition:width .6s}
+.question-card{background:#fdf8f9;border:1px solid #e8c0cc;border-radius:10px;padding:20px;margin-bottom:16px}
+.option-btn{display:block;width:100%;text-align:left;padding:12px 16px;margin:6px 0;background:#fff;border:1.5px solid #ddd;border-radius:8px;font-size:.95em;cursor:pointer;transition:all .2s;min-height:48px}
+.option-btn:hover{border-color:#b83255;background:#fdf0f4}
+.option-btn.correct{background:#d4edda;border-color:#28a745;color:#155724}
+.option-btn.wrong{background:#f8d7da;border-color:#dc3545;color:#721c24}
+.feedback{padding:10px 14px;border-radius:8px;margin-top:8px;font-weight:600;display:none}
+.feedback.show{display:block}
+.feedback.ok{background:#d4edda;color:#155724}
+.feedback.fail{background:#f8d7da;color:#721c24}
+.score-bar{background:#f0d0da;border-radius:8px;height:12px;margin:8px 0}
+.score-fill{background:linear-gradient(90deg,#b83255,#e0607a);height:100%;border-radius:8px;transition:width .6s}
+footer{text-align:center;padding:20px;color:#999;font-size:.85em;border-top:1px solid #e0d0d5;margin-top:20px}
+@media(max-width:600px){header h2{font-size:1.3em}nav button{font-size:.82em;padding:9px 14px}.days{gap:4px}.day-btn{width:30px;height:30px}}
+</style>
+</head>
+<body>
+<header>
+  <h1>HABILIDADES BLANDAS &middot; M&Oacute;DULO 4</h1>
+  <h2>H&aacute;bitos de Personas Exitosas</h2>
+</header>
+<nav>
+  <button class="active" onclick="showTab('concepto',this)">&#128218; Concepto</button>
+  <button onclick="showTab('simulacion',this)">&#128197; Tracker</button>
+  <button onclick="showTab('juego',this)">&#127922; Mini-juego</button>
+</nav>
+
+<!-- TAB 1: CONCEPTO -->
+<section id="concepto" class="active">
+  <div class="card">
+    <h3>&#127775; &iquest;Qu&eacute; es un H&aacute;bito y por qu&eacute; importa?</h3>
+    <p>Un h&aacute;bito es un comportamiento autom&aacute;tico que el cerebro ejecuta sin esfuerzo consciente. Seg&uacute;n investigaciones del MIT, el 40-45% de las acciones que realizamos cada d&iacute;a son h&aacute;bitos, no decisiones activas. Esto significa que nuestros resultados de vida son, en gran medida, el producto acumulado de nuestros h&aacute;bitos diarios.</p>
+    <div class="highlight">
+      <strong>Principio clave:</strong> No son los eventos extraordinarios los que construyen una vida de &eacute;xito, sino las peque&ntilde;as acciones realizadas con consistencia. Un 1% de mejora diaria se traduce en 37 veces mejor al cabo de un a&ntilde;o.
+    </div>
+    <p>Los h&aacute;bitos funcionan mediante un ciclo de tres pasos: <strong>Se&ntilde;al &rarr; Rutina &rarr; Recompensa</strong>. Comprender este ciclo permite dise&ntilde;ar h&aacute;bitos deliberadamente en vez de adquirirlos al azar.</p>
+  </div>
+
+  <div class="card">
+    <h3>&#127775; Los 10 H&aacute;bitos de las Personas Altamente Exitosas</h3>
+
+    <div class="habito-card">
+      <div class="habito-num">1</div>
+      <div class="habito-body">
+        <h4>Madrugar con prop&oacute;sito</h4>
+        <p>Las personas exitosas usan las primeras horas del d&iacute;a para actividades de alto valor: ejercicio, lectura, planificaci&oacute;n. La ma&ntilde;ana sin interrupciones es el bloque de tiempo m&aacute;s valioso del d&iacute;a. Levantarse 1 hora antes puede cambiar tu vida en 6 meses.</p>
+      </div>
+    </div>
+
+    <div class="habito-card">
+      <div class="habito-num">2</div>
+      <div class="habito-body">
+        <h4>Planificaci&oacute;n diaria escrita</h4>
+        <p>Dedican 10-15 minutos cada noche o cada ma&ntilde;ana a planificar el d&iacute;a por escrito. Identifican las 3 tareas m&aacute;s importantes (tareas "ranita") y las hacen primero. Este h&aacute;bito puede multiplicar la productividad hasta un 25%.</p>
+      </div>
+    </div>
+
+    <div class="habito-card">
+      <div class="habito-num">3</div>
+      <div class="habito-body">
+        <h4>Lectura y aprendizaje continuo</h4>
+        <p>El CEO promedio lee 60 libros al a&ntilde;o. Warren Buffett dedica el 80% de su jornada a leer. La lectura diaria en tu &aacute;rea te diferencia de la mayor&iacute;a. Solo 20 p&aacute;ginas al d&iacute;a son 15-20 libros al a&ntilde;o.</p>
+      </div>
+    </div>
+
+    <div class="habito-card">
+      <div class="habito-num">4</div>
+      <div class="habito-body">
+        <h4>Ejercicio f&iacute;sico regular</h4>
+        <p>El ejercicio no es solo para el cuerpo: aumenta la energ&iacute;a, mejora la concentraci&oacute;n, reduce el estr&eacute;s y dispara la creatividad. Richard Branson afirm&oacute; que el ejercicio le duplica su productividad. 30 minutos diarios son suficientes para transformar el rendimiento mental.</p>
+      </div>
+    </div>
+
+    <div class="habito-card">
+      <div class="habito-num">5</div>
+      <div class="habito-body">
+        <h4>Revisi&oacute;n diaria de metas</h4>
+        <p>Leen sus metas escritas cada ma&ntilde;ana y noche. Este h&aacute;bito programa el sistema de activaci&oacute;n reticular del cerebro para detectar oportunidades alineadas con los objetivos. "Lo que revisas, lo ves. Lo que ves, lo persigues."</p>
+      </div>
+    </div>
+
+    <div class="habito-card">
+      <div class="habito-num">6</div>
+      <div class="habito-body">
+        <h4>Uni-tarea y enfoque profundo</h4>
+        <p>El multitasking reduce la productividad hasta un 40%. Las personas exitosas practican el "deep work": bloques de 90-120 minutos de trabajo sin interrupciones en la tarea m&aacute;s importante. Apagan notificaciones, cierran redes sociales y se sumergen completamente.</p>
+      </div>
+    </div>
+
+    <div class="habito-card">
+      <div class="habito-num">7</div>
+      <div class="habito-body">
+        <h4>Gratitud y mentalidad positiva</h4>
+        <p>Anotan 3-5 cosas por las que son agradecidos cada ma&ntilde;ana. La ciencia del bienestar demuestra que la pr&aacute;ctica de la gratitud reorienta el cerebro para detectar lo positivo, reduce el cortisol y aumenta la resiliencia ante los obst&aacute;culos.</p>
+      </div>
+    </div>
+
+    <div class="habito-card">
+      <div class="habito-num">8</div>
+      <div class="habito-body">
+        <h4>Red de relaciones de calidad</h4>
+        <p>Invierten tiempo deliberadamente en construir y mantener relaciones con personas que les inspiran, retan y apoyan. "Eres el promedio de las 5 personas con quienes m&aacute;s tiempo pasas." Atienden llamadas, almuerzan con mentores, asisten a eventos de su sector.</p>
+      </div>
+    </div>
+
+    <div class="habito-card">
+      <div class="habito-num">9</div>
+      <div class="habito-body">
+        <h4>Sue&ntilde;o de calidad</h4>
+        <p>Duermen 7-8 horas con horarios consistentes. El sue&ntilde;o no es un lujo: es cuando el cerebro consolida la memoria, restaura la energ&iacute;a y procesa emociones. Sacrificar sue&ntilde;o por "m&aacute;s horas de trabajo" es contraproducente a largo plazo.</p>
+      </div>
+    </div>
+
+    <div class="habito-card">
+      <div class="habito-num">10</div>
+      <div class="habito-body">
+        <h4>Reflexi&oacute;n y revisi&oacute;n semanal</h4>
+        <p>Dedican 30-60 minutos cada semana a revisar lo logrado, identificar lecciones aprendidas y planificar la semana siguiente. Esta pr&aacute;ctica genera una espiral de mejora continua. La revisi&oacute;n sem anal cierra el bucle entre acci&oacute;n y aprendizaje.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>&#129504; C&oacute;mo Instalar un H&aacute;bito Nuevo</h3>
+    <p>La investigaci&oacute;n de Phillippa Lally (University College London) encontr&oacute; que un h&aacute;bito tarda en promedio <strong>66 d&iacute;as</strong> en automatizarse (no 21, como se cree popularmente). La estrategia m&aacute;s efectiva es:</p>
+    <ol>
+      <li><strong>Empezar peque&ntilde;o:</strong> El h&aacute;bito m&iacute;nimo viable. No "correr 5 km" sino "ponerme las zapatillas". La identidad cambia antes que la acci&oacute;n.</li>
+      <li><strong>Anclar al existente:</strong> "Despu&eacute;s de X, har&eacute; Y." Despu&eacute;s de servirme el caf&eacute;, leer&eacute; 10 p&aacute;ginas.</li>
+      <li><strong>Rastrear la cadena:</strong> Marcar cada d&iacute;a completado en un calendario. "No romper la cadena" crea un momentum poderoso.</li>
+      <li><strong>Recompensar inmediatamente:</strong> El cerebro necesita una recompensa instant&aacute;nea para reforzar el circuito del h&aacute;bito.</li>
+    </ol>
+    <div class="highlight">
+      <strong>Regla de los 2 minutos:</strong> Si el h&aacute;bito puede hacerse en 2 minutos, h&aacute;zlo ahora mismo. Si no, empieza con una versi&oacute;n de 2 minutos: "Leer 1 p&aacute;rrafo", "Hacer 5 sentadillas", "Escribir 1 orac i&oacute;n de mi diario."
+    </div>
+  </div>
+  <div class="nav-links">
+    <span></span>
+    <button class="btn" onclick="showTab('simulacion',document.querySelectorAll('nav button')[1])">Siguiente: Tracker &#8594;</button>
+  </div>
+</section>
+<!-- TAB 2: SIMULACION - Tracker de habitos -->
+<section id="simulacion">
+  <div class="card">
+    <h3>&#128197; Tracker de H&aacute;bitos &mdash; Tu semana de alto rendimiento</h3>
+    <p>Marca cada d&iacute;a de la semana en el que realizaste cada h&aacute;bito. Al final, eval&uacute;a tu nivel de consistencia. La consistencia es el &uacute;nico secreto real del &eacute;xito.</p>
+  </div>
+
+  <div class="sim-panel">
+    <div class="sim-label">&#128197; Semana de pr&aacute;ctica &mdash; Marca los d&iacute;as completados</div>
+    <div class="sim-sub">L = Lunes, M = Martes, Mi = Mi&eacute;rcoles, J = Jueves, V = Viernes, S = S&aacute;bado, D = Domingo</div>
+
+    <div id="trackerContainer">
+      <!-- generado por JS -->
+    </div>
+
+    <div style="text-align:center;margin-top:20px">
+      <button class="btn" onclick="calcularTracker()">&#128200; Ver mi puntuaci&oacute;n semanal</button>
+      <button class="btn btn-outline" onclick="resetTracker()">&#8635; Reiniciar</button>
+    </div>
+  </div>
+
+  <div class="resultado-box" id="trackerResult">
+    <div class="emoji-big" id="trackerEmoji"></div>
+    <h3 id="trackerTitulo" style="font-size:1.3em;margin-bottom:10px"></h3>
+    <div style="background:rgba(255,255,255,.2);border-radius:10px;padding:14px;margin:10px 0">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+        <span>Consistencia semanal:</span>
+        <strong id="trackerPct" style="font-size:1.4em"></strong>
+      </div>
+      <div class="progress-bar"><div class="progress-fill" id="trackerBarra" style="width:0%"></div></div>
+    </div>
+    <p id="trackerTexto" style="opacity:.9;line-height:1.6;margin-top:10px"></p>
+    <p id="trackerConsejo" style="margin-top:12px;font-style:italic;opacity:.85;font-size:.92em"></p>
+  </div>
+
+  <div class="nav-links">
+    <button class="btn btn-outline" onclick="showTab('concepto',document.querySelectorAll('nav button')[0])">&#8592; Concepto</button>
+    <button class="btn" onclick="showTab('juego',document.querySelectorAll('nav button')[2])">Mini-juego &#8594;</button>
+  </div>
+</section>
+<!-- TAB 3: MINI-JUEGO -->
+<section id="juego">
+  <div class="card">
+    <h3>&#127922; Trivia: H&aacute;bitos de Personas Exitosas</h3>
+    <p>Pon a prueba lo que aprendiste sobre el poder de los h&aacute;bitos.</p>
+    <div id="quizArea"></div>
+    <div style="text-align:center;margin-top:20px">
+      <button class="btn" onclick="iniciarQuiz()" id="btnStart">&#9654; Iniciar Quiz</button>
+      <button class="btn btn-outline" onclick="reiniciarQuiz()" id="btnReset" style="display:none">&#8635; Intentar de nuevo</button>
+    </div>
+    <div class="resultado-box" id="quizResult">
+      <div class="emoji-big" id="quizEmoji"></div>
+      <h3 id="quizTitulo" style="font-size:1.4em;margin-bottom:8px"></h3>
+      <p>Respondiste correctamente <strong id="quizCorrectas"></strong> de <strong id="quizTotal"></strong> preguntas</p>
+      <div style="margin-top:12px"><div class="score-bar" style="background:rgba(255,255,255,.3)"><div class="score-fill" id="quizBarra" style="width:0%;background:#fff"></div></div></div>
+    </div>
+  </div>
+  <div class="nav-links">
+    <button class="btn btn-outline" onclick="showTab('simulacion',document.querySelectorAll('nav button')[1])">&#8592; Tracker</button>
+    <a class="btn" href="modulo3_metas_vision_futuro.html">&#8592; M&oacute;dulo 3</a>
+  </div>
+</section>
+
+<script>
+function showTab(id, btn) {
+  document.querySelectorAll('section').forEach(function(s){s.classList.remove('active');});
+  document.querySelectorAll('nav button').forEach(function(b){b.classList.remove('active');});
+  document.getElementById(id).classList.add('active');
+  if (btn) btn.classList.add('active');
+  window.scrollTo(0, 0);
+}
+
+// TRACKER
+const habitos = [
+  'Madrugar con proposito',
+  'Planificacion diaria escrita',
+  'Lectura 20 paginas',
+  'Ejercicio fisico 30 min',
+  'Revision de metas escritas',
+  'Bloque de enfoque profundo',
+  'Practica de gratitud',
+  'Conexion con red de contactos',
+  'Dormir 7-8 horas',
+  'Reflexion y revision del dia'
+];
+const dias = ['L','M','Mi','J','V','S','D'];
+
+function buildTracker() {
+  var html = '';
+  habitos.forEach(function(h, hi) {
+    html += '<div class="tracker-row">';
+    html += '<div class="tracker-name">' + (hi+1) + '. ' + h + '</div>';
+    html += '<div class="days">';
+    dias.forEach(function(d, di) {
+      html += '<button class="day-btn" id="d'+hi+'_'+di+'" onclick="toggleDay('+hi+','+di+',this)">'+d+'</button>';
+    });
+    html += '</div></div>';
+  });
+  document.getElementById('trackerContainer').innerHTML = html;
+}
+
+function toggleDay(hi, di, btn) {
+  btn.classList.toggle('done');
+}
+
+function calcularTracker() {
+  var total = habitos.length * dias.length;
+  var completados = document.querySelectorAll('.day-btn.done').length;
+  var pct = Math.round((completados / total) * 100);
+  var box = document.getElementById('trackerResult');
+  document.getElementById('trackerPct').textContent = pct + '%';
+  document.getElementById('trackerBarra').style.width = pct + '%';
+  var emoji, titulo, texto, consejo;
+  if (pct >= 70) {
+    emoji = '&#127881;';
+    titulo = 'Ritmo de campeon! Consistencia alta';
+    texto = 'Lograste una consistencia excelente esta semana. Con este nivel de adherencia, estos habitos se automatizaran en pocas semanas y se convertiran en parte de tu identidad.';
+    consejo = 'Desafio: Mantén este ritmo por 30 dias seguidos. Registra como cambia tu energia, claridad mental y resultados.';
+  } else if (pct >= 40) {
+    emoji = '&#127810;';
+    titulo = 'Buen comienzo! Sigue construyendo';
+    texto = 'Estas en el proceso de instalacion de habitos. La inconsistencia inicial es normal: el cerebro necesita repeticion para crear nuevas vias neuronales. No abandones.';
+    consejo = 'Estrategia: Elige los 3 habitos mas importantes y concentrate solo en ellos esta semana. La concentracion supera a la cantidad.';
+  } else {
+    emoji = '&#128161;';
+    titulo = 'Tu punto de partida — Aqui comienza el cambio';
+    texto = 'No te preocupes por el numero de hoy. Lo importante es que tomaste conciencia. El primer paso para cambiar un habito es medirlo.';
+    consejo = 'Accion inmediata: Elige 1 solo habito de la lista y practícalo todos los dias durante los proximos 7 dias. Solo uno. La maestria empieza con la concentracion.';
+  }
+  document.getElementById('trackerEmoji').innerHTML = emoji;
+  document.getElementById('trackerTitulo').innerHTML = titulo;
+  document.getElementById('trackerTexto').innerHTML = texto;
+  document.getElementById('trackerConsejo').innerHTML = consejo;
+  box.classList.add('show');
+  box.scrollIntoView({behavior:'smooth', block:'center'});
+}
+
+function resetTracker() {
+  document.querySelectorAll('.day-btn.done').forEach(function(b){b.classList.remove('done');});
+  document.getElementById('trackerResult').classList.remove('show');
+}
+
+// QUIZ
+var preguntas = [
+  {pregunta:'Segun investigaciones del MIT, que porcentaje de nuestras acciones diarias son habitos automaticos?',opciones:['10-15%','25-30%','40-45%','60-70%'],correcta:2,explicacion:'Investigaciones del MIT demuestran que el 40-45% de las acciones que realizamos cada dia son habitos, no decisiones conscientes. Esto subraya la enorme influencia de los habitos en nuestros resultados.'},
+  {pregunta:'Cuanto tiempo tarda en promedio en automatizarse un habito nuevo, segun la investigacion de Phillippa Lally?',opciones:['21 dias','30 dias','66 dias','90 dias'],correcta:2,explicacion:'La investigacion de Phillippa Lally (University College London) encontro que un habito tarda en promedio 66 dias en automatizarse, no 21 dias como se cree popularmente. El tiempo varia entre 18 y 254 dias segun la persona y el habito.'},
+  {pregunta:'Cual es el ciclo de tres pasos que describe como funcionan los habitos segun la neurociencia?',opciones:['Motivacion - Accion - Resultado','Senial - Rutina - Recompensa','Planificacion - Ejecucion - Evaluacion','Deseo - Esfuerzo - Logro'],correcta:1,explicacion:'Los habitos funcionan mediante el ciclo Senial (trigger) - Rutina (comportamiento) - Recompensa (beneficio). Comprender este ciclo permite disenyar habitos deliberadamente en vez de adquirirlos por accidente.'},
+  {pregunta:'Cuantos libros lee en promedio un CEO exitoso al anio?',opciones:['5-10 libros','15-20 libros','60 libros','Mas de 100 libros'],correcta:2,explicacion:'Estudios sobre habitos de CEOs exitosos muestran que leen en promedio 60 libros al anio. Warren Buffett destina el 80% de su jornada laboral a leer e investigar. La lectura continua es uno de los habitos mas comunes entre lideres de alto rendimiento.'},
+  {pregunta:'Que es la Regla de los 2 minutos para instalar nuevos habitos?',opciones:['Dedicar al menos 2 minutos de calentamiento antes de ejercitarse','Si el habito puede hacerse en 2 minutos, hazlo ahora; si no, empieza con una version de 2 minutos','Revisar tus metas durante exactamente 2 minutos cada maniana','Tomar 2 minutos de descanso entre bloques de trabajo profundo'],correcta:1,explicacion:'La Regla de los 2 minutos dice: si algo puede hacerse en 2 minutos, hazlo de inmediato. Si el habito es mayor, comienza con una version de 2 minutos: "leer 1 parrafo", "hacer 5 sentadillas". Esto vence la inercia inicial que impide comenzar.'},
+  {pregunta:'Cual es el efecto del multitasking en la productividad segun estudios cientificos?',opciones:['Aumenta la productividad hasta un 30%','No tiene efecto significativo en el rendimiento','La reduce hasta un 40%','Solo afecta a personas sin experiencia previa'],correcta:2,explicacion:'Investigaciones de la American Psychological Association demuestran que el multitasking reduce la productividad hasta un 40%, porque el cerebro no puede enfocarse en dos tareas complejas simultaneamente. Las personas exitosas practican el "deep work" en bloques de 90-120 minutos sin interrupciones.'}
+];
+var respuestas = [];
+
+function iniciarQuiz() {
+  respuestas = [];
+  document.getElementById('btnStart').style.display = 'none';
+  document.getElementById('btnReset').style.display = 'inline-block';
+  document.getElementById('quizResult').classList.remove('show');
+  var html = '';
+  preguntas.forEach(function(p, i) {
+    html += '<div class="question-card" id="q'+i+'">';
+    html += '<p><span class="badge">'+(i+1)+'</span>'+p.pregunta+'</p>';
+    p.opciones.forEach(function(op, j) {
+      html += '<button class="option-btn" onclick="responder('+i+','+j+',this)" id="opt'+i+'_'+j+'">'+op+'</button>';
+    });
+    html += '<div class="feedback" id="fb'+i+'"></div></div>';
+  });
+  document.getElementById('quizArea').innerHTML = html;
+}
+
+function responder(pregIdx, opIdx, btn) {
+  var p = preguntas[pregIdx];
+  var card = document.getElementById('q'+pregIdx);
+  var fb = document.getElementById('fb'+pregIdx);
+  card.querySelectorAll('.option-btn').forEach(function(b){b.disabled=true;});
+  if (opIdx === p.correcta) {
+    btn.classList.add('correct');
+    fb.className = 'feedback show ok';
+    fb.innerHTML = '&#9989; Correcto! ' + p.explicacion;
+    respuestas[pregIdx] = true;
+  } else {
+    btn.classList.add('wrong');
+    document.getElementById('opt'+pregIdx+'_'+p.correcta).classList.add('correct');
+    fb.className = 'feedback show fail';
+    fb.innerHTML = '&#10060; ' + p.explicacion;
+    respuestas[pregIdx] = false;
+  }
+  if (respuestas.filter(function(r){return r!==undefined;}).length === preguntas.length) {
+    setTimeout(mostrarResultado, 800);
+  }
+}
+
+function mostrarResultado() {
+  var correctas = respuestas.filter(function(r){return r===true;}).length;
+  var total = preguntas.length;
+  var pct = Math.round((correctas/total)*100);
+  document.getElementById('quizCorrectas').textContent = correctas;
+  document.getElementById('quizTotal').textContent = total;
+  document.getElementById('quizBarra').style.width = pct+'%';
+  var emoji, titulo;
+  if (pct>=83){emoji='&#127881;';titulo='Excelente dominio del tema!';}
+  else if(pct>=50){emoji='&#128077;';titulo='Buen resultado, sigue practicando';}
+  else{emoji='&#128218;';titulo='Repasa el material y vuelve a intentarlo';}
+  document.getElementById('quizEmoji').innerHTML = emoji;
+  document.getElementById('quizTitulo').innerHTML = titulo;
+  var box = document.getElementById('quizResult');
+  box.classList.add('show');
+  box.scrollIntoView({behavior:'smooth',block:'center'});
+}
+
+function reiniciarQuiz() {
+  document.getElementById('quizArea').innerHTML = '';
+  document.getElementById('quizResult').classList.remove('show');
+  document.getElementById('btnStart').style.display = 'inline-block';
+  document.getElementById('btnReset').style.display = 'none';
+}
+
+// Init
+buildTracker();
+</script>
+
+<footer>Juan Carlos Reyes &middot; juancreyes.hn@gmail.com</footer>
+</body>
+</html>
