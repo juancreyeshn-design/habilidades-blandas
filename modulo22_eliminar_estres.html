@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Habilidades Blandas | Módulo 22 – Eliminando el Estrés y la Tensión</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',Arial,sans-serif;background:#f5f0f5;color:#2d2d2d;font-size:16px}
+header{background:linear-gradient(135deg,#8b1a3a 0%,#b83255 100%);color:#fff;padding:20px;text-align:center}
+header small{display:block;font-size:13px;letter-spacing:2px;opacity:.85;text-transform:uppercase}
+header h1{font-size:1.5rem;margin-top:4px}
+nav{display:flex;background:#6d1430;overflow-x:auto}
+nav button{flex:1;min-width:110px;padding:14px 10px;background:none;border:none;color:#f5c6d3;font-size:15px;cursor:pointer;border-bottom:3px solid transparent;transition:all .2s;white-space:nowrap}
+nav button.active,nav button:hover{color:#fff;border-bottom-color:#f7b2c4;background:rgba(255,255,255,.08)}
+.section{display:none;padding:20px;max-width:900px;margin:0 auto}
+.section.active{display:block}
+.card{background:#fff;border-radius:12px;padding:20px;margin-bottom:16px;box-shadow:0 2px 8px rgba(0,0,0,.07)}
+.card h3{color:#8b1a3a;font-size:1.1rem;margin-bottom:8px}
+.card p{line-height:1.7;color:#444}
+.card ul,.card ol{padding-left:20px;line-height:1.9;color:#444}
+.estres-level{background:#fdf0f4;border-radius:10px;padding:16px;margin-bottom:12px;display:flex;gap:14px;align-items:flex-start}
+.estres-icon{font-size:2rem;flex-shrink:0}
+.estres-body h4{color:#8b1a3a;font-size:.95rem;font-weight:700;margin-bottom:4px}
+.estres-body p{font-size:14px;color:#555;line-height:1.6}
+.sim-area{background:#fff;border-radius:12px;padding:24px;box-shadow:0 2px 8px rgba(0,0,0,.07);margin-bottom:16px}
+.sim-area h3{color:#8b1a3a;font-size:1.1rem;margin-bottom:12px}
+.rs-row{margin-bottom:14px}
+.rs-row label{display:block;font-size:14px;font-weight:600;color:#555;margin-bottom:4px}
+.rs-row input[type=range]{width:100%;accent-color:#b83255}
+.rs-row .sv{font-size:13px;color:#888;text-align:right}
+.sim-result{border-left:4px solid #b83255;background:#f5e6ea;border-radius:8px;padding:16px;margin-top:8px;display:none}
+.sim-result h4{color:#8b1a3a;margin-bottom:6px}
+.sim-result p{font-size:14px;color:#444;line-height:1.6}
+.sim-btn{margin-top:14px;padding:12px 24px;background:#b83255;color:#fff;border:none;border-radius:8px;font-size:15px;cursor:pointer}
+.sim-btn:hover{background:#8b1a3a}
+.quiz-box{background:#fff;border-radius:12px;padding:24px;box-shadow:0 2px 8px rgba(0,0,0,.07)}
+.quiz-box h3{color:#8b1a3a;font-size:1.1rem;margin-bottom:6px}
+.quiz-progress{font-size:13px;color:#888;margin-bottom:16px}
+.quiz-q{font-size:1rem;font-weight:600;margin-bottom:16px;line-height:1.5}
+.quiz-opts{display:flex;flex-direction:column;gap:10px;margin-bottom:16px}
+.quiz-opts button{padding:13px 16px;border:2px solid #ddd;border-radius:8px;background:#fff;font-size:15px;cursor:pointer;text-align:left;transition:all .2s;line-height:1.3}
+.quiz-opts button:hover{border-color:#b83255;background:#f9f0f3}
+.quiz-opts button.correct{background:#d4edda;border-color:#28a745;color:#155724}
+.quiz-opts button.wrong{background:#f8d7da;border-color:#dc3545;color:#721c24}
+.quiz-feedback{display:none;padding:12px 16px;border-radius:8px;margin-bottom:14px;font-size:14px;line-height:1.5}
+.quiz-feedback.show{display:block}
+.quiz-feedback.correct{background:#d4edda;color:#155724}
+.quiz-feedback.wrong{background:#f8d7da;color:#721c24}
+.quiz-next{padding:12px 28px;background:#b83255;color:#fff;border:none;border-radius:8px;font-size:15px;cursor:pointer;display:none}
+.quiz-next:hover{background:#8b1a3a}
+.quiz-result{display:none;text-align:center;padding:20px}
+.quiz-result .score{font-size:2.5rem;font-weight:700;color:#b83255}
+.quiz-result p{color:#555;margin-top:8px}
+.quiz-result button{margin-top:16px;padding:12px 28px;background:#b83255;color:#fff;border:none;border-radius:8px;font-size:15px;cursor:pointer}
+footer{text-align:center;padding:20px;color:#888;font-size:13px;margin-top:20px}
+@media(max-width:600px){header h1{font-size:1.2rem}nav button{font-size:13px;padding:12px 8px}}
+</style>
+</head>
+<body>
+<header>
+<small>Habilidades Blandas · Módulo 22 · Bloque 6</small>
+<h1>Eliminando el Estrés y la Tensión</h1>
+</header>
+<nav>
+<button class="active" onclick="showTab('concepto',this)">📖 Concepto</button>
+<button onclick="showTab('simulacion',this)">🧘 Gestión del Estrés</button>
+<button onclick="showTab('juego',this)">🎯 Mini-juego</button>
+</nav>
+<div id="concepto" class="section active">
+<div class="card">
+<h3>Estrés: El Enemigo Invisible del Éxito</h3>
+<p>El estrés crónico es la epidemia silenciosa del siglo XXI. La Organización Mundial de la Salud lo define como la "epidemia de salud global del siglo XXI". Afecta a más del 75% de los adultos y es la causa principal o agravante de la mayoría de enfermedades modernas: cardiovasculares, inmunológicas, digestivas y mentales.</p>
+<p style="margin-top:10px">No todo el estrés es negativo. El estrés agudo (corto) puede mejorar el rendimiento. El problema es el estrés crónico (prolongado), que destruye la salud, la productividad y las relaciones.</p>
+</div>
+<div class="card">
+<h3>Los 3 Tipos de Estrés y sus Consecuencias</h3>
+<div class="estres-level">
+<div class="estres-icon">🟢</div>
+<div class="estres-body"><h4>Euestrés (Estrés Positivo)</h4><p>Activación motivadora ante desafíos manejables. Te hace rendir mejor, estar más alerta y actuar con decisión. Es necesario para el crecimiento y la superación.</p></div>
+</div>
+<div class="estres-level">
+<div class="estres-icon">🟡</div>
+<div class="estres-body"><h4>Estrés Agudo (Corto Plazo)</h4><p>Respuesta intensa ante un evento específico (examen, presentación). Desaparece al resolverse la situación. En dosis moderadas, mejora el rendimiento.</p></div>
+</div>
+<div class="estres-level">
+<div class="estres-icon">🔴</div>
+<div class="estres-body"><h4>Estrés Crónico (Largo Plazo)</h4><p>Activación sostenida del sistema de alerta. Destruye la salud, deteriora la memoria, debilita el sistema inmune y causa agotamiento total. Este es el enemigo a eliminar.</p></div>
+</div>
+</div>
+<div class="card">
+<h3>Las 8 Estrategias Más Efectivas para Eliminar el Estrés</h3>
+<ol>
+<li><strong>Respiración diafragmática:</strong> Activa el sistema nervioso parasimpático (descanso) en menos de 2 minutos. Técnica 4-7-8: inhala 4 seg, mantén 7, exhala 8.</li>
+<li><strong>Ejercicio físico regular:</strong> El mejor ansiolítico y antidepresivo conocido. Libera endorfinas, BDNF y serotonina que neutralizan el cortisol.</li>
+<li><strong>Reencuadre cognitivo:</strong> Cambia la interpretación del evento estresante. "Este problema me está enseñando..." en lugar de "¿Por qué me pasa esto?"</li>
+<li><strong>Conexión social significativa:</strong> Conversar con alguien de confianza libera oxitocina (la hormona del vínculo), que contrarresta directamente el cortisol.</li>
+<li><strong>Agenda de preocupaciones:</strong> Reserva 20 minutos diarios para preocuparte conscientemente. Fuera de ese tiempo, pospón la preocupación. Entrena al cerebro a no rumiar constantemente.</li>
+<li><strong>Naturaleza y luz solar:</strong> 20-30 minutos en la naturaleza o al sol reduce el cortisol significativamente y mejora el estado de ánimo.</li>
+<li><strong>Escritura expresiva:</strong> Escribir sobre lo que te preocupa durante 15-20 minutos reduce la rumiación y procesa las emociones de forma más efectiva.</li>
+<li><strong>Gratitud activa:</strong> Escribir 3 cosas específicas de gratitud al día reprograma el cerebro para buscar lo positivo en lugar de lo amenazante.</li>
+</ol>
+</div>
+<div class="card">
+<h3>La Regla de los 3 Meses</h3>
+<p>Ante cualquier situación estresante, pregúntate: "¿Esto importará en 3 meses? ¿En 3 años?" El 90% de lo que nos estresa hoy no tendrá ninguna relevancia en 3 meses. Esta perspectiva temporal activa el córtex prefrontal (razonamiento) y desactiva la amígdala (miedo y pánico), permitiendo respuestas más inteligentes ante el estrés.</p>
+</div>
+</div>
+<div id="simulacion" class="section">
+<div class="sim-area">
+<h3>🧘 Diagnóstico de Estrés Personal</h3>
+<p style="font-size:14px;color:#666;margin-bottom:16px">Evalúa tu nivel de estrés en diferentes áreas (1=sin estrés, 10=estrés extremo):</p>
+<div class="rs-row">
+<label>1. Estrés laboral/académico</label>
+<input type="range" id="r1" min="1" max="10" value="5" oninput="document.getElementById('v1').textContent=this.value">
+<div class="sv">Valor: <span id="v1">5</span></div>
+</div>
+<div class="rs-row">
+<label>2. Estrés financiero/económico</label>
+<input type="range" id="r2" min="1" max="10" value="5" oninput="document.getElementById('v2').textContent=this.value">
+<div class="sv">Valor: <span id="v2">5</span></div>
+</div>
+<div class="rs-row">
+<label>3. Estrés en relaciones personales</label>
+<input type="range" id="r3" min="1" max="10" value="5" oninput="document.getElementById('v3').textContent=this.value">
+<div class="sv">Valor: <span id="v3">5</span></div>
+</div>
+<div class="rs-row">
+<label>4. Tensión física (dolor de cabeza, espalda, insomnio)</label>
+<input type="range" id="r4" min="1" max="10" value="5" oninput="document.getElementById('v4').textContent=this.value">
+<div class="sv">Valor: <span id="v4">5</span></div>
+</div>
+<button class="sim-btn" onclick="calcEstres()">Ver mi Plan Anti-Estrés</button>
+<div class="sim-result" id="simResult">
+<h4 id="resTitle"></h4>
+<p id="resText"></p>
+</div>
+</div>
+</div>
+<div id="juego" class="section">
+<div class="quiz-box">
+<h3>🎯 Quiz: Eliminando el Estrés</h3>
+<div class="quiz-progress" id="qProgress">Pregunta 1 de 6</div>
+<div id="quizArea">
+<div class="quiz-q" id="qText"></div>
+<div class="quiz-opts" id="qOpts"></div>
+<div class="quiz-feedback" id="qFeedback"></div>
+<button class="quiz-next" id="qNext" onclick="nextQuestion()">Siguiente →</button>
+</div>
+<div class="quiz-result" id="quizResult">
+<div class="score" id="finalScore"></div>
+<p id="finalMsg"></p>
+<button onclick="restartQuiz()">Reintentar 🔄</button>
+</div>
+</div>
+</div>
+<footer>Habilidades Blandas · Seminario Fénix · Módulo 22</footer>
+<script>
+function showTab(id,btn){document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));document.getElementById(id).classList.add('active');btn.classList.add('active');}
+function calcEstres(){const vals=[+r1.value,+r2.value,+r3.value,+r4.value];const avg=vals.reduce((a,b)=>a+b,0)/4;const el=document.getElementById('simResult');el.style.display='block';let t,tx;if(avg>=8){t='🚨 Nivel Crítico de Estrés';tx='Tu nivel de estrés es alto y requiere atención inmediata. Esta semana implementa: 1) Respiración 4-7-8 cada vez que sientas estrés, 2) Caminata de 30 minutos al aire libre, 3) Escribe en un diario 15 min antes de dormir. Si el estrés persiste, busca apoyo profesional: un psicólogo es una inversión, no un lujo.';}else if(avg>=6){t='⚠️ Estrés Moderado-Alto';tx='Tienes un nivel de estrés que está afectando tu rendimiento y bienestar. Implementa la "agenda de preocupaciones" (20 min diarios) y la gratitud activa (3 cosas específicas por la noche). Agrega ejercicio 3 veces por semana.';}else if(avg>=4){t='🟡 Estrés Manejable';tx='Tu estrés está dentro de límites normales pero con margen de mejora. Aplica el reencuadre cognitivo ante situaciones estresantes y fortalece tu red de conexión social.';}else{t='🟢 Buen Equilibrio';tx='¡Excelente gestión del estrés! Mantén tus prácticas actuales y comparte tus estrategias con personas cercanas que puedan beneficiarse de tu ejemplo.';}document.getElementById('resTitle').textContent=t;document.getElementById('resText').textContent=tx;}
+const questions=[{q:'¿Qué tipo de estrés describe la OMS como "epidemia global del siglo XXI"?',opts:['El euestrés','El estrés agudo positivo','El estrés crónico','El estrés laboral únicamente'],ans:2,fb:'El estrés crónico (prolongado) es la epidemia global. Es la causa principal o agravante de la mayoría de enfermedades modernas.'},
+{q:'¿Qué activa la respiración diafragmática lenta?',opts:['El sistema nervioso simpático (alerta)','El sistema nervioso parasimpático (descanso y reparación)','La producción de adrenalina','El sistema inmunológico'],ans:1,fb:'La respiración lenta y profunda activa el sistema parasimpático (descanso y digestión), que contrarresta directamente la respuesta de estrés aguda.'},
+{q:'¿Qué hormona libera la conexión social significativa para contrarrestar el cortisol?',opts:['Serotonina','Dopamina','Oxitocina','Melatonina'],ans:2,fb:'La oxitocina (hormona del vínculo y la conexión) se libera en la conexión social significativa y contrarresta directamente los efectos del cortisol.'},
+{q:'¿En qué consiste la "agenda de preocupaciones"?',opts:['Anotar todo lo que puede salir mal durante el día','Reservar 20 minutos diarios para preocuparse conscientemente y posponer fuera de ese tiempo','Hacer una lista de problemas para pedir ayuda','Eliminar completamente cualquier preocupación'],ans:1,fb:'La agenda de preocupaciones entrena al cerebro a no rumiar constantemente: se preocupa en un horario específico (20 min) y pospone fuera de ese tiempo.'},
+{q:'¿Cuántos minutos en la naturaleza reduce significativamente el cortisol?',opts:['5 minutos','10 minutos','20-30 minutos','Al menos 2 horas'],ans:2,fb:'20-30 minutos en la naturaleza o al sol reduce el cortisol significativamente y mejora el estado de ánimo, incluso en entornos urbanos con parques.'},
+{q:'¿Cuál es la pregunta de "La Regla de los 3 Meses"?',opts:['"¿Puedo resolver esto en 3 meses?"','"¿Esto importará en 3 meses o en 3 años?"','"¿Cuánto me va a costar en 3 meses?"','"¿Cómo estaré en 3 meses si no actúo?"'],ans:1,fb:'Preguntarse "¿Esto importará en 3 meses?" activa el córtex prefrontal y desactiva la amígdala, permitiendo respuestas más inteligentes al estrés.'}];
+let cur=0,sc=0,answ=false;
+function loadQ(){const q=questions[cur];document.getElementById('qProgress').textContent='Pregunta '+(cur+1)+' de '+questions.length;document.getElementById('qText').textContent=q.q;const fb=document.getElementById('qFeedback');fb.className='quiz-feedback';fb.textContent='';document.getElementById('qNext').style.display='none';answ=false;const op=document.getElementById('qOpts');op.innerHTML='';q.opts.forEach((o,i)=>{const b=document.createElement('button');b.textContent=o;b.onclick=()=>answer(i,b);op.appendChild(b);});}
+function answer(i,btn){if(answ)return;answ=true;const q=questions[cur];document.querySelectorAll('.quiz-opts button').forEach(b=>b.style.pointerEvents='none');const fb=document.getElementById('qFeedback');if(i===q.ans){btn.classList.add('correct');sc++;fb.className='quiz-feedback show correct';fb.textContent='✅ '+q.fb;}else{btn.classList.add('wrong');document.querySelectorAll('.quiz-opts button')[q.ans].classList.add('correct');fb.className='quiz-feedback show wrong';fb.textContent='❌ '+q.fb;}document.getElementById('qNext').style.display='inline-block';}
+function nextQuestion(){cur++;if(cur<questions.length){loadQ();}else{document.getElementById('quizArea').style.display='none';const r=document.getElementById('quizResult');r.style.display='block';document.getElementById('finalScore').textContent=sc+'/'+questions.length;const p=sc/questions.length;document.getElementById('finalMsg').textContent=p>=0.83?'🧘 ¡Excelente! Eres un maestro en gestión del estrés.':p>=0.5?'📈 Buen trabajo. Practica las 8 estrategias anti-estrés.':'💆 Sigue aprendiendo. ¡Eliminar el estrés transforma tu vida!';}}
+function restartQuiz(){cur=0;sc=0;answ=false;document.getElementById('quizArea').style.display='block';document.getElementById('quizResult').style.display='none';loadQ();}
+loadQ();
+</script>
+</body>
+</html>
