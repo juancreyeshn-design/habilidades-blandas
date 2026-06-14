@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Habilidades Blandas | Módulo 24 – Construyendo Relaciones Superiores</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',Arial,sans-serif;background:#f5f0f5;color:#2d2d2d;font-size:16px}
+header{background:linear-gradient(135deg,#8b1a3a 0%,#b83255 100%);color:#fff;padding:20px;text-align:center}
+header small{display:block;font-size:13px;letter-spacing:2px;opacity:.85;text-transform:uppercase}
+header h1{font-size:1.5rem;margin-top:4px}
+nav{display:flex;background:#6d1430;overflow-x:auto}
+nav button{flex:1;min-width:110px;padding:14px 10px;background:none;border:none;color:#f5c6d3;font-size:15px;cursor:pointer;border-bottom:3px solid transparent;transition:all .2s;white-space:nowrap}
+nav button.active,nav button:hover{color:#fff;border-bottom-color:#f7b2c4;background:rgba(255,255,255,.08)}
+.section{display:none;padding:20px;max-width:900px;margin:0 auto}
+.section.active{display:block}
+.card{background:#fff;border-radius:12px;padding:20px;margin-bottom:16px;box-shadow:0 2px 8px rgba(0,0,0,.07)}
+.card h3{color:#8b1a3a;font-size:1.1rem;margin-bottom:8px}
+.card p{line-height:1.7;color:#444}
+.card ul,.card ol{padding-left:20px;line-height:1.9;color:#444}
+.rel-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px;margin:12px 0}
+.rel-card{border-radius:10px;padding:16px;text-align:center;background:#fdf0f4}
+.rel-card .pico{font-size:2rem;margin-bottom:6px}
+.rel-card h4{color:#8b1a3a;font-size:.9rem;font-weight:700;margin-bottom:4px}
+.rel-card p{font-size:.8rem;color:#666;line-height:1.4}
+.sim-area{background:#fff;border-radius:12px;padding:24px;box-shadow:0 2px 8px rgba(0,0,0,.07);margin-bottom:16px}
+.sim-area h3{color:#8b1a3a;font-size:1.1rem;margin-bottom:12px}
+.rs-row{margin-bottom:14px}
+.rs-row label{display:block;font-size:14px;font-weight:600;color:#555;margin-bottom:4px}
+.rs-row input[type=range]{width:100%;accent-color:#b83255}
+.rs-row .sv{font-size:13px;color:#888;text-align:right}
+.sim-result{border-left:4px solid #b83255;background:#f5e6ea;border-radius:8px;padding:16px;margin-top:8px;display:none}
+.sim-result h4{color:#8b1a3a;margin-bottom:6px}
+.sim-result p{font-size:14px;color:#444;line-height:1.6}
+.sim-btn{margin-top:14px;padding:12px 24px;background:#b83255;color:#fff;border:none;border-radius:8px;font-size:15px;cursor:pointer}
+.sim-btn:hover{background:#8b1a3a}
+.quiz-box{background:#fff;border-radius:12px;padding:24px;box-shadow:0 2px 8px rgba(0,0,0,.07)}
+.quiz-box h3{color:#8b1a3a;font-size:1.1rem;margin-bottom:6px}
+.quiz-progress{font-size:13px;color:#888;margin-bottom:16px}
+.quiz-q{font-size:1rem;font-weight:600;margin-bottom:16px;line-height:1.5}
+.quiz-opts{display:flex;flex-direction:column;gap:10px;margin-bottom:16px}
+.quiz-opts button{padding:13px 16px;border:2px solid #ddd;border-radius:8px;background:#fff;font-size:15px;cursor:pointer;text-align:left;transition:all .2s;line-height:1.3}
+.quiz-opts button:hover{border-color:#b83255;background:#f9f0f3}
+.quiz-opts button.correct{background:#d4edda;border-color:#28a745;color:#155724}
+.quiz-opts button.wrong{background:#f8d7da;border-color:#dc3545;color:#721c24}
+.quiz-feedback{display:none;padding:12px 16px;border-radius:8px;margin-bottom:14px;font-size:14px;line-height:1.5}
+.quiz-feedback.show{display:block}
+.quiz-feedback.correct{background:#d4edda;color:#155724}
+.quiz-feedback.wrong{background:#f8d7da;color:#721c24}
+.quiz-next{padding:12px 28px;background:#b83255;color:#fff;border:none;border-radius:8px;font-size:15px;cursor:pointer;display:none}
+.quiz-next:hover{background:#8b1a3a}
+.quiz-result{display:none;text-align:center;padding:20px}
+.quiz-result .score{font-size:2.5rem;font-weight:700;color:#b83255}
+.quiz-result p{color:#555;margin-top:8px}
+.quiz-result button{margin-top:16px;padding:12px 28px;background:#b83255;color:#fff;border:none;border-radius:8px;font-size:15px;cursor:pointer}
+footer{text-align:center;padding:20px;color:#888;font-size:13px;margin-top:20px}
+@media(max-width:600px){header h1{font-size:1.2rem}nav button{font-size:13px;padding:12px 8px}}
+</style>
+</head>
+<body>
+<header>
+<small>Habilidades Blandas · Módulo 24 · Bloque 6</small>
+<h1>Construyendo Relaciones Superiores</h1>
+</header>
+<nav>
+<button class="active" onclick="showTab('concepto',this)">📖 Concepto</button>
+<button onclick="showTab('simulacion',this)">🤝 Mis Relaciones</button>
+<button onclick="showTab('juego',this)">🎯 Mini-juego</button>
+</nav>
+<div id="concepto" class="section active">
+<div class="card">
+<h3>Las Relaciones: el Mayor Capital del Éxito</h3>
+<p>Harvard realizó el estudio longitudinal más largo sobre la felicidad humana (75 años, más de 700 participantes). Su conclusión más contundente: la calidad de las relaciones es el factor número uno en la salud, la felicidad y el éxito a largo plazo. Ni el dinero, ni los logros, ni la inteligencia: las relaciones.</p>
+<p style="margin-top:10px">El 85% de las oportunidades de empleo, negocios y crecimiento profesional provienen de relaciones personales. Tu red de contactos vale más que cualquier título académico.</p>
+</div>
+<div class="card">
+<h3>Los 6 Pilares de las Relaciones Superiores</h3>
+<div class="rel-grid">
+<div class="rel-card"><div class="pico">👂</div><h4>Escucha activa</h4><p>Escuchar para entender, no para responder. Presencia plena en cada conversación.</p></div>
+<div class="rel-card"><div class="pico">❤️</div><h4>Interés genuino</h4><p>Recordar detalles de la vida del otro. Preguntar, no solo hablar de uno mismo.</p></div>
+<div class="rel-card"><div class="pico">🙏</div><h4>Generosidad sin expectativas</h4><p>Dar valor, ayuda y tiempo sin esperar retribución inmediata.</p></div>
+<div class="rel-card"><div class="pico">🤝</div><h4>Confiabilidad</h4><p>Cumplir lo que se promete. La confianza se construye con hechos, no con palabras.</p></div>
+<div class="rel-card"><div class="pico">💬</div><h4>Comunicación auténtica</h4><p>Decir la verdad con respeto. La autenticidad crea conexiones reales.</p></div>
+<div class="rel-card"><div class="pico">🔄</div><h4>Reciprocidad</h4><p>Dar y recibir en equilibrio. Las relaciones unilaterales se agotan.</p></div>
+</div>
+</div>
+<div class="card">
+<h3>Las 7 Reglas de Oro de Dale Carnegie para Construir Relaciones</h3>
+<ol>
+<li><strong>No critique, no condene, no se queje:</strong> La crítica genera defensividad y resentimiento, no cambio.</li>
+<li><strong>Elogie sincera y específicamente:</strong> Las personas tienen hambre de reconocimiento genuino. Un elogio específico vale 10 veces más que uno genérico.</li>
+<li><strong>Despierte en el otro un deseo vivo:</strong> Habla en términos de lo que quiere la otra persona, no de lo que tú quieres.</li>
+<li><strong>Interésese genuinamente por los demás:</strong> Puedes ganar más amigos en dos meses interesándote en otros que en dos años tratando de interesarlos en ti.</li>
+<li><strong>Sonría:</strong> Una sonrisa genuina no cuesta nada y vale millones en términos de conexión humana.</li>
+<li><strong>Recuerde el nombre de las personas:</strong> El nombre propio es el sonido más dulce para cualquier persona. Usarlo crea conexión inmediata.</li>
+<li><strong>Sea un buen oyente:</strong> Anima a los demás a hablar de sí mismos. Las personas recuerdan a quienes las escuchan más que a quienes las entretienen.</li>
+</ol>
+</div>
+</div>
+<div id="simulacion" class="section">
+<div class="sim-area">
+<h3>🤝 Evaluación de la Calidad de tus Relaciones</h3>
+<p style="font-size:14px;color:#666;margin-bottom:16px">Evalúa tus habilidades de construcción de relaciones (1=muy baja, 10=excelente):</p>
+<div class="rs-row">
+<label>1. Capacidad de escucha activa y presencia plena</label>
+<input type="range" id="r1" min="1" max="10" value="5" oninput="document.getElementById('v1').textContent=this.value">
+<div class="sv">Valor: <span id="v1">5</span></div>
+</div>
+<div class="rs-row">
+<label>2. Interés genuino por la vida de los demás</label>
+<input type="range" id="r2" min="1" max="10" value="5" oninput="document.getElementById('v2').textContent=this.value">
+<div class="sv">Valor: <span id="v2">5</span></div>
+</div>
+<div class="rs-row">
+<label>3. Generosidad y aporte de valor sin expectativas</label>
+<input type="range" id="r3" min="1" max="10" value="5" oninput="document.getElementById('v3').textContent=this.value">
+<div class="sv">Valor: <span id="v3">5</span></div>
+</div>
+<div class="rs-row">
+<label>4. Confiabilidad (cumplo lo que prometo)</label>
+<input type="range" id="r4" min="1" max="10" value="5" oninput="document.getElementById('v4').textContent=this.value">
+<div class="sv">Valor: <span id="v4">5</span></div>
+</div>
+<button class="sim-btn" onclick="calcRelaciones()">Ver mi Perfil Relacional</button>
+<div class="sim-result" id="simResult">
+<h4 id="resTitle"></h4>
+<p id="resText"></p>
+</div>
+</div>
+</div>
+<div id="juego" class="section">
+<div class="quiz-box">
+<h3>🎯 Quiz: Construyendo Relaciones Superiores</h3>
+<div class="quiz-progress" id="qProgress">Pregunta 1 de 6</div>
+<div id="quizArea">
+<div class="quiz-q" id="qText"></div>
+<div class="quiz-opts" id="qOpts"></div>
+<div class="quiz-feedback" id="qFeedback"></div>
+<button class="quiz-next" id="qNext" onclick="nextQuestion()">Siguiente →</button>
+</div>
+<div class="quiz-result" id="quizResult">
+<div class="score" id="finalScore"></div>
+<p id="finalMsg"></p>
+<button onclick="restartQuiz()">Reintentar 🔄</button>
+</div>
+</div>
+</div>
+<footer>Habilidades Blandas · Seminario Fénix · Módulo 24</footer>
+<script>
+function showTab(id,btn){document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));document.getElementById(id).classList.add('active');btn.classList.add('active');}
+function calcRelaciones(){const v=[+r1.value,+r2.value,+r3.value,+r4.value];const avg=(v[0]+v[1]+v[2]+v[3])/4;const el=document.getElementById('simResult');el.style.display='block';let t,tx;if(avg>=8){t='🌟 Constructor de Relaciones Superiores';tx='¡Tienes habilidades relacionales de alto nivel! Eres el tipo de persona que otros quieren tener cerca. Usa estas habilidades para expandir tu red de relaciones de alto impacto.';}else if(avg>=6){t='📈 Relacionador en Crecimiento';tx='Tienes bases sólidas. Esta semana, elige 3 personas de tu vida a quienes enviarás un mensaje genuino de interés o gratitud. Esa acción simple puede transformar esas relaciones.';}else if(avg>=4){t='⚙️ Gran Potencial Relacional';tx='Hay espacio para crecer significativamente. Empieza con la habilidad de escucha: en la próxima conversación, enfócate 100% en entender a la otra persona antes de responder.';}else{t='🔧 El Mejor Momento para Invertir en Relaciones';tx='Las relaciones son el activo más valioso y rentable que existe. Esta semana, contacta a 3 personas con quienes hayas perdido contacto y muestra interés genuino por su vida.';}document.getElementById('resTitle').textContent=t;document.getElementById('resText').textContent=tx;}
+const questions=[{q:'¿Cuál fue la conclusión principal del estudio de Harvard sobre la felicidad?',opts:['El dinero es el factor más importante','Los logros profesionales determinan la felicidad','La calidad de las relaciones es el factor número uno','La salud física determina la felicidad'],ans:2,fb:'El estudio de 75 años de Harvard concluyó que la calidad de las relaciones es el factor número uno en salud, felicidad y éxito a largo plazo.'},
+{q:'¿Qué porcentaje de oportunidades provienen de relaciones personales?',opts:['30%','50%','70%','85%'],ans:3,fb:'El 85% de las oportunidades de empleo, negocios y crecimiento profesional provienen de relaciones personales. Tu red vale más que tu CV.'},
+{q:'¿Cuál es la diferencia entre escucha activa y escucha pasiva?',opts:['La escucha activa requiere tomar notas','Escuchar activamente es para entender; la pasiva es esperar para responder','La activa es más rápida','No hay diferencia real'],ans:1,fb:'La escucha activa significa presencia plena con intención de entender genuinamente. La mayoría escucha esperando su turno para hablar, no para comprender.'},
+{q:'¿Por qué Carnegie recomienda recordar el nombre de las personas?',opts:['Por cortesía social básica','El nombre propio es el sonido más dulce para cualquier persona y crea conexión inmediata','Para impresionar en entornos formales','Para recordar información de trabajo'],ans:1,fb:'Carnegie descubrió que el nombre propio activa una respuesta emocional positiva inmediata. Recordarlo y usarlo crea conexión y demuestra respeto genuino.'},
+{q:'¿Cómo se construye la confianza según el módulo?',opts:['Con promesas elaboradas y compromisos grandiosos','Con hechos consistentes, no con palabras','Con años de amistad','Con títulos académicos y credenciales'],ans:1,fb:'La confianza se construye con hechos: hacer lo que se dice, cumplir compromisos pequeños consistentemente. Las palabras sin respaldo destruyen la confianza.'},
+{q:'¿En cuánto tiempo puedes ganar más amigos interesándote en los demás vs. tratar de interesarlos en ti?',opts:['Interesarse en otros: 2 meses vs 2 años tratando de interesarlos en ti','Es igual en ambos casos','Solo funciona para extrovertidos','Depende del entorno cultural'],ans:0,fb:'Carnegie: "Puedes ganar más amigos en dos meses interesándote genuinamente en los demás que en dos años tratando de que se interesen en ti."'}];
+let cur=0,sc=0,answ=false;
+function loadQ(){const q=questions[cur];document.getElementById('qProgress').textContent='Pregunta '+(cur+1)+' de '+questions.length;document.getElementById('qText').textContent=q.q;const fb=document.getElementById('qFeedback');fb.className='quiz-feedback';fb.textContent='';document.getElementById('qNext').style.display='none';answ=false;const op=document.getElementById('qOpts');op.innerHTML='';q.opts.forEach((o,i)=>{const b=document.createElement('button');b.textContent=o;b.onclick=()=>answer(i,b);op.appendChild(b);});}
+function answer(i,btn){if(answ)return;answ=true;const q=questions[cur];document.querySelectorAll('.quiz-opts button').forEach(b=>b.style.pointerEvents='none');const fb=document.getElementById('qFeedback');if(i===q.ans){btn.classList.add('correct');sc++;fb.className='quiz-feedback show correct';fb.textContent='✅ '+q.fb;}else{btn.classList.add('wrong');document.querySelectorAll('.quiz-opts button')[q.ans].classList.add('correct');fb.className='quiz-feedback show wrong';fb.textContent='❌ '+q.fb;}document.getElementById('qNext').style.display='inline-block';}
+function nextQuestion(){cur++;if(cur<questions.length){loadQ();}else{document.getElementById('quizArea').style.display='none';const r=document.getElementById('quizResult');r.style.display='block';document.getElementById('finalScore').textContent=sc+'/'+questions.length;const p=sc/questions.length;document.getElementById('finalMsg').textContent=p>=0.83?'🤝 ¡Excelente! Eres un constructor de relaciones superiores.':p>=0.5?'📈 Buen trabajo. Practica las 7 reglas de Carnegie.':'💬 Sigue aprendiendo. ¡Las relaciones son tu mayor activo!';}}
+function restartQuiz(){cur=0;sc=0;answ=false;document.getElementById('quizArea').style.display='block';document.getElementById('quizResult').style.display='none';loadQ();}
+loadQ();
+</script>
+</body>
+</html>
