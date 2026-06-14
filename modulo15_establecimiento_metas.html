@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Habilidades Blandas | Módulo 15 – 5 Claves para el Establecimiento de Metas</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',Arial,sans-serif;background:#f5f0f5;color:#2d2d2d;font-size:16px}
+header{background:linear-gradient(135deg,#8b1a3a 0%,#b83255 100%);color:#fff;padding:20px;text-align:center}
+header small{display:block;font-size:13px;letter-spacing:2px;opacity:.85;text-transform:uppercase}
+header h1{font-size:1.5rem;margin-top:4px}
+nav{display:flex;background:#6d1430;overflow-x:auto}
+nav button{flex:1;min-width:110px;padding:14px 10px;background:none;border:none;color:#f5c6d3;font-size:15px;cursor:pointer;border-bottom:3px solid transparent;transition:all .2s;white-space:nowrap}
+nav button.active,nav button:hover{color:#fff;border-bottom-color:#f7b2c4;background:rgba(255,255,255,.08)}
+.section{display:none;padding:20px;max-width:900px;margin:0 auto}
+.section.active{display:block}
+.card{background:#fff;border-radius:12px;padding:20px;margin-bottom:16px;box-shadow:0 2px 8px rgba(0,0,0,.07)}
+.card h3{color:#8b1a3a;font-size:1.1rem;margin-bottom:8px}
+.card p{line-height:1.7;color:#444}
+.card ul,.card ol{padding-left:20px;line-height:1.9;color:#444}
+.key-box{background:#fdf0f4;border-radius:12px;padding:20px;margin-bottom:14px;border:2px solid #e8c0cc}
+.key-box .num{display:inline-block;background:#b83255;color:#fff;border-radius:50%;width:32px;height:32px;text-align:center;line-height:32px;font-weight:700;font-size:1.1rem;margin-bottom:10px}
+.key-box h4{color:#8b1a3a;font-size:1.05rem;margin-bottom:8px}
+.key-box p{font-size:14px;color:#555;line-height:1.7}
+.smart-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin:12px 0}
+.smart-card{background:#fff;border-radius:10px;padding:14px;text-align:center;border:2px solid #e8c0cc}
+.smart-card .letter{font-size:2.5rem;font-weight:700;color:#b83255;line-height:1}
+.smart-card h5{color:#8b1a3a;font-size:.9rem;font-weight:700;margin:4px 0}
+.smart-card p{font-size:.78rem;color:#666;line-height:1.4}
+.sim-area{background:#fff;border-radius:12px;padding:24px;box-shadow:0 2px 8px rgba(0,0,0,.07);margin-bottom:16px}
+.sim-area h3{color:#8b1a3a;font-size:1.1rem;margin-bottom:12px}
+.meta-form label{display:block;font-size:14px;font-weight:600;color:#555;margin-bottom:4px;margin-top:12px}
+.meta-form input,.meta-form textarea,.meta-form select{width:100%;padding:10px;border:1px solid #ddd;border-radius:8px;font-size:14px;font-family:inherit}
+.meta-form textarea{min-height:60px;resize:vertical}
+.sim-btn{margin-top:14px;padding:12px 24px;background:#b83255;color:#fff;border:none;border-radius:8px;font-size:15px;cursor:pointer}
+.sim-btn:hover{background:#8b1a3a}
+.meta-result{display:none;background:#f0f8f0;border-radius:10px;padding:16px;margin-top:14px;border:2px solid #388e3c}
+.meta-result h4{color:#1b5e20;margin-bottom:10px}
+.meta-row{background:#fff;border-radius:8px;padding:10px;margin-bottom:6px;border-left:3px solid #388e3c;font-size:14px;color:#444}
+.meta-row strong{color:#1b5e20}
+.quiz-box{background:#fff;border-radius:12px;padding:24px;box-shadow:0 2px 8px rgba(0,0,0,.07)}
+.quiz-box h3{color:#8b1a3a;font-size:1.1rem;margin-bottom:6px}
+.quiz-progress{font-size:13px;color:#888;margin-bottom:16px}
+.quiz-q{font-size:1rem;font-weight:600;margin-bottom:16px;line-height:1.5}
+.quiz-opts{display:flex;flex-direction:column;gap:10px;margin-bottom:16px}
+.quiz-opts button{padding:13px 16px;border:2px solid #ddd;border-radius:8px;background:#fff;font-size:15px;cursor:pointer;text-align:left;transition:all .2s;line-height:1.3}
+.quiz-opts button:hover{border-color:#b83255;background:#f9f0f3}
+.quiz-opts button.correct{background:#d4edda;border-color:#28a745;color:#155724}
+.quiz-opts button.wrong{background:#f8d7da;border-color:#dc3545;color:#721c24}
+.quiz-feedback{display:none;padding:12px 16px;border-radius:8px;margin-bottom:14px;font-size:14px;line-height:1.5}
+.quiz-feedback.show{display:block}
+.quiz-feedback.correct{background:#d4edda;color:#155724}
+.quiz-feedback.wrong{background:#f8d7da;color:#721c24}
+.quiz-next{padding:12px 28px;background:#b83255;color:#fff;border:none;border-radius:8px;font-size:15px;cursor:pointer;display:none}
+.quiz-next:hover{background:#8b1a3a}
+.quiz-result{display:none;text-align:center;padding:20px}
+.quiz-result .score{font-size:2.5rem;font-weight:700;color:#b83255}
+.quiz-result p{color:#555;margin-top:8px}
+.quiz-result button{margin-top:16px;padding:12px 28px;background:#b83255;color:#fff;border:none;border-radius:8px;font-size:15px;cursor:pointer}
+footer{text-align:center;padding:20px;color:#888;font-size:13px;margin-top:20px}
+@media(max-width:600px){header h1{font-size:1.2rem}nav button{font-size:13px;padding:12px 8px}}
+</style>
+</head>
+<body>
+<header>
+<small>Habilidades Blandas · Módulo 15 · Bloque 4</small>
+<h1>5 Claves para el Establecimiento de Metas</h1>
+</header>
+<nav>
+<button class="active" onclick="showTab('concepto',this)">📖 Concepto</button>
+<button onclick="showTab('simulacion',this)">🎯 Constructor de Metas</button>
+<button onclick="showTab('juego',this)">🎯 Mini-juego</button>
+</nav>
+<div id="concepto" class="section active">
+<div class="card">
+<h3>¿Por Qué el 97% No Logra sus Metas?</h3>
+<p>Estudios de la Universidad de Harvard han demostrado que solo el 3% de los adultos tiene metas escritas claramente. Ese 3% logra entre 5 y 10 veces más que el 97% restante combinado, a pesar de tener el mismo talento, educación e inteligencia.</p>
+<p style="margin-top:10px">La diferencia no es la capacidad: es el sistema. Las metas vagas producen resultados vagos. Las metas específicas, escritas y con fecha producen resultados extraordinarios.</p>
+</div>
+<div class="card">
+<h3>El Sistema SMART de Metas</h3>
+<p style="margin-bottom:12px">Toda meta efectiva debe cumplir con los 5 criterios SMART:</p>
+<div class="smart-grid">
+<div class="smart-card"><div class="letter">S</div><h5>Específica</h5><p>Definida con precisión. ¿Qué exactamente quieres lograr?</p></div>
+<div class="smart-card"><div class="letter">M</div><h5>Medible</h5><p>Con indicadores claros. ¿Cómo sabrás que la lograste?</p></div>
+<div class="smart-card"><div class="letter">A</div><h5>Alcanzable</h5><p>Desafiante pero realista según tus recursos actuales.</p></div>
+<div class="smart-card"><div class="letter">R</div><h5>Relevante</h5><p>Alineada con tus valores y propósito de vida mayor.</p></div>
+<div class="smart-card"><div class="letter">T</div><h5>Temporal</h5><p>Con fecha límite específica. "Algún día" nunca llega.</p></div>
+</div>
+</div>
+<div class="card">
+<h3>Las 5 Claves para el Establecimiento de Metas</h3>
+<div class="key-box">
+<div class="num">1</div>
+<h4>Escríbela en tiempo presente y positivo</h4>
+<p>Tu subconsciente no procesa negaciones. Escribe "Peso 75 kg y me siento en forma" en lugar de "No quiero estar gordo." La mente va hacia aquello en lo que se enfoca, sea positivo o negativo.</p>
+</div>
+<div class="key-box">
+<div class="num">2</div>
+<h4>Ponle fecha límite específica</h4>
+<p>Una meta sin fecha es un sueño. Define el día exacto: "Para el 31 de diciembre de este año..." La fecha activa el sistema de activación reticular (SAR) del cerebro para buscar oportunidades.</p>
+</div>
+<div class="key-box">
+<div class="num">3</div>
+<h4>Identifica el precio que debes pagar</h4>
+<p>Toda meta tiene un precio: tiempo, dinero, comodidad, relaciones. Quien no está dispuesto a pagar el precio no logra la meta. Sé honesto contigo mismo sobre lo que requiere.</p>
+</div>
+<div class="key-box">
+<div class="num">4</div>
+<h4>Visualízala diariamente con emoción</h4>
+<p>El cerebro no distingue entre una experiencia real e imaginada vívidamente. 5 minutos de visualización cargada de emoción cada mañana programan el subconsciente para actuar en esa dirección.</p>
+</div>
+<div class="key-box">
+<div class="num">5</div>
+<h4>Define el próximo paso de acción inmediata</h4>
+<p>Cada meta grande se conquista con pasos pequeños consistentes. Identifica la acción más pequeña que puedes tomar HOY que te acerque a tu meta. La acción genera motivación, no al revés.</p>
+</div>
+</div>
+<div class="card">
+<h3>Las 7 Áreas de Metas</h3>
+<p>Para una vida equilibrada y plena, establece metas en todas estas áreas: Salud y forma física, Familia y relaciones, Carrera y negocios, Finanzas e inversiones, Educación y crecimiento personal, Espiritualidad y propósito, Experiencias y diversión. El desequilibrio en cualquier área eventualmente afecta las demás.</p>
+</div>
+</div>
+<div id="simulacion" class="section">
+<div class="sim-area">
+<h3>🎯 Constructor de Metas SMART</h3>
+<p style="font-size:14px;color:#666;margin-bottom:16px">Crea una meta poderosa llenando cada campo con precisión:</p>
+<div class="meta-form">
+<label>¿Qué quieres lograr exactamente? (Específica)</label>
+<input type="text" id="mEspecifica" placeholder="Ej: Ganar 3,000 dólares mensuales como freelancer...">
+<label>¿Cómo medirás el éxito? (Medible)</label>
+<input type="text" id="mMedible" placeholder="Ej: Factura mensual de al menos 3,000 USD confirmada en banco...">
+<label>¿Por qué es alcanzable para ti? (Alcanzable)</label>
+<textarea id="mAlcanzable" placeholder="Ej: Ya tengo 2 clientes base, 1 hora libre diaria y habilidades en diseño..."></textarea>
+<label>¿Por qué es importante para tu vida? (Relevante)</label>
+<textarea id="mRelevante" placeholder="Ej: Me permitirá tener independencia financiera y más tiempo con mi familia..."></textarea>
+<label>¿Cuál es la fecha límite exacta? (Temporal)</label>
+<input type="date" id="mFecha">
+<label>¿Cuál es el PRIMER paso que tomarás hoy?</label>
+<input type="text" id="mAccion" placeholder="Ej: Enviar propuesta a 3 potenciales clientes antes de las 6pm...">
+</div>
+<button class="sim-btn" onclick="crearMeta()">Generar mi Meta SMART</button>
+<div class="meta-result" id="metaResult">
+<h4>🎯 Tu Meta SMART está lista:</h4>
+<div id="metaContent"></div>
+<p style="font-size:13px;color:#388e3c;margin-top:10px">💡 Copia esta meta, imprímela y ponla donde la veas todos los días.</p>
+</div>
+</div>
+</div>
+<div id="juego" class="section">
+<div class="quiz-box">
+<h3>🎯 Quiz: Establecimiento de Metas</h3>
+<div class="quiz-progress" id="qProgress">Pregunta 1 de 6</div>
+<div id="quizArea">
+<div class="quiz-q" id="qText"></div>
+<div class="quiz-opts" id="qOpts"></div>
+<div class="quiz-feedback" id="qFeedback"></div>
+<button class="quiz-next" id="qNext" onclick="nextQuestion()">Siguiente →</button>
+</div>
+<div class="quiz-result" id="quizResult">
+<div class="score" id="finalScore"></div>
+<p id="finalMsg"></p>
+<button onclick="restartQuiz()">Reintentar 🔄</button>
+</div>
+</div>
+</div>
+<footer>Habilidades Blandas · Seminario Fénix · Módulo 15</footer>
+<script>
+function showTab(id,btn){document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));document.getElementById(id).classList.add('active');btn.classList.add('active');}
+function crearMeta(){
+  const e=document.getElementById('mEspecifica').value.trim();
+  const m=document.getElementById('mMedible').value.trim();
+  const a=document.getElementById('mAlcanzable').value.trim();
+  const r=document.getElementById('mRelevante').value.trim();
+  const f=document.getElementById('mFecha').value;
+  const ac=document.getElementById('mAccion').value.trim();
+  if(!e){alert('Completa al menos el campo "Específica"');return;}
+  const content=document.getElementById('metaContent');
+  const fecha=f?new Date(f).toLocaleDateString('es-ES',{weekday:'long',year:'numeric',month:'long',day:'numeric'}):'Sin fecha definida';
+  content.innerHTML='';
+  const items=[
+    ['S – Específica',e||'No completado'],
+    ['M – Medible',m||'No completado'],
+    ['A – Alcanzable',a||'No completado'],
+    ['R – Relevante',r||'No completado'],
+    ['T – Temporal (Fecha límite)',fecha],
+    ['⚡ Primer paso HOY',ac||'No completado']
+  ];
+  items.forEach(([label,val])=>{
+    const div=document.createElement('div');
+    div.className='meta-row';
+    div.innerHTML='<strong>'+label+':</strong> '+val;
+    content.appendChild(div);
+  });
+  document.getElementById('metaResult').style.display='block';
+}
+const questions=[
+  {q:'¿Qué porcentaje de adultos tiene metas escritas claramente?',opts:['25%','10%','3%','50%'],ans:2,fb:'Solo el 3% tiene metas escritas, y ese grupo logra entre 5 y 10 veces más que el 97% restante combinado.'},
+  {q:'¿Qué significa la "A" en el sistema SMART de metas?',opts:['Ambiciosa','Alcanzable','Anual','Adaptable'],ans:1,fb:'La "A" es de Alcanzable: la meta debe ser desafiante pero realista según los recursos y capacidades actuales.'},
+  {q:'¿Por qué se debe escribir la meta en tiempo PRESENTE y POSITIVO?',opts:['Para que suene mejor','El subconsciente no procesa negaciones y va hacia lo que se enfoca','Es solo una convención sin base científica','Para motivar a otros'],ans:1,fb:'El subconsciente no distingue negaciones: "no quiero fracasar" focaliza en el fracaso. Escribe siempre hacia lo que sí quieres.'},
+  {q:'¿Qué activa en el cerebro una fecha límite específica para una meta?',opts:['El sistema límbico de emociones','El sistema de activación reticular (SAR)','El hipocampo de memoria','Los reflejos automáticos'],ans:1,fb:'La fecha activa el SAR (Sistema de Activación Reticular) que filtra información relevante para tu meta y la hace visible.'},
+  {q:'Según el módulo, ¿qué genera motivación?',opts:['Esperar sentirse inspirado','Ver a otros tener éxito','La acción inmediata','Planear durante meses'],ans:2,fb:'La acción genera motivación, no al revés. Dar el primer paso pequeño activa el impulso y la energía necesarios.'},
+  {q:'¿En cuántas áreas de vida se recomienda establecer metas?',opts:['3 áreas principales','5 áreas','7 áreas','Solo en la carrera profesional'],ans:2,fb:'Las 7 áreas son: Salud, Familia, Carrera, Finanzas, Educación, Espiritualidad y Experiencias. El desequilibrio en una afecta las demás.'}
+];
+let cur=0,sc=0,answ=false;
+function loadQ(){const q=questions[cur];document.getElementById('qProgress').textContent='Pregunta '+(cur+1)+' de '+questions.length;document.getElementById('qText').textContent=q.q;const fb=document.getElementById('qFeedback');fb.className='quiz-feedback';fb.textContent='';document.getElementById('qNext').style.display='none';answ=false;const op=document.getElementById('qOpts');op.innerHTML='';q.opts.forEach((o,i)=>{const b=document.createElement('button');b.textContent=o;b.onclick=()=>answer(i,b);op.appendChild(b);});}
+function answer(i,btn){if(answ)return;answ=true;const q=questions[cur];document.querySelectorAll('.quiz-opts button').forEach(b=>b.style.pointerEvents='none');const fb=document.getElementById('qFeedback');if(i===q.ans){btn.classList.add('correct');sc++;fb.className='quiz-feedback show correct';fb.textContent='✅ '+q.fb;}else{btn.classList.add('wrong');document.querySelectorAll('.quiz-opts button')[q.ans].classList.add('correct');fb.className='quiz-feedback show wrong';fb.textContent='❌ '+q.fb;}document.getElementById('qNext').style.display='inline-block';}
+function nextQuestion(){cur++;if(cur<questions.length){loadQ();}else{document.getElementById('quizArea').style.display='none';const r=document.getElementById('quizResult');r.style.display='block';document.getElementById('finalScore').textContent=sc+'/'+questions.length;const p=sc/questions.length;document.getElementById('finalMsg').textContent=p>=0.83?'🏆 ¡Excelente! Eres un maestro en el establecimiento de metas.':p>=0.5?'📈 Buen trabajo. Practica el sistema SMART con tus propias metas.':'🎯 Sigue aprendiendo. ¡Define una meta SMART hoy mismo!';}}
+function restartQuiz(){cur=0;sc=0;answ=false;document.getElementById('quizArea').style.display='block';document.getElementById('quizResult').style.display='none';loadQ();}
+loadQ();
+</script>
+</body>
+</html>
