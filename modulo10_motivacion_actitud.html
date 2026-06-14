@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Habilidades Blandas | Módulo 10 – Motivación y Actitud Positiva</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',Arial,sans-serif;background:#f5f0f5;color:#2d2d2d;font-size:16px}
+header{background:linear-gradient(135deg,#8b1a3a 0%,#b83255 100%);color:#fff;padding:20px;text-align:center}
+header small{display:block;font-size:13px;letter-spacing:2px;opacity:.85;text-transform:uppercase}
+header h1{font-size:1.5rem;margin-top:4px}
+nav{display:flex;background:#6d1430;overflow-x:auto}
+nav button{flex:1;min-width:110px;padding:14px 10px;background:none;border:none;color:#f5c6d3;font-size:15px;cursor:pointer;border-bottom:3px solid transparent;transition:all .2s;white-space:nowrap}
+nav button.active,nav button:hover{color:#fff;border-bottom-color:#f7b2c4;background:rgba(255,255,255,.08)}
+.section{display:none;padding:20px;max-width:900px;margin:0 auto}
+.section.active{display:block}
+.card{background:#fff;border-radius:12px;padding:20px;margin-bottom:16px;box-shadow:0 2px 8px rgba(0,0,0,.07)}
+.card h3{color:#8b1a3a;font-size:1.1rem;margin-bottom:8px}
+.card p{line-height:1.7;color:#444}
+.card ul{padding-left:20px;line-height:1.9;color:#444}
+.badge{display:inline-block;background:#f5e6ea;color:#8b1a3a;border-radius:20px;padding:4px 12px;font-size:13px;font-weight:600;margin:4px 4px 4px 0}
+/* Motivación visual */
+.motiv-levels{display:flex;flex-direction:column;gap:10px;margin:12px 0}
+.motiv-row{display:flex;align-items:center;gap:12px;background:#fdf0f4;border-radius:10px;padding:12px 16px}
+.motiv-icon{font-size:1.6rem;min-width:40px;text-align:center}
+.motiv-info h4{color:#8b1a3a;font-size:.95rem;margin-bottom:3px}
+.motiv-info p{font-size:.85rem;color:#555;line-height:1.4}
+/* Simulación: Auditoria actitudinal */
+.sim-area{background:#fff;border-radius:12px;padding:24px;box-shadow:0 2px 8px rgba(0,0,0,.07);margin-bottom:16px}
+.sim-area h3{color:#8b1a3a;font-size:1.1rem;margin-bottom:12px}
+.audit-sliders{display:flex;flex-direction:column;gap:14px;margin-bottom:20px}
+.audit-row label{display:block;font-size:14px;font-weight:600;color:#555;margin-bottom:4px}
+.audit-row input[type=range]{width:100%;accent-color:#b83255}
+.audit-row .sv{font-size:13px;color:#888;text-align:right}
+.audit-result{background:#f5e6ea;border-left:4px solid #b83255;border-radius:8px;padding:16px;margin-top:8px}
+.audit-result h4{color:#8b1a3a;margin-bottom:6px}
+.audit-result p{font-size:14px;color:#444;line-height:1.6}
+/* Rueda motivacional */
+.wheel-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin:14px 0}
+.wheel-item{background:#fdf0f4;border-radius:10px;padding:14px;cursor:pointer;border:2px solid transparent;transition:all .2s}
+.wheel-item:hover,.wheel-item.active{border-color:#b83255;background:#f5e6ea}
+.wheel-item .wi-ico{font-size:1.5rem;margin-bottom:6px}
+.wheel-item .wi-title{font-weight:700;color:#8b1a3a;font-size:.9rem;margin-bottom:4px}
+.wheel-item .wi-desc{font-size:.8rem;color:#666;line-height:1.4}
+.wheel-detail{display:none;background:#fff;border:2px solid #b83255;border-radius:10px;padding:16px;margin-top:4px}
+.wheel-detail.show{display:block}
+.wheel-detail h4{color:#8b1a3a;margin-bottom:8px}
+.wheel-detail ul{padding-left:18px;line-height:1.8;color:#444;font-size:14px}
+/* Quiz */
+.quiz-box{background:#fff;border-radius:12px;padding:24px;box-shadow:0 2px 8px rgba(0,0,0,.07)}
+.quiz-box h3{color:#8b1a3a;font-size:1.1rem;margin-bottom:6px}
+.quiz-progress{font-size:13px;color:#888;margin-bottom:16px}
+.quiz-q{font-size:1rem;font-weight:600;margin-bottom:16px;line-height:1.5}
+.quiz-opts{display:flex;flex-direction:column;gap:10px;margin-bottom:16px}
+.quiz-opts button{padding:13px 16px;border:2px solid #ddd;border-radius:8px;background:#fff;font-size:15px;cursor:pointer;text-align:left;transition:all .2s;line-height:1.3}
+.quiz-opts button:hover{border-color:#b83255;background:#f9f0f3}
+.quiz-opts button.correct{background:#d4edda;border-color:#28a745;color:#155724}
+.quiz-opts button.wrong{background:#f8d7da;border-color:#dc3545;color:#721c24}
+.quiz-feedback{display:none;padding:12px 16px;border-radius:8px;margin-bottom:14px;font-size:14px;line-height:1.5}
+.quiz-feedback.correct{background:#d4edda;color:#155724}
+.quiz-feedback.wrong{background:#f8d7da;color:#721c24}
+.quiz-next{padding:12px 28px;background:#b83255;color:#fff;border:none;border-radius:8px;font-size:15px;cursor:pointer;display:none}
+.quiz-next:hover{background:#8b1a3a}
+.quiz-result{display:none;text-align:center;padding:20px}
+.quiz-result .score{font-size:2.5rem;font-weight:700;color:#b83255}
+.quiz-result p{color:#555;margin-top:8px}
+.quiz-result button{margin-top:16px;padding:12px 28px;background:#b83255;color:#fff;border:none;border-radius:8px;font-size:15px;cursor:pointer}
+footer{text-align:center;padding:20px;color:#888;font-size:13px;margin-top:20px}
+@media(max-width:600px){header h1{font-size:1.2rem}nav button{font-size:13px;padding:12px 8px}.wheel-grid{grid-template-columns:repeat(2,1fr)}}
+</style>
+</head>
+<body>
+<header>
+  <small>Habilidades Blandas · Módulo 10 · Bloque 2</small>
+  <h1>Motivación y Actitud Positiva</h1>
+</header>
+<nav>
+  <button class="active" onclick="showTab('concepto',this)">📖 Concepto</button>
+  <button onclick="showTab('simulacion',this)">⚡ Auditoría</button>
+  <button onclick="showTab('juego',this)">🎯 Mini-juego</button>
+</nav>
+
+<div id="concepto" class="section active">
+  <div class="card">
+    <h3>¿Qué es la Motivación?</h3>
+    <p>La motivación es la fuerza interna que impulsa a iniciar, sostener y dirigir el comportamiento hacia un objetivo. No es un estado permanente: fluctúa según el contexto, las emociones y los resultados que obtenemos. Por eso, esperar "sentirse motivado" antes de actuar es una trampa: la acción genera motivación, no al revés.</p>
+  </div>
+  <div class="card">
+    <h3>Motivación Intrínseca vs. Extrínseca</h3>
+    <div class="motiv-levels">
+      <div class="motiv-row"><div class="motiv-icon">🔥</div><div class="motiv-info"><h4>Intrínseca (interna)</h4><p>Actúas porque la actividad en sí te resulta significativa, retadora o placentera. Es la más duradera y poderosa.</p></div></div>
+      <div class="motiv-row"><div class="motiv-icon">💰</div><div class="motiv-info"><h4>Extrínseca (externa)</h4><p>Actúas por recompensas (dinero, reconocimiento) o para evitar consecuencias. Es útil pero no sostenible a largo plazo.</p></div></div>
+    </div>
+    <p>El secreto es conectar las tareas externas con significados internos: "No solo llevo contabilidad, ayudo a las familias a tener certeza financiera."</p>
+  </div>
+  <div class="card">
+    <h3>La Actitud Positiva: Qué Es y Qué No Es</h3>
+    <p>La actitud positiva <strong>no es</strong> fingir que todo está bien ni ignorar los problemas. Es la disposición de buscar activamente posibilidades de acción ante cualquier situación, incluyendo las difíciles. Se basa en tres pilares:</p>
+    <ul>
+      <li><strong>Enfoque en lo controlable:</strong> Dirigir la energía a lo que depende de ti.</li>
+      <li><strong>Lenguaje constructivo:</strong> Las palabras que usas moldean cómo percibes la realidad.</li>
+      <li><strong>Aprendizaje en lugar de queja:</strong> Extraer lecciones de los errores en vez de lamentarse.</li>
+    </ul>
+  </div>
+  <div class="card">
+    <h3>Los 3 Enemigos de la Motivación</h3>
+    <ul>
+      <li><strong>La espera del "momento perfecto":</strong> Postergación disfrazada de preparación. La acción imperfecta supera a la inacción perfecta.</li>
+      <li><strong>La comparación constante:</strong> Medirte con otros bloquea tu progreso propio. Compárate con quien eras ayer.</li>
+      <li><strong>La falta de propósito claro:</strong> Sin saber por qué haces lo que haces, cualquier obstáculo parece insuperable.</li>
+    </ul>
+  </div>
+  <div class="card">
+    <h3>La Fórmula de la Motivación Sostenida</h3>
+    <p><strong>Propósito + Progreso visible + Entorno favorable = Motivación duradera</strong></p>
+    <p style="margin-top:8px">Celebrar los avances pequeños activa el sistema de recompensa del cerebro. Construir un entorno que elimine fricciones hacia tus metas (y agregue fricción a los hábitos que quieres evitar) multiplica la motivación sin depender de la fuerza de voluntad.</p>
+  </div>
+</div>
+
+<div id="simulacion" class="section">
+  <div class="sim-area">
+    <h3>⚡ Auditoría de Motivación Personal</h3>
+    <p style="color:#666;font-size:14px;margin-bottom:16px">Evalúa tu nivel actual en 5 dimensiones clave de la motivación.</p>
+    <div class="audit-sliders" id="auditSliders">
+      <div class="audit-row"><label>Claridad de propósito (¿sabes por qué haces lo que haces?)</label><input type="range" min="0" max="10" value="5" oninput="updateAudit()" id="as1"><div class="sv" id="asv1">5/10</div></div>
+      <div class="audit-row"><label>Nivel de energía y entusiasmo cotidiano</label><input type="range" min="0" max="10" value="5" oninput="updateAudit()" id="as2"><div class="sv" id="asv2">5/10</div></div>
+      <div class="audit-row"><label>Capacidad de mantener el esfuerzo ante obstáculos</label><input type="range" min="0" max="10" value="5" oninput="updateAudit()" id="as3"><div class="sv" id="asv3">5/10</div></div>
+      <div class="audit-row"><label>Reconocimiento de tus propios avances y logros</label><input type="range" min="0" max="10" value="5" oninput="updateAudit()" id="as4"><div class="sv" id="asv4">5/10</div></div>
+      <div class="audit-row"><label>Alineación entre tus actividades y tus valores</label><input type="range" min="0" max="10" value="5" oninput="updateAudit()" id="as5"><div class="sv" id="asv5">5/10</div></div>
+    </div>
+    <div class="audit-result" id="auditResult">
+      <h4 id="auditTitle">Nivel de motivación: 50%</h4>
+      <p id="auditAdvice">Ajusta los controles para ver tu diagnóstico personalizado.</p>
+    </div>
+  </div>
+  <div class="sim-area">
+    <h3>🔋 Fuentes de Recarga de Motivación</h3>
+    <p style="color:#666;font-size:14px;margin-bottom:14px">Selecciona una fuente para ver estrategias concretas de activación.</p>
+    <div class="wheel-grid" id="wheelGrid"></div>
+    <div class="wheel-detail" id="wheelDetail">
+      <h4 id="wdTitle"></h4>
+      <ul id="wdList"></ul>
+    </div>
+  </div>
+</div>
+<div id="juego" class="section">
+  <div class="quiz-box">
+    <h3>🎯 Mini-juego: Motivación y Actitud</h3>
+    <div class="quiz-progress" id="quizProgress">Pregunta 1 de 6</div>
+    <div id="quizArea">
+      <div class="quiz-q" id="quizQ"></div>
+      <div class="quiz-opts" id="quizOpts"></div>
+      <div class="quiz-feedback" id="quizFeedback"></div>
+      <button class="quiz-next" id="quizNext" onclick="nextQuestion()">Siguiente →</button>
+    </div>
+    <div class="quiz-result" id="quizResult">
+      <div class="score" id="quizScore"></div>
+      <p id="quizMsg"></p>
+      <button onclick="restartQuiz()">Jugar de nuevo</button>
+    </div>
+  </div>
+</div>
+<footer>Juan Carlos Reyes · juancreyes.hn@gmail.com</footer>
+
+<script>
+function showTab(id,btn){
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  btn.classList.add('active');
+}
+
+// ── Auditoría ──
+const auditLevels=[
+  {max:25,title:'Motivación baja',color:'#f44336',advice:'Tu energía motivacional necesita atención urgente. Empieza por reconectar con tu propósito: ¿por qué es importante lo que haces? Identifica una sola cosa que puedas hacer hoy que te acerque a algo significativo.'},
+  {max:50,title:'Motivación moderada-baja',color:'#ff9800',advice:'Hay potencial pero también bloqueos importantes. Trabaja primero en claridad de propósito y en reconocer tus avances cotidianos. Una revisión semanal de logros pequeños puede transformar tu percepción.'},
+  {max:70,title:'Motivación aceptable',color:'#ffc107',advice:'Funciona bien en algunos días y flaquea en otros. Refuerza las áreas con puntajes más bajos y construye rutinas que no dependan de "sentirte bien" para actuar.'},
+  {max:85,title:'Buena motivación',color:'#8bc34a',advice:'Tu motivación es sólida. Para elevarla al siguiente nivel, trabaja en alinear aún más tus tareas diarias con tu propósito mayor y en compartir tu progreso con otros (accountability).'},
+  {max:100,title:'Alta motivación',color:'#4caf50',advice:'Excelente estado motivacional. Úsalo para avanzar en metas ambiciosas y para inspirar a quienes te rodean. Recuerda que la motivación fluctúa: construye sistemas (no solo voluntad) para mantener este nivel.'}
+];
+
+function updateAudit(){
+  let total=0;
+  for(let i=1;i<=5;i++){
+    const v=parseInt(document.getElementById('as'+i).value);
+    document.getElementById('asv'+i).textContent=v+'/10';
+    total+=v;
+  }
+  const pct=Math.round((total/50)*100);
+  const level=auditLevels.find(l=>pct<=l.max)||auditLevels[4];
+  const res=document.getElementById('auditResult');
+  res.style.borderLeftColor=level.color;
+  document.getElementById('auditTitle').textContent='Nivel de motivación: '+pct+'% — '+level.title;
+  document.getElementById('auditAdvice').textContent=level.advice;
+}
+updateAudit();
+
+// ── Rueda motivacional ──
+const sources=[
+  {ico:'🎯',title:'Propósito',desc:'Conectar con el "por qué"',items:['Escribe en 1 párrafo por qué tu trabajo importa a otros','Identifica a 3 personas a quienes beneficia tu esfuerzo','Lee tu propósito en voz alta cada mañana durante 7 días','Visualiza cómo será tu vida en 5 años si sigues este camino']},
+  {ico:'🏆',title:'Logros',desc:'Celebrar el progreso',items:['Lleva un diario de victorias pequeñas (5 minutos/día)','Al final de la semana, lista 3 cosas que hiciste bien','Comparte tus logros con alguien de confianza','Crea un tablero visual de proyectos completados']},
+  {ico:'🌱',title:'Crecimiento',desc:'Aprender y mejorar',items:['Dedica 30 minutos diarios a leer o aprender algo nuevo','Identifica una habilidad que quieras dominar este trimestre','Busca un mentor o comunidad en tu área','Aplica algo nuevo cada semana, aunque sea pequeño']},
+  {ico:'🤝',title:'Relaciones',desc:'Entorno de apoyo',items:['Identifica 3 personas que elevan tu energía y pasa más tiempo con ellas','Únete a un grupo profesional o de aprendizaje','Limita el tiempo con personas que drenan tu motivación','Crea acuerdos de responsabilidad (accountability) con un compañero']},
+  {ico:'💆',title:'Bienestar',desc:'Energía física y mental',items:['Duerme 7-8 horas: la motivación depende del descanso','Ejercita al menos 20 minutos 3 veces por semana','Practica una actividad placentera que no sea productiva','Desconéctate digitalmente 1 hora antes de dormir']},
+  {ico:'🎨',title:'Entorno',desc:'Espacio y rutinas favorables',items:['Reorganiza tu espacio de trabajo para que sea limpio y energizante','Elimina una distracción de tu entorno habitual esta semana','Crea una rutina de inicio que active tu estado mental de trabajo','Pon tu siguiente tarea importante visible desde que te despiertas']}
+];
+
+function buildWheel(){
+  const grid=document.getElementById('wheelGrid');
+  grid.innerHTML='';
+  sources.forEach((s,i)=>{
+    const div=document.createElement('div');
+    div.className='wheel-item';
+    div.innerHTML='<div class="wi-ico">'+s.ico+'</div><div class="wi-title">'+s.title+'</div><div class="wi-desc">'+s.desc+'</div>';
+    div.onclick=()=>{
+      document.querySelectorAll('.wheel-item').forEach(w=>w.classList.remove('active'));
+      div.classList.add('active');
+      const d=document.getElementById('wheelDetail');
+      document.getElementById('wdTitle').textContent=s.ico+' '+s.title+': Estrategias de activación';
+      const ul=document.getElementById('wdList');ul.innerHTML='';
+      s.items.forEach(it=>{const li=document.createElement('li');li.textContent=it;ul.appendChild(li);});
+      d.classList.add('show');d.scrollIntoView({behavior:'smooth',block:'nearest'});
+    };
+    grid.appendChild(div);
+  });
+}
+buildWheel();
+
+// ── Quiz ──
+const questions=[
+  {q:'¿Cuál es la relación correcta entre acción y motivación?',opts:['Debes esperar sentirte motivado antes de actuar','La motivación siempre precede a la acción','La acción genera motivación; no al revés','La motivación y la acción son independientes'],ans:2,exp:'Esperar motivación para actuar es una trampa. Comenzar a actuar, aunque sea con poco entusiasmo, activa el sistema de recompensa cerebral que genera motivación.'},
+  {q:'¿Cuál es la característica principal de la motivación intrínseca?',opts:['Depende de recompensas económicas externas','Nace del significado personal de la actividad en sí misma','Solo funciona en tareas creativas o artísticas','Es más fácil de mantener que la extrínseca en períodos cortos'],ans:1,exp:'La motivación intrínseca viene del interior: el disfrute, el reto, el significado. Es la más duradera porque no depende de factores externos que pueden desaparecer.'},
+  {q:'¿Qué es la actitud positiva según el enfoque presentado?',opts:['Fingir que todo está bien aunque no sea así','Ignorar los problemas para no perder la energía','Buscar activamente posibilidades de acción ante cualquier situación','Tener siempre un estado de ánimo alegre y optimista'],ans:2,exp:'La actitud positiva no es ingenuidad: es la disposición de actuar sobre lo controlable, usar lenguaje constructivo y extraer aprendizajes de las dificultades.'},
+  {q:'Según la Fórmula de Motivación Sostenida, ¿cuáles son sus tres componentes?',opts:['Dinero, tiempo y apoyo social','Propósito, progreso visible y entorno favorable','Objetivos SMART, disciplina y recompensas','Talento, esfuerzo y suerte'],ans:1,exp:'Propósito (el por qué), progreso visible (celebrar avances) y entorno favorable (reducir fricciones) son los tres pilares que sostienen la motivación sin depender de la fuerza de voluntad.'},
+  {q:'¿Cuál de los siguientes es un "enemigo de la motivación" según el módulo?',opts:['Tener metas ambiciosas','Compararse constantemente con los demás','Buscar retroalimentación frecuente','Construir hábitos de trabajo sistemáticos'],ans:1,exp:'La comparación constante con otros desvía tu atención de tu propio progreso. La comparación útil es con quien eras tú mismo hace tiempo atrás.'},
+  {q:'¿Qué estrategia de la "Rueda Motivacional" corresponde al pilar "Logros"?',opts:['Unirse a un grupo profesional','Llevar un diario de victorias pequeñas','Reorganizar el espacio de trabajo','Dedicar 30 minutos diarios a aprender'],ans:1,exp:'Registrar logros pequeños activa el sistema de recompensa cerebral. La percepción de progreso, aunque sea incremental, es uno de los mayores impulsores de la motivación sostenida.'}
+];
+
+let qIndex=0,score=0,answered=false;
+function loadQuestion(){
+  const q=questions[qIndex];
+  document.getElementById('quizProgress').textContent='Pregunta '+(qIndex+1)+' de '+questions.length;
+  document.getElementById('quizQ').textContent=q.q;
+  const opts=document.getElementById('quizOpts');opts.innerHTML='';
+  q.opts.forEach((o,i)=>{const btn=document.createElement('button');btn.textContent=o;btn.onclick=()=>selectAnswer(i,btn);opts.appendChild(btn);});
+  document.getElementById('quizFeedback').style.display='none';document.getElementById('quizNext').style.display='none';answered=false;
+}
+function selectAnswer(i,btn){
+  if(answered)return;answered=true;
+  const q=questions[qIndex];const fb=document.getElementById('quizFeedback');
+  document.querySelectorAll('.quiz-opts button').forEach((b,idx)=>{b.disabled=true;if(idx===q.ans)b.classList.add('correct');else if(b===btn)b.classList.add('wrong');});
+  if(i===q.ans){score++;fb.className='quiz-feedback correct';fb.textContent='✅ '+q.exp;}
+  else{fb.className='quiz-feedback wrong';fb.textContent='❌ '+q.exp;}
+  fb.style.display='block';document.getElementById('quizNext').style.display='inline-block';
+}
+function nextQuestion(){qIndex++;if(qIndex>=questions.length)showResult();else loadQuestion();}
+function showResult(){
+  document.getElementById('quizArea').style.display='none';document.getElementById('quizProgress').style.display='none';
+  document.getElementById('quizResult').style.display='block';document.getElementById('quizScore').textContent=score+'/'+questions.length;
+  const msgs=['Sigue: recuerda que la acción genera motivación, no al revés.','Buen inicio. Identifica qué pilares de motivación necesitas reforzar.','¡Bien! Comprendes los fundamentos de la motivación duradera.','¡Muy bien! Tu conocimiento sobre motivación es sólido.','¡Sobresaliente! Eres un referente de actitud positiva y motivación.'];
+  document.getElementById('quizMsg').textContent=msgs[Math.min(score,4)];
+}
+function restartQuiz(){
+  qIndex=0;score=0;answered=false;
+  document.getElementById('quizArea').style.display='block';document.getElementById('quizProgress').style.display='block';
+  document.getElementById('quizResult').style.display='none';loadQuestion();
+}
+loadQuestion();
+</script>
+</body>
+</html>
