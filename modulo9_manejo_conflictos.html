@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Habilidades Blandas | Módulo 9 – Manejo de Conflictos</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',Arial,sans-serif;background:#f5f0f5;color:#2d2d2d;font-size:16px}
+header{background:linear-gradient(135deg,#8b1a3a 0%,#b83255 100%);color:#fff;padding:20px;text-align:center}
+header small{display:block;font-size:13px;letter-spacing:2px;opacity:.85;text-transform:uppercase}
+header h1{font-size:1.5rem;margin-top:4px}
+nav{display:flex;background:#6d1430;overflow-x:auto}
+nav button{flex:1;min-width:110px;padding:14px 10px;background:none;border:none;color:#f5c6d3;font-size:15px;cursor:pointer;border-bottom:3px solid transparent;transition:all .2s;white-space:nowrap}
+nav button.active,nav button:hover{color:#fff;border-bottom-color:#f7b2c4;background:rgba(255,255,255,.08)}
+.section{display:none;padding:20px;max-width:900px;margin:0 auto}
+.section.active{display:block}
+.card{background:#fff;border-radius:12px;padding:20px;margin-bottom:16px;box-shadow:0 2px 8px rgba(0,0,0,.07)}
+.card h3{color:#8b1a3a;font-size:1.1rem;margin-bottom:8px}
+.card p{line-height:1.7;color:#444}
+.card ul{padding-left:20px;line-height:1.9;color:#444}
+.badge{display:inline-block;background:#f5e6ea;color:#8b1a3a;border-radius:20px;padding:4px 12px;font-size:13px;font-weight:600;margin:4px 4px 4px 0}
+/* Estilos de manejo */
+.style5-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px;margin:12px 0}
+.s5-card{border-radius:10px;padding:14px;text-align:center;cursor:pointer;border:2px solid transparent;transition:all .2s}
+.s5-card:hover{transform:translateY(-2px);box-shadow:0 4px 12px rgba(0,0,0,.1)}
+.s5-evitar{background:#e3f2fd;border-color:#90caf9}.s5-ceder{background:#fce4ec;border-color:#f48fb1}
+.s5-competir{background:#fff3e0;border-color:#ffcc80}.s5-comprometer{background:#f3e5f5;border-color:#ce93d8}
+.s5-colaborar{background:#e8f5e9;border-color:#a5d6a7}
+.s5-card .ico{font-size:1.8rem;margin-bottom:6px}.s5-card h4{font-size:.88rem;font-weight:700;margin-bottom:4px}.s5-card p{font-size:.78rem;line-height:1.4}
+/* Simulación */
+.sim-area{background:#fff;border-radius:12px;padding:24px;box-shadow:0 2px 8px rgba(0,0,0,.07);margin-bottom:16px}
+.sim-area h3{color:#8b1a3a;font-size:1.1rem;margin-bottom:12px}
+.conflict-case{background:#fdf0f4;border-radius:10px;padding:16px;margin-bottom:14px;font-size:15px;line-height:1.6;color:#444}
+.conflict-case strong{color:#8b1a3a;display:block;margin-bottom:6px}
+.strat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-bottom:14px}
+.strat-btn{padding:12px 8px;border:2px solid #ddd;border-radius:8px;background:#fff;font-size:13px;cursor:pointer;text-align:center;transition:all .2s;line-height:1.4}
+.strat-btn:hover{border-color:#b83255;background:#f9f0f3}
+.strat-btn.chosen{border-color:#b83255;background:#f5e6ea;color:#8b1a3a;font-weight:600}
+.strat-result{display:none;border-radius:8px;padding:14px;margin-top:8px;font-size:14px;line-height:1.5;border-left:4px solid}
+.strat-result.show{display:block}
+.res-ideal{background:#e8f5e9;border-color:#388e3c;color:#1b5e20}
+.res-ok{background:#fff8e1;border-color:#f9a825;color:#5d4037}
+.res-poor{background:#ffebee;border-color:#d32f2f;color:#b71c1c}
+/* Protocolo */
+.proto-steps{display:flex;flex-direction:column;gap:10px}
+.p-step{display:flex;align-items:flex-start;gap:12px;background:#fdf0f4;border-radius:10px;padding:14px}
+.p-num{background:#b83255;color:#fff;border-radius:50%;width:32px;height:32px;min-width:32px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px}
+.p-txt{line-height:1.5;color:#444;font-size:14px}.p-txt strong{color:#8b1a3a}
+/* Quiz */
+.quiz-box{background:#fff;border-radius:12px;padding:24px;box-shadow:0 2px 8px rgba(0,0,0,.07)}
+.quiz-box h3{color:#8b1a3a;font-size:1.1rem;margin-bottom:6px}
+.quiz-progress{font-size:13px;color:#888;margin-bottom:16px}
+.quiz-q{font-size:1rem;font-weight:600;margin-bottom:16px;line-height:1.5}
+.quiz-opts{display:flex;flex-direction:column;gap:10px;margin-bottom:16px}
+.quiz-opts button{padding:13px 16px;border:2px solid #ddd;border-radius:8px;background:#fff;font-size:15px;cursor:pointer;text-align:left;transition:all .2s;line-height:1.3}
+.quiz-opts button:hover{border-color:#b83255;background:#f9f0f3}
+.quiz-opts button.correct{background:#d4edda;border-color:#28a745;color:#155724}
+.quiz-opts button.wrong{background:#f8d7da;border-color:#dc3545;color:#721c24}
+.quiz-feedback{display:none;padding:12px 16px;border-radius:8px;margin-bottom:14px;font-size:14px;line-height:1.5}
+.quiz-feedback.correct{background:#d4edda;color:#155724}
+.quiz-feedback.wrong{background:#f8d7da;color:#721c24}
+.quiz-next{padding:12px 28px;background:#b83255;color:#fff;border:none;border-radius:8px;font-size:15px;cursor:pointer;display:none}
+.quiz-next:hover{background:#8b1a3a}
+.quiz-result{display:none;text-align:center;padding:20px}
+.quiz-result .score{font-size:2.5rem;font-weight:700;color:#b83255}
+.quiz-result p{color:#555;margin-top:8px}
+.quiz-result button{margin-top:16px;padding:12px 28px;background:#b83255;color:#fff;border:none;border-radius:8px;font-size:15px;cursor:pointer}
+footer{text-align:center;padding:20px;color:#888;font-size:13px;margin-top:20px}
+@media(max-width:600px){header h1{font-size:1.2rem}nav button{font-size:13px;padding:12px 8px}.style5-grid{grid-template-columns:repeat(2,1fr)}.strat-grid{grid-template-columns:repeat(2,1fr)}}
+</style>
+</head>
+<body>
+<header>
+  <small>Habilidades Blandas · Módulo 9 · Bloque 2</small>
+  <h1>Manejo de Conflictos</h1>
+</header>
+<nav>
+  <button class="active" onclick="showTab('concepto',this)">📖 Concepto</button>
+  <button onclick="showTab('simulacion',this)">⚖️ Estrategias</button>
+  <button onclick="showTab('juego',this)">🎯 Mini-juego</button>
+</nav>
+
+<div id="concepto" class="section active">
+  <div class="card">
+    <h3>¿Qué es un Conflicto?</h3>
+    <p>Un conflicto es una situación de desacuerdo o incompatibilidad entre dos o más partes sobre intereses, necesidades, valores o metas. No es inherentemente negativo: un conflicto bien gestionado puede mejorar la creatividad, fortalecer relaciones y producir mejores decisiones que si no hubiera existido.</p>
+    <p style="margin-top:10px">El problema no es el conflicto en sí, sino la forma en que lo abordamos. La evitación crónica y la escalada agresiva son los dos extremos que generan mayor daño.</p>
+  </div>
+  <div class="card">
+    <h3>Los 5 Estilos de Manejo de Conflictos (Thomas-Kilmann)</h3>
+    <div class="style5-grid">
+      <div class="s5-card s5-evitar"><div class="ico">🚶</div><h4>Evitar</h4><p>Retirarse del conflicto. Útil si el tema es menor o necesitas tiempo.</p></div>
+      <div class="s5-card s5-ceder"><div class="ico">🤝</div><h4>Ceder</h4><p>Satisfaces las necesidades del otro sobre las tuyas. Útil para preservar la relación.</p></div>
+      <div class="s5-card s5-competir"><div class="ico">🏆</div><h4>Competir</h4><p>Impones tu postura. Útil en emergencias o cuando la decisión es tuya.</p></div>
+      <div class="s5-card s5-comprometer"><div class="ico">⚖️</div><h4>Comprometerse</h4><p>Ambos ceden algo. Útil cuando no hay tiempo o las posiciones son igualmente válidas.</p></div>
+      <div class="s5-card s5-colaborar"><div class="ico">🌟</div><h4>Colaborar</h4><p>Buscan una solución que satisfaga a ambos. El más efectivo pero requiere más tiempo.</p></div>
+    </div>
+  </div>
+  <div class="card">
+    <h3>Las 4 Causas Más Frecuentes de Conflicto Laboral</h3>
+    <ul>
+      <li><strong>Recursos limitados:</strong> Presupuesto, tiempo, personal o equipos insuficientes para todos.</li>
+      <li><strong>Roles ambiguos:</strong> No está claro quién es responsable de qué.</li>
+      <li><strong>Diferencias de valores:</strong> Las personas priorizan cosas distintas en su trabajo.</li>
+      <li><strong>Comunicación deficiente:</strong> Mensajes mal entendidos, rumores o falta de información.</li>
+    </ul>
+  </div>
+  <div class="card">
+    <h3>El Conflicto como Oportunidad</h3>
+    <p>Los conflictos bien resueltos generan innovación, clarifican expectativas y fortalecen la confianza entre las partes. Un equipo que nunca tiene conflictos no está pensando críticamente. La clave está en pasar del conflicto destructivo (basado en posiciones) al constructivo (basado en intereses).</p>
+    <div style="margin-top:10px">
+      <span class="badge">Posición: "Quiero ese escritorio"</span>
+      <span class="badge">Interés: "Necesito luz natural para concentrarme"</span>
+    </div>
+  </div>
+  <div class="card">
+    <h3>Señales de un Conflicto Escalando</h3>
+    <ul>
+      <li>Las conversaciones se vuelven ataques personales en lugar de críticas al problema.</li>
+      <li>Se forman "bandos" dentro del equipo.</li>
+      <li>La comunicación se reduce o se vuelve formal y distante.</li>
+      <li>Los errores del pasado se usan como munición.</li>
+      <li>Las partes dejan de buscar soluciones y solo buscan "ganar".</li>
+    </ul>
+  </div>
+</div>
+
+<div id="simulacion" class="section">
+  <div class="sim-area">
+    <h3>⚖️ Elige tu Estrategia de Manejo</h3>
+    <p style="color:#666;font-size:14px;margin-bottom:16px">Para cada caso laboral, selecciona la estrategia más adecuada y recibe retroalimentación.</p>
+    <div id="conflictArea"></div>
+  </div>
+  <div class="sim-area">
+    <h3>🔧 Protocolo de Resolución en 6 Pasos</h3>
+    <div class="proto-steps">
+      <div class="p-step"><div class="p-num">1</div><div class="p-txt"><strong>ENFRÍA:</strong> Espera hasta que las emociones estén en un nivel manejable. Nunca resuelvas conflictos en el pico emocional.</div></div>
+      <div class="p-step"><div class="p-num">2</div><div class="p-txt"><strong>SEPARA:</strong> Distingue a las personas del problema. Ataca el problema, no a la persona.</div></div>
+      <div class="p-step"><div class="p-num">3</div><div class="p-txt"><strong>ESCUCHA:</strong> Antes de responder, escucha para entender (no para replicar). Parafrasea lo que escuchaste.</div></div>
+      <div class="p-step"><div class="p-num">4</div><div class="p-txt"><strong>IDENTIFICA:</strong> Descubre los intereses reales de cada parte, no solo sus posiciones superficiales.</div></div>
+      <div class="p-step"><div class="p-num">5</div><div class="p-txt"><strong>GENERA:</strong> Crea opciones de solución sin juzgarlas inicialmente. Busca al menos 3 alternativas.</div></div>
+      <div class="p-step"><div class="p-num">6</div><div class="p-txt"><strong>ACUERDA:</strong> Selecciona la solución más justa y factible. Define quién hace qué y cuándo.</div></div>
+    </div>
+  </div>
+</div>
+<div id="juego" class="section">
+  <div class="quiz-box">
+    <h3>🎯 Mini-juego: Manejo de Conflictos</h3>
+    <div class="quiz-progress" id="quizProgress">Pregunta 1 de 6</div>
+    <div id="quizArea">
+      <div class="quiz-q" id="quizQ"></div>
+      <div class="quiz-opts" id="quizOpts"></div>
+      <div class="quiz-feedback" id="quizFeedback"></div>
+      <button class="quiz-next" id="quizNext" onclick="nextQuestion()">Siguiente →</button>
+    </div>
+    <div class="quiz-result" id="quizResult">
+      <div class="score" id="quizScore"></div>
+      <p id="quizMsg"></p>
+      <button onclick="restartQuiz()">Jugar de nuevo</button>
+    </div>
+  </div>
+</div>
+<footer>Juan Carlos Reyes · juancreyes.hn@gmail.com</footer>
+
+<script>
+function showTab(id,btn){
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  btn.classList.add('active');
+}
+
+// ── Conflictos ──
+const cases=[
+  {
+    situation:'Dos miembros de tu equipo discuten sobre quién debe presentar el informe mensual. Ambos creen que no es su responsabilidad.',
+    ideal:'colaborar',
+    options:[
+      {key:'evitar',label:'🚶 Evitar',text:'Dejar que lo resuelvan solos sin intervenir.'},
+      {key:'competir',label:'🏆 Competir',text:'Decidir tú quién presenta y cerrarlo de inmediato.'},
+      {key:'colaborar',label:'🌟 Colaborar',text:'Reunirte con ambos, clarificar el rol y redefinir la responsabilidad de presentaciones en adelante.'},
+      {key:'comprometer',label:'⚖️ Comprometerse',text:'Proponer que se turnen la presentación cada mes.'}
+    ],
+    feedbacks:{
+      evitar:{cls:'res-poor',msg:'Evitar aquí permite que el conflicto de roles persista y se repita. El problema estructural no se resuelve.'},
+      competir:{cls:'res-ok',msg:'Funciona a corto plazo pero no resuelve la ambigüedad del rol, que seguirá generando conflictos similares.'},
+      colaborar:{cls:'res-ideal',msg:'¡Estrategia ideal! Clarifica responsabilidades y crea acuerdo duradero. Requiere tiempo pero previene futuros conflictos.'},
+      comprometer:{cls:'res-ok',msg:'Aceptable: distribuye la carga equitativamente, aunque no resuelve el problema de fondo sobre quién debe ser responsable.'}
+    }
+  },
+  {
+    situation:'Un cliente importante llama furioso porque detectó un error en su declaración. El plazo de entrega es mañana.',
+    ideal:'competir',
+    options:[
+      {key:'ceder',label:'🤝 Ceder',text:'Aceptar toda la culpa y ofrecer descuentos o compensaciones de inmediato.'},
+      {key:'competir',label:'🏆 Competir',text:'Tomar el liderazgo: disculparse brevemente, investigar, y dar una solución concreta antes del plazo.'},
+      {key:'colaborar',label:'🌟 Colaborar',text:'Organizar una reunión larga con el cliente para analizar juntos el error en detalle.'},
+      {key:'evitar',label:'🚶 Evitar',text:'Esperar a que el cliente se calme y responder mañana.'}
+    ],
+    feedbacks:{
+      ceder:{cls:'res-poor',msg:'Ceder ante la presión emocional sin investigar puede comprometer tu integridad profesional y generar precedentes costosos.'},
+      competir:{cls:'res-ideal',msg:'¡Estrategia ideal en urgencias! Tomar el control con decisión y ofrecer solución rápida demuestra profesionalismo bajo presión.'},
+      colaborar:{cls:'res-poor',msg:'Con el plazo encima, una sesión larga de análisis conjunto no es viable. El tiempo es el recurso más escaso aquí.'},
+      evitar:{cls:'res-poor',msg:'Evitar una crisis activa empeora la situación. El cliente interpretará el silencio como falta de responsabilidad.'}
+    }
+  }
+];
+
+let currentCase=0;
+function buildCase(){
+  const c=cases[currentCase];
+  const area=document.getElementById('conflictArea');
+  area.innerHTML='';
+  const cbox=document.createElement('div');
+  cbox.className='conflict-case';
+  cbox.innerHTML='<strong>Caso '+(currentCase+1)+' de '+cases.length+':</strong>'+c.situation;
+  area.appendChild(cbox);
+  const grid=document.createElement('div');
+  grid.className='strat-grid';
+  c.options.forEach(o=>{
+    const btn=document.createElement('button');
+    btn.className='strat-btn';
+    btn.innerHTML='<strong>'+o.label+'</strong><br>'+o.text;
+    const rbox=document.createElement('div');
+    rbox.className='strat-result '+c.feedbacks[o.key].cls;
+    rbox.innerHTML=(o.key===c.ideal?'⭐ Mejor opción: ':'Resultado: ')+c.feedbacks[o.key].msg;
+    btn.onclick=()=>{
+      grid.querySelectorAll('.strat-btn').forEach(b=>b.classList.remove('chosen'));
+      btn.classList.add('chosen');
+      area.querySelectorAll('.strat-result').forEach(r=>r.classList.remove('show'));
+      rbox.classList.add('show');
+    };
+    grid.appendChild(btn);
+    grid.appendChild(rbox);
+  });
+  area.appendChild(grid);
+  const nav=document.createElement('div');
+  nav.style.cssText='display:flex;gap:10px;margin-top:14px';
+  if(currentCase>0){const p=document.createElement('button');p.style.cssText='padding:10px 20px;background:#eee;border:none;border-radius:8px;cursor:pointer;font-size:14px';p.textContent='← Anterior';p.onclick=()=>{currentCase--;buildCase();};nav.appendChild(p);}
+  if(currentCase<cases.length-1){const n=document.createElement('button');n.style.cssText='padding:10px 20px;background:#b83255;color:#fff;border:none;border-radius:8px;cursor:pointer;font-size:14px';n.textContent='Siguiente caso →';n.onclick=()=>{currentCase++;buildCase();};nav.appendChild(n);}
+  area.appendChild(nav);
+}
+buildCase();
+
+// ── Quiz ──
+const questions=[
+  {q:'¿Cuál es la diferencia clave entre la posición y el interés en un conflicto?',opts:['La posición es flexible y el interés es rígido','La posición es lo que se pide; el interés es la necesidad real que hay detrás','El interés es siempre económico; la posición es emocional','Son términos sinónimos en la gestión de conflictos'],ans:1,exp:'Descubrir los intereses reales (el "por qué" detrás del "qué") abre posibilidades de solución que las posiciones superficiales bloquean.'},
+  {q:'¿En qué situación es más adecuado el estilo "Competir" en el manejo de conflictos?',opts:['Cuando quieres preservar la relación a largo plazo','Cuando hay tiempo suficiente para analizar todas las opciones','En emergencias donde debes tomar una decisión rápida y tienes autoridad','Cuando ambas partes tienen la misma información'],ans:2,exp:'El estilo competitivo es efectivo en crisis donde la velocidad de decisión supera la necesidad de consenso. Usarlo en exceso daña relaciones.'},
+  {q:'¿Qué caracteriza al estilo de manejo de conflictos "Colaborar"?',opts:['Una parte gana y la otra pierde','Ambas partes ceden algo para llegar a un punto medio','Se busca una solución que satisfaga los intereses de ambas partes plenamente','Se evita discutir el conflicto directamente'],ans:2,exp:'Colaborar es el estilo "ganar-ganar": requiere tiempo y apertura, pero produce soluciones duraderas que fortalecen la relación.'},
+  {q:'En el Protocolo de Resolución en 6 pasos, ¿por qué es importante "enfriar" primero?',opts:['Para que el otro tenga tiempo de preparar argumentos','Porque las emociones elevadas bloquean el pensamiento racional y la capacidad de escuchar','Para demostrar que no te importa el conflicto','Porque las reglas del protocolo lo exigen formalmente'],ans:1,exp:'Cuando las emociones están elevadas, el cerebro está en modo defensivo. Esperar reduce la reactividad y permite procesar con más claridad.'},
+  {q:'¿Cuál de estas señales indica que un conflicto está escalando negativamente?',opts:['Las partes escuchan activamente sus argumentos','Se generan múltiples alternativas de solución','Los errores pasados se usan como argumentos en la discusión actual','Ambas partes piden tiempo para pensar'],ans:2,exp:'Usar el pasado como munición convierte el conflicto en un ataque personal y aleja a las partes de la resolución del problema actual.'},
+  {q:'¿Qué estilo del modelo Thomas-Kilmann es más útil para preservar una relación importante aunque pierdas en el asunto específico?',opts:['Competir','Evitar','Ceder','Colaborar'],ans:2,exp:'Ceder es apropiado cuando la relación vale más que el resultado puntual, o cuando reconoces que el otro tiene razón. Usado estratégicamente fortalece la confianza.'}
+];
+
+let qIndex=0,score=0,answered=false;
+function loadQuestion(){
+  const q=questions[qIndex];
+  document.getElementById('quizProgress').textContent='Pregunta '+(qIndex+1)+' de '+questions.length;
+  document.getElementById('quizQ').textContent=q.q;
+  const opts=document.getElementById('quizOpts');opts.innerHTML='';
+  q.opts.forEach((o,i)=>{const btn=document.createElement('button');btn.textContent=o;btn.onclick=()=>selectAnswer(i,btn);opts.appendChild(btn);});
+  document.getElementById('quizFeedback').style.display='none';document.getElementById('quizNext').style.display='none';answered=false;
+}
+function selectAnswer(i,btn){
+  if(answered)return;answered=true;
+  const q=questions[qIndex];const fb=document.getElementById('quizFeedback');
+  document.querySelectorAll('.quiz-opts button').forEach((b,idx)=>{b.disabled=true;if(idx===q.ans)b.classList.add('correct');else if(b===btn)b.classList.add('wrong');});
+  if(i===q.ans){score++;fb.className='quiz-feedback correct';fb.textContent='✅ '+q.exp;}
+  else{fb.className='quiz-feedback wrong';fb.textContent='❌ '+q.exp;}
+  fb.style.display='block';document.getElementById('quizNext').style.display='inline-block';
+}
+function nextQuestion(){qIndex++;if(qIndex>=questions.length)showResult();else loadQuestion();}
+function showResult(){
+  document.getElementById('quizArea').style.display='none';document.getElementById('quizProgress').style.display='none';
+  document.getElementById('quizResult').style.display='block';document.getElementById('quizScore').textContent=score+'/'+questions.length;
+  const msgs=['Sigue practicando: el manejo de conflictos mejora con la experiencia.','Buen inicio. Identifica tu estilo predominante.','¡Bien! Conoces los estilos y cuándo aplicarlos.','¡Muy bien! Manejas los conflictos con inteligencia.','¡Sobresaliente! Eres un mediador efectivo.'];
+  document.getElementById('quizMsg').textContent=msgs[Math.min(score,4)];
+}
+function restartQuiz(){
+  qIndex=0;score=0;answered=false;
+  document.getElementById('quizArea').style.display='block';document.getElementById('quizProgress').style.display='block';
+  document.getElementById('quizResult').style.display='none';loadQuestion();
+}
+loadQuestion();
+</script>
+</body>
+</html>
