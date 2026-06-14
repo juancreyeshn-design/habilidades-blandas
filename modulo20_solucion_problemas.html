@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Habilidades Blandas | Módulo 20 – Técnicas Creadoras para la Solución de Problemas</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',Arial,sans-serif;background:#f5f0f5;color:#2d2d2d;font-size:16px}
+header{background:linear-gradient(135deg,#8b1a3a 0%,#b83255 100%);color:#fff;padding:20px;text-align:center}
+header small{display:block;font-size:13px;letter-spacing:2px;opacity:.85;text-transform:uppercase}
+header h1{font-size:1.5rem;margin-top:4px}
+nav{display:flex;background:#6d1430;overflow-x:auto}
+nav button{flex:1;min-width:110px;padding:14px 10px;background:none;border:none;color:#f5c6d3;font-size:15px;cursor:pointer;border-bottom:3px solid transparent;transition:all .2s;white-space:nowrap}
+nav button.active,nav button:hover{color:#fff;border-bottom-color:#f7b2c4;background:rgba(255,255,255,.08)}
+.section{display:none;padding:20px;max-width:900px;margin:0 auto}
+.section.active{display:block}
+.card{background:#fff;border-radius:12px;padding:20px;margin-bottom:16px;box-shadow:0 2px 8px rgba(0,0,0,.07)}
+.card h3{color:#8b1a3a;font-size:1.1rem;margin-bottom:8px}
+.card p{line-height:1.7;color:#444}
+.card ul,.card ol{padding-left:20px;line-height:1.9;color:#444}
+.technique-box{background:#fdf0f4;border-radius:10px;padding:16px;margin-bottom:12px;border-left:4px solid #b83255}
+.technique-box h4{color:#8b1a3a;font-size:1rem;margin-bottom:6px}
+.technique-box p{font-size:14px;color:#555;line-height:1.6}
+.sim-area{background:#fff;border-radius:12px;padding:24px;box-shadow:0 2px 8px rgba(0,0,0,.07);margin-bottom:16px}
+.sim-area h3{color:#8b1a3a;font-size:1.1rem;margin-bottom:12px}
+.problem-input{width:100%;padding:12px;border:1px solid #ddd;border-radius:8px;font-size:14px;font-family:inherit;min-height:80px;resize:vertical;margin-bottom:12px}
+.brainstorm-list{min-height:120px;background:#f9f9f9;border:2px dashed #ddd;border-radius:8px;padding:12px;margin-bottom:12px;font-size:14px;color:#666}
+.brainstorm-list ul{list-style:disc;padding-left:20px}
+.brainstorm-list li{margin-bottom:6px;color:#444}
+.sim-btn{padding:12px 24px;background:#b83255;color:#fff;border:none;border-radius:8px;font-size:15px;cursor:pointer;margin:4px}
+.sim-btn:hover{background:#8b1a3a}
+.sim-btn.outline{background:#fff;color:#b83255;border:2px solid #b83255}
+.sim-btn.outline:hover{background:#fdf0f4}
+.quiz-box{background:#fff;border-radius:12px;padding:24px;box-shadow:0 2px 8px rgba(0,0,0,.07)}
+.quiz-box h3{color:#8b1a3a;font-size:1.1rem;margin-bottom:6px}
+.quiz-progress{font-size:13px;color:#888;margin-bottom:16px}
+.quiz-q{font-size:1rem;font-weight:600;margin-bottom:16px;line-height:1.5}
+.quiz-opts{display:flex;flex-direction:column;gap:10px;margin-bottom:16px}
+.quiz-opts button{padding:13px 16px;border:2px solid #ddd;border-radius:8px;background:#fff;font-size:15px;cursor:pointer;text-align:left;transition:all .2s;line-height:1.3}
+.quiz-opts button:hover{border-color:#b83255;background:#f9f0f3}
+.quiz-opts button.correct{background:#d4edda;border-color:#28a745;color:#155724}
+.quiz-opts button.wrong{background:#f8d7da;border-color:#dc3545;color:#721c24}
+.quiz-feedback{display:none;padding:12px 16px;border-radius:8px;margin-bottom:14px;font-size:14px;line-height:1.5}
+.quiz-feedback.show{display:block}
+.quiz-feedback.correct{background:#d4edda;color:#155724}
+.quiz-feedback.wrong{background:#f8d7da;color:#721c24}
+.quiz-next{padding:12px 28px;background:#b83255;color:#fff;border:none;border-radius:8px;font-size:15px;cursor:pointer;display:none}
+.quiz-next:hover{background:#8b1a3a}
+.quiz-result{display:none;text-align:center;padding:20px}
+.quiz-result .score{font-size:2.5rem;font-weight:700;color:#b83255}
+.quiz-result p{color:#555;margin-top:8px}
+.quiz-result button{margin-top:16px;padding:12px 28px;background:#b83255;color:#fff;border:none;border-radius:8px;font-size:15px;cursor:pointer}
+footer{text-align:center;padding:20px;color:#888;font-size:13px;margin-top:20px}
+@media(max-width:600px){header h1{font-size:1.2rem}nav button{font-size:13px;padding:12px 8px}}
+</style>
+</head>
+<body>
+<header>
+<small>Habilidades Blandas · Módulo 20 · Bloque 5</small>
+<h1>Técnicas Creadoras para la Solución de Problemas</h1>
+</header>
+<nav>
+<button class="active" onclick="showTab('concepto',this)">📖 Concepto</button>
+<button onclick="showTab('simulacion',this)">🔮 Taller de Ideas</button>
+<button onclick="showTab('juego',this)">🎯 Mini-juego</button>
+</nav>
+<div id="concepto" class="section active">
+<div class="card">
+<h3>Creatividad: La Habilidad del Siglo XXI</h3>
+<p>El Foro Económico Mundial identifica la creatividad y la resolución de problemas complejos como las habilidades más demandadas del mercado laboral. Sin embargo, la mayoría de las personas nunca aprendió sistemáticamente a pensar de forma creativa. La buena noticia: la creatividad no es un talento de nacimiento; es una habilidad que se desarrolla con práctica y con las herramientas correctas.</p>
+<p style="margin-top:10px">Todo problema tiene múltiples soluciones. La persona que encuentra la solución no convencional, inesperada o elegante tiene una ventaja competitiva extraordinaria en cualquier campo.</p>
+</div>
+<div class="card">
+<h3>Las 6 Técnicas Creadoras más Efectivas</h3>
+<div class="technique-box">
+<h4>1. 🧠 Lluvia de Ideas (Brainstorming)</h4>
+<p>Genera la mayor cantidad de ideas posibles sin juzgar ni filtrar. La cantidad primero, la calidad después. Las mejores ideas suelen aparecer después de la idea número 20, cuando la mente convencional se agota y el pensamiento creativo emerge.</p>
+</div>
+<div class="technique-box">
+<h4>2. 🔄 Inversión del Problema</h4>
+<p>Pregunta: "¿Cómo podría empeorar este problema?" o "¿Cómo haría exactamente lo opuesto?" Las respuestas a estas preguntas inversas revelan, por contraste, las mejores soluciones directas.</p>
+</div>
+<div class="technique-box">
+<h4>3. 🎩 Los 6 Sombreros para Pensar (De Bono)</h4>
+<p>Analiza el problema desde 6 perspectivas: blanco (datos), rojo (emociones), negro (riesgos), amarillo (beneficios), verde (creatividad) y azul (proceso). Cada sombrero revela una dimensión invisible con el pensamiento habitual.</p>
+</div>
+<div class="technique-box">
+<h4>4. 🔗 Método de Asociación Forzada</h4>
+<p>Toma un objeto aleatorio (ej: una silla, una manzana) y fuerza conexiones con tu problema. Las conexiones absurdas a veces revelan soluciones inesperadamente brillantes.</p>
+</div>
+<div class="technique-box">
+<h4>5. ❓ Los 5 ¿Por Qué?</h4>
+<p>Para llegar a la causa raíz de un problema, pregunta "¿por qué?" 5 veces consecutivas. Cada respuesta revela una capa más profunda. La solución a la causa raíz es siempre más efectiva que tratar síntomas.</p>
+</div>
+<div class="technique-box">
+<h4>6. 🎯 Pensamiento de Diseño (Design Thinking)</h4>
+<p>5 fases: Empatizar (entender al usuario) → Definir (enmarcar el problema) → Idear (generar soluciones) → Prototipar (crear versión mínima) → Testear (validar con usuarios reales). Enfoque centrado en el ser humano.</p>
+</div>
+</div>
+<div class="card">
+<h3>El Estado Mental para la Creatividad Máxima</h3>
+<ul>
+<li><strong>Relajación alerta:</strong> Ni demasiado estresado ni demasiado relajado. Las ideas surgen frecuentemente en la ducha, al caminar o justo antes de dormir.</li>
+<li><strong>Sin juicio inicial:</strong> El crítico interno es el mayor asesino de la creatividad. Pospón el juicio durante la fase de generación de ideas.</li>
+<li><strong>Estimulación cruzada:</strong> Expo a disciplinas distintas a la tuya. Las mejores innovaciones surgen de la intersección entre campos.</li>
+<li><strong>Tiempo sin estructura:</strong> El aburrimiento productivo es el incubador de las grandes ideas. Las pantallas constantes eliminan ese espacio.</li>
+</ul>
+</div>
+</div>
+<div id="simulacion" class="section">
+<div class="sim-area">
+<h3>🔮 Taller de Resolución Creativa</h3>
+<p style="font-size:14px;color:#666;margin-bottom:12px">Describe un problema que quieras resolver de forma creativa:</p>
+<textarea class="problem-input" id="problemInput" placeholder="Ej: Necesito aumentar mis ingresos pero no tengo más tiempo..."></textarea>
+<div style="margin-bottom:16px">
+<button class="sim-btn" onclick="generarIdeas('inversion')">🔄 Inversión del Problema</button>
+<button class="sim-btn" onclick="generarIdeas('5porques')">❓ Los 5 ¿Por Qué?</button>
+<button class="sim-btn" onclick="generarIdeas('asociacion')">🔗 Asociación Forzada</button>
+</div>
+<div class="brainstorm-list" id="ideasResult">
+<p style="color:#aaa;font-style:italic">Las ideas generadas aparecerán aquí...</p>
+</div>
+<p style="font-size:13px;color:#888">💡 Usa estas técnicas como punto de partida. Agrega tus propias ideas en un papel.</p>
+</div>
+</div>
+<div id="juego" class="section">
+<div class="quiz-box">
+<h3>🎯 Quiz: Técnicas Creadoras</h3>
+<div class="quiz-progress" id="qProgress">Pregunta 1 de 6</div>
+<div id="quizArea">
+<div class="quiz-q" id="qText"></div>
+<div class="quiz-opts" id="qOpts"></div>
+<div class="quiz-feedback" id="qFeedback"></div>
+<button class="quiz-next" id="qNext" onclick="nextQuestion()">Siguiente →</button>
+</div>
+<div class="quiz-result" id="quizResult">
+<div class="score" id="finalScore"></div>
+<p id="finalMsg"></p>
+<button onclick="restartQuiz()">Reintentar 🔄</button>
+</div>
+</div>
+</div>
+<footer>Habilidades Blandas · Seminario Fénix · Módulo 20</footer>
+<script>
+function showTab(id,btn){document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));document.getElementById(id).classList.add('active');btn.classList.add('active');}
+function generarIdeas(tipo){const prob=document.getElementById('problemInput').value.trim();const el=document.getElementById('ideasResult');if(!prob){el.innerHTML='<p style="color:#dc3545">Por favor, describe primero tu problema.</p>';return;}let html='<ul>';if(tipo==='inversion'){html+='<li>¿Cómo podrías EMPEORAR activamente este problema?</li><li>¿Qué harías exactamente al CONTRARIO de lo que haces ahora?</li><li>¿Quién tiene el problema opuesto y cómo lo resuelve?</li><li>¿Qué pasaría si eliminaras completamente la restricción principal?</li>';}else if(tipo==='5porques'){html+='<li>¿Por qué existe este problema? (responde y pregunta de nuevo)</li><li>¿Por qué persiste a pesar de tus intentos previos?</li><li>¿Por qué esa causa existe? ¿Qué la genera?</li><li>¿Por qué no has atacado la causa raíz hasta ahora?</li><li>¿Por qué resolverlo es importante para ti realmente?</li>';}else{const objects=['una palanca','una araña','un iceberg','un jardín','un GPS'];const obj=objects[Math.floor(Math.random()*objects.length)];html+='<li>Tu problema es como <strong>'+obj+'</strong>. ¿Qué características comparten?</li><li>¿Cómo funciona '+obj+'? ¿Qué de ese funcionamiento aplica a tu situación?</li><li>Si '+obj+' pudiera resolver tu problema, ¿qué haría?</li><li>¿Qué necesita '+obj+' para funcionar bien? ¿Tu problema necesita lo mismo?</li>';}html+='</ul>';el.innerHTML='<strong style="color:#8b1a3a">Preguntas generativas para: "'+prob.substring(0,50)+(prob.length>50?'...':'')+'"</strong><br><br>'+html;}
+const questions=[{q:'¿Cuál es el principio fundamental del Brainstorming?',opts:['Generar pocas ideas pero muy buenas','Criticar cada idea para mejorarla','Generar la mayor cantidad de ideas sin juzgar','Solo generan ideas los expertos'],ans:2,fb:'En el Brainstorming, la cantidad primero, la calidad después. Las mejores ideas surgen después de la idea número 20, cuando el pensamiento convencional se agota.'},
+{q:'¿En qué consiste la técnica de "Los 5 ¿Por Qué?"?',opts:['Hacer 5 preguntas a 5 personas diferentes','Preguntar "por qué" 5 veces consecutivas para llegar a la causa raíz','Identificar 5 beneficios del problema','Encontrar 5 soluciones alternativas'],ans:1,fb:'Los 5 ¿Por Qué? revelan capas cada vez más profundas hasta llegar a la causa raíz, que es donde la solución más efectiva suele estar.'},
+{q:'¿Qué color de sombrero representa los datos objetivos en el método de De Bono?',opts:['Rojo','Negro','Amarillo','Blanco'],ans:3,fb:'El sombrero BLANCO representa los datos, hechos e información objetiva. El rojo son emociones, negro son riesgos, amarillo son beneficios, verde es creatividad y azul es el proceso.'},
+{q:'¿Cuándo suelen surgir las mejores ideas creativas?',opts:['Durante reuniones de equipo largas','Bajo presión extrema de tiempo','En estado de relajación alerta (ducha, caminata, antes de dormir)','Solo cuando se tiene toda la información necesaria'],ans:2,fb:'Las ideas creativas emergen en estado de relajación alerta: en la ducha, caminando, o justo antes de dormir. El estrés extremo bloquea el pensamiento lateral.'},
+{q:'¿Qué elimina el espacio para la creatividad según el módulo?',opts:['El ejercicio físico intenso','Las pantallas constantes que eliminan el aburrimiento productivo','La lectura de libros de otras disciplinas','El trabajo en equipo'],ans:1,fb:'Las pantallas constantes eliminan el "aburrimiento productivo", que es el estado mental donde emergen las conexiones creativas e inesperadas.'},
+{q:'¿Cuál es la primera fase del Design Thinking?',opts:['Idear soluciones','Prototipar','Empatizar con el usuario','Definir el problema'],ans:2,fb:'El Design Thinking comienza con Empatizar: entender profundamente al usuario final, sus necesidades, frustraciones y contexto. Sin empatía, las soluciones son teóricas.'}];
+let cur=0,sc=0,answ=false;
+function loadQ(){const q=questions[cur];document.getElementById('qProgress').textContent='Pregunta '+(cur+1)+' de '+questions.length;document.getElementById('qText').textContent=q.q;const fb=document.getElementById('qFeedback');fb.className='quiz-feedback';fb.textContent='';document.getElementById('qNext').style.display='none';answ=false;const op=document.getElementById('qOpts');op.innerHTML='';q.opts.forEach((o,i)=>{const b=document.createElement('button');b.textContent=o;b.onclick=()=>answer(i,b);op.appendChild(b);});}
+function answer(i,btn){if(answ)return;answ=true;const q=questions[cur];document.querySelectorAll('.quiz-opts button').forEach(b=>b.style.pointerEvents='none');const fb=document.getElementById('qFeedback');if(i===q.ans){btn.classList.add('correct');sc++;fb.className='quiz-feedback show correct';fb.textContent='✅ '+q.fb;}else{btn.classList.add('wrong');document.querySelectorAll('.quiz-opts button')[q.ans].classList.add('correct');fb.className='quiz-feedback show wrong';fb.textContent='❌ '+q.fb;}document.getElementById('qNext').style.display='inline-block';}
+function nextQuestion(){cur++;if(cur<questions.length){loadQ();}else{document.getElementById('quizArea').style.display='none';const r=document.getElementById('quizResult');r.style.display='block';document.getElementById('finalScore').textContent=sc+'/'+questions.length;const p=sc/questions.length;document.getElementById('finalMsg').textContent=p>=0.83?'🔮 ¡Brillante! Eres un solucionador creativo de problemas.':p>=0.5?'📈 Buen trabajo. Practica las técnicas con problemas reales.':'💡 Sigue explorando. ¡La creatividad es un músculo que se entrena!';}}
+function restartQuiz(){cur=0;sc=0;answ=false;document.getElementById('quizArea').style.display='block';document.getElementById('quizResult').style.display='none';loadQ();}
+loadQ();
+</script>
+</body>
+</html>
