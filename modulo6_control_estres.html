@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Habilidades Blandas | Módulo 6 – Control del Estrés</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',Arial,sans-serif;background:#f5f0f5;color:#2d2d2d;font-size:16px}
+header{background:linear-gradient(135deg,#8b1a3a 0%,#b83255 100%);color:#fff;padding:20px;text-align:center}
+header small{display:block;font-size:13px;letter-spacing:2px;opacity:.85;text-transform:uppercase}
+header h1{font-size:1.5rem;margin-top:4px}
+nav{display:flex;background:#6d1430;overflow-x:auto}
+nav button{flex:1;min-width:110px;padding:14px 10px;background:none;border:none;color:#f5c6d3;font-size:15px;cursor:pointer;border-bottom:3px solid transparent;transition:all .2s;white-space:nowrap}
+nav button.active,nav button:hover{color:#fff;border-bottom-color:#f7b2c4;background:rgba(255,255,255,.08)}
+.section{display:none;padding:20px;max-width:900px;margin:0 auto}
+.section.active{display:block}
+.card{background:#fff;border-radius:12px;padding:20px;margin-bottom:16px;box-shadow:0 2px 8px rgba(0,0,0,.07)}
+.card h3{color:#8b1a3a;font-size:1.1rem;margin-bottom:8px}
+.card p{line-height:1.7;color:#444}
+.card ul{padding-left:20px;line-height:1.9;color:#444}
+.badge{display:inline-block;background:#f5e6ea;color:#8b1a3a;border-radius:20px;padding:4px 12px;font-size:13px;font-weight:600;margin:4px 4px 4px 0}
+/* Simulación */
+.sim-area{background:#fff;border-radius:12px;padding:24px;box-shadow:0 2px 8px rgba(0,0,0,.07);margin-bottom:16px}
+.sim-area h3{color:#8b1a3a;font-size:1.1rem;margin-bottom:16px}
+.stress-meter{margin-bottom:24px}
+.meter-label{display:flex;justify-content:space-between;font-size:14px;color:#666;margin-bottom:6px}
+.meter-bar{height:18px;border-radius:9px;background:#f0d0d8;overflow:hidden}
+.meter-fill{height:100%;border-radius:9px;transition:width .6s ease}
+.stress-sliders{display:flex;flex-direction:column;gap:16px;margin-bottom:20px}
+.slider-row{display:flex;flex-direction:column;gap:6px}
+.slider-row label{font-size:14px;font-weight:600;color:#555}
+.slider-row input[type=range]{width:100%;accent-color:#b83255}
+.slider-val{font-size:13px;color:#888;text-align:right}
+.result-panel{background:#f5e6ea;border-left:4px solid #b83255;padding:16px;border-radius:8px;margin-top:16px}
+.result-panel h4{color:#8b1a3a;margin-bottom:8px}
+.result-panel p{color:#444;line-height:1.6;font-size:14px}
+/* Técnicas */
+.tech-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-bottom:16px}
+.tech-card{background:#fdf0f4;border-radius:10px;padding:16px;cursor:pointer;border:2px solid transparent;transition:all .2s}
+.tech-card:hover,.tech-card.active{border-color:#b83255;background:#f5e6ea}
+.tech-card .icon{font-size:2rem;margin-bottom:8px;text-align:center}
+.tech-card .name{font-weight:700;color:#8b1a3a;font-size:14px;text-align:center;margin-bottom:4px}
+.tech-card .brief{font-size:12px;color:#666;text-align:center;line-height:1.4}
+.tech-detail{display:none;background:#fff;border-radius:10px;padding:18px;border:2px solid #b83255;margin-top:4px}
+.tech-detail.show{display:block}
+.tech-detail h4{color:#8b1a3a;margin-bottom:8px}
+.tech-detail ol{padding-left:18px;line-height:1.8;color:#444;font-size:14px}
+/* Mini-juego */
+.quiz-box{background:#fff;border-radius:12px;padding:24px;box-shadow:0 2px 8px rgba(0,0,0,.07)}
+.quiz-box h3{color:#8b1a3a;font-size:1.1rem;margin-bottom:6px}
+.quiz-progress{font-size:13px;color:#888;margin-bottom:16px}
+.quiz-q{font-size:1rem;font-weight:600;margin-bottom:16px;line-height:1.5;color:#2d2d2d}
+.quiz-opts{display:flex;flex-direction:column;gap:10px;margin-bottom:16px}
+.quiz-opts button{padding:13px 16px;border:2px solid #ddd;border-radius:8px;background:#fff;font-size:15px;cursor:pointer;text-align:left;transition:all .2s;line-height:1.3}
+.quiz-opts button:hover{border-color:#b83255;background:#f9f0f3}
+.quiz-opts button.correct{background:#d4edda;border-color:#28a745;color:#155724}
+.quiz-opts button.wrong{background:#f8d7da;border-color:#dc3545;color:#721c24}
+.quiz-feedback{display:none;padding:12px 16px;border-radius:8px;margin-bottom:14px;font-size:14px;line-height:1.5}
+.quiz-feedback.correct{background:#d4edda;color:#155724}
+.quiz-feedback.wrong{background:#f8d7da;color:#721c24}
+.quiz-next{padding:12px 28px;background:#b83255;color:#fff;border:none;border-radius:8px;font-size:15px;cursor:pointer;display:none}
+.quiz-next:hover{background:#8b1a3a}
+.quiz-result{display:none;text-align:center;padding:20px}
+.quiz-result .score{font-size:2.5rem;font-weight:700;color:#b83255}
+.quiz-result p{color:#555;margin-top:8px;font-size:1rem}
+.quiz-result button{margin-top:16px;padding:12px 28px;background:#b83255;color:#fff;border:none;border-radius:8px;font-size:15px;cursor:pointer}
+footer{text-align:center;padding:20px;color:#888;font-size:13px;margin-top:20px}
+@media(max-width:600px){header h1{font-size:1.2rem}nav button{font-size:13px;padding:12px 8px}.tech-grid{grid-template-columns:repeat(2,1fr)}}
+</style>
+</head>
+<body>
+<header>
+  <small>Habilidades Blandas · Módulo 6 · Bloque 2</small>
+  <h1>Control del Estrés</h1>
+</header>
+<nav>
+  <button class="active" onclick="showTab('concepto',this)">📖 Concepto</button>
+  <button onclick="showTab('simulacion',this)">🌡️ Termómetro</button>
+  <button onclick="showTab('juego',this)">🎯 Mini-juego</button>
+</nav>
+
+<div id="concepto" class="section active">
+  <div class="card">
+    <h3>¿Qué es el Estrés?</h3>
+    <p>El estrés es la respuesta fisiológica y psicológica del organismo ante demandas que percibimos como superiores a nuestros recursos. No todo el estrés es negativo: el <em>eustrés</em> activa el rendimiento, mientras que el <em>distrés</em> sostenido deteriora la salud, la toma de decisiones y las relaciones.</p>
+    <p style="margin-top:10px">Para un profesional como un contador, el estrés mal gestionado puede afectar la precisión del trabajo, el juicio profesional y la calidad de las relaciones con clientes durante épocas de alta carga fiscal.</p>
+  </div>
+  <div class="card">
+    <h3>Las 3 Fuentes Principales del Estrés Profesional</h3>
+    <ul>
+      <li><strong>Sobrecarga de trabajo:</strong> Más tareas de las que el tiempo disponible permite hacer con calidad.</li>
+      <li><strong>Ambigüedad de rol:</strong> No tener claridad sobre las expectativas o responsabilidades propias.</li>
+      <li><strong>Conflictos interpersonales:</strong> Relaciones tensas con colegas, jefes o clientes que drenan energía.</li>
+    </ul>
+  </div>
+  <div class="card">
+    <h3>Señales de Alerta del Estrés Crónico</h3>
+    <p>El estrés crónico se acumula silenciosamente. Aprende a reconocer sus señales antes de que escalen:</p>
+    <div style="margin-top:10px">
+      <span class="badge">Insomnio frecuente</span>
+      <span class="badge">Irritabilidad constante</span>
+      <span class="badge">Dificultad para concentrarse</span>
+      <span class="badge">Dolores de cabeza o espalda</span>
+      <span class="badge">Sensación de agotamiento</span>
+      <span class="badge">Errores frecuentes</span>
+      <span class="badge">Aislamiento social</span>
+      <span class="badge">Procrastinación</span>
+    </div>
+  </div>
+  <div class="card">
+    <h3>El Modelo de las 4 A del Manejo del Estrés</h3>
+    <ul>
+      <li><strong>Avoid (Evitar):</strong> Identifica y elimina estresores innecesarios (compromisos que no agregan valor).</li>
+      <li><strong>Alter (Modificar):</strong> Cambia la situación estresante cambiando tu comportamiento o comunicación.</li>
+      <li><strong>Adapt (Adaptarse):</strong> Ajusta tus expectativas o perspectiva ante lo que no puedes cambiar.</li>
+      <li><strong>Accept (Aceptar):</strong> Reconoce que hay situaciones que simplemente debes dejar ir.</li>
+    </ul>
+  </div>
+  <div class="card">
+    <h3>Estrés y Rendimiento: La Curva de Yerkes-Dodson</h3>
+    <p>Un nivel óptimo de estrés mejora el rendimiento: te mantiene alerta y enfocado. Sin embargo, pasado ese punto, el rendimiento cae drásticamente. El objetivo no es eliminar el estrés, sino mantenerlo en la zona óptima. Esto se logra con técnicas de regulación consciente y límites bien definidos.</p>
+  </div>
+</div>
+
+<div id="simulacion" class="section">
+  <div class="sim-area">
+    <h3>🌡️ Termómetro de Estrés Personal</h3>
+    <p style="color:#666;font-size:14px;margin-bottom:20px">Evalúa tu nivel de estrés en 5 áreas clave. Mueve cada control y obtén tu diagnóstico.</p>
+    <div class="stress-sliders" id="stressSliders">
+      <div class="slider-row">
+        <label>Carga de trabajo actual</label>
+        <input type="range" min="0" max="10" value="5" oninput="updateMeter()" id="sl1">
+        <div class="slider-val" id="sv1">5/10</div>
+      </div>
+      <div class="slider-row">
+        <label>Calidad del sueño (inverso: 10 = mal sueño)</label>
+        <input type="range" min="0" max="10" value="5" oninput="updateMeter()" id="sl2">
+        <div class="slider-val" id="sv2">5/10</div>
+      </div>
+      <div class="slider-row">
+        <label>Tensión en relaciones laborales</label>
+        <input type="range" min="0" max="10" value="5" oninput="updateMeter()" id="sl3">
+        <div class="slider-val" id="sv3">5/10</div>
+      </div>
+      <div class="slider-row">
+        <label>Sensación de falta de control</label>
+        <input type="range" min="0" max="10" value="5" oninput="updateMeter()" id="sl4">
+        <div class="slider-val" id="sv4">5/10</div>
+      </div>
+      <div class="slider-row">
+        <label>Preocupaciones financieras o personales</label>
+        <input type="range" min="0" max="10" value="5" oninput="updateMeter()" id="sl5">
+        <div class="slider-val" id="sv5">5/10</div>
+      </div>
+    </div>
+    <div class="stress-meter">
+      <div class="meter-label"><span>Nivel de estrés total</span><span id="meterPct">50%</span></div>
+      <div class="meter-bar"><div class="meter-fill" id="meterFill" style="width:50%;background:#f0a0b0"></div></div>
+    </div>
+    <div class="result-panel" id="stressResult">
+      <h4 id="stressLevel">Nivel moderado</h4>
+      <p id="stressAdvice">Actualiza los controles para ver tu diagnóstico personalizado.</p>
+    </div>
+  </div>
+  <div class="sim-area">
+    <h3>🛠️ Técnicas de Reducción del Estrés</h3>
+    <p style="color:#666;font-size:14px;margin-bottom:16px">Selecciona una técnica para ver los pasos prácticos.</p>
+    <div class="tech-grid" id="techGrid"></div>
+    <div class="tech-detail" id="techDetail">
+      <h4 id="techTitle"></h4>
+      <ol id="techSteps"></ol>
+    </div>
+  </div>
+</div>
+<div id="juego" class="section">
+  <div class="quiz-box">
+    <h3>🎯 Mini-juego: Control del Estrés</h3>
+    <div class="quiz-progress" id="quizProgress">Pregunta 1 de 6</div>
+    <div id="quizArea">
+      <div class="quiz-q" id="quizQ"></div>
+      <div class="quiz-opts" id="quizOpts"></div>
+      <div class="quiz-feedback" id="quizFeedback"></div>
+      <button class="quiz-next" id="quizNext" onclick="nextQuestion()">Siguiente →</button>
+    </div>
+    <div class="quiz-result" id="quizResult">
+      <div class="score" id="quizScore"></div>
+      <p id="quizMsg"></p>
+      <button onclick="restartQuiz()">Jugar de nuevo</button>
+    </div>
+  </div>
+</div>
+
+<footer>Juan Carlos Reyes · juancreyes.hn@gmail.com</footer>
+
+<script>
+function showTab(id,btn){
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  btn.classList.add('active');
+}
+
+// ── Termómetro ──
+const stressLevels=[
+  {max:20,label:'Estrés bajo',color:'#4caf50',advice:'Tu nivel de estrés está bien gestionado. Mantén tus rutinas de bienestar y sé proactivo para prevenir el aumento en épocas de mayor carga.'},
+  {max:40,label:'Estrés manejable',color:'#8bc34a',advice:'Hay cierta presión pero todavía la manejas bien. Incorpora pequeñas pausas activas durante el día y asegura al menos 7 horas de sueño.'},
+  {max:60,label:'Estrés moderado',color:'#ffc107',advice:'Tu estrés está en un nivel de atención. Prioriza tus tareas, delega lo que puedas y practica al menos una técnica de reducción diaria (respiración, caminata).'},
+  {max:80,label:'Estrés elevado',color:'#ff9800',advice:'Señal de alerta: tu nivel de estrés puede estar afectando tu rendimiento y salud. Revisa tu carga, establece límites claros y busca apoyo de alguien de confianza.'},
+  {max:100,label:'Estrés crítico',color:'#f44336',advice:'Necesitas acción inmediata. Toma un descanso real hoy, habla con alguien y considera una consulta profesional si esta sensación persiste más de 2 semanas.'}
+];
+
+function updateMeter(){
+  let total=0;
+  for(let i=1;i<=5;i++){
+    const val=parseInt(document.getElementById('sl'+i).value);
+    document.getElementById('sv'+i).textContent=val+'/10';
+    total+=val;
+  }
+  const pct=Math.round((total/50)*100);
+  const fill=document.getElementById('meterFill');
+  const pctEl=document.getElementById('meterPct');
+  fill.style.width=pct+'%';
+  pctEl.textContent=pct+'%';
+  const level=stressLevels.find(l=>pct<=l.max)||stressLevels[4];
+  fill.style.background=level.color;
+  document.getElementById('stressLevel').textContent=level.label+' ('+pct+'%)';
+  document.getElementById('stressAdvice').textContent=level.advice;
+}
+updateMeter();
+
+// ── Técnicas ──
+const techniques=[
+  {icon:'🌬️',name:'Respiración 4-7-8',brief:'Técnica de respiración para calma inmediata',steps:['Siéntate erguido o recuéstate cómodamente','Exhala completamente por la boca haciendo un sonido','Cierra la boca e inhala por la nariz contando 4','Mantén la respiración contando hasta 7','Exhala completamente por la boca contando hasta 8','Repite el ciclo 3-4 veces']},
+  {icon:'🧘',name:'Relajación Muscular',brief:'Tensión y liberación progresiva de músculos',steps:['Siéntate en una silla cómoda con pies en el suelo','Tensa los músculos de los pies durante 5 segundos','Suelta la tensión y observa la sensación de liberación','Sube progresivamente: piernas, abdomen, manos, hombros','Termina tensando y soltando el rostro','Permanece 2 minutos en silencio disfrutando la relajación']},
+  {icon:'📝',name:'Journaling Anti-estrés',brief:'Escribe para vaciar la mente y ganar perspectiva',steps:['Toma un cuaderno o abre un documento en blanco','Escribe sin filtro todo lo que te preocupa ahora mismo','Lee lo que escribiste y marca lo que SÍ depende de ti','Para cada ítem controlable: escribe una acción pequeña','Para los no controlables: escribe "lo suelto"','Cierra el cuaderno y da por terminada esa preocupación']},
+  {icon:'🚶',name:'Caminata Consciente',brief:'Movimiento físico para liberar tensión acumulada',steps:['Sal a caminar por al menos 10 minutos','Deja el teléfono en silencio (o en casa si puedes)','Enfoca tu atención en lo que ves, escuchas y sientes','Da pasos deliberados, no apresurados','Respira profundo con cada 4 pasos','Al regresar, identifica un solo paso a seguir en tu problema']},
+  {icon:'⏱️',name:'Técnica Pomodoro',brief:'Trabaja en bloques para evitar el agotamiento',steps:['Elige la tarea más importante del momento','Configura un temporizador en 25 minutos','Trabaja con foco total: sin redes, sin interrupciones','Al sonar, toma un descanso de 5 minutos obligatorio','Después de 4 ciclos, toma un descanso de 20-30 minutos','Repite durante el día, máximo 8-12 ciclos']},
+  {icon:'🤝',name:'Conversación de Apoyo',brief:'Compartir alivias la carga emocional',steps:['Identifica a alguien de confianza (no necesita ser experto)','Pide un momento específico: "¿Puedo hablar contigo 10 min?"','Explica lo que sientes sin exagerar ni minimizar','Pide lo que necesitas: consejo, o solo ser escuchado','Agradece su tiempo genuinamente','Ofrécete a estar disponible cuando ellos necesiten']},
+];
+
+function buildTechs(){
+  const grid=document.getElementById('techGrid');
+  grid.innerHTML='';
+  techniques.forEach((t,i)=>{
+    const div=document.createElement('div');
+    div.className='tech-card';
+    div.innerHTML='<div class="icon">'+t.icon+'</div><div class="name">'+t.name+'</div><div class="brief">'+t.brief+'</div>';
+    div.onclick=()=>showTech(i,div);
+    grid.appendChild(div);
+  });
+}
+
+function showTech(i,card){
+  document.querySelectorAll('.tech-card').forEach(c=>c.classList.remove('active'));
+  card.classList.add('active');
+  const t=techniques[i];
+  const detail=document.getElementById('techDetail');
+  document.getElementById('techTitle').textContent=t.icon+' '+t.name;
+  const ol=document.getElementById('techSteps');
+  ol.innerHTML='';
+  t.steps.forEach(s=>{const li=document.createElement('li');li.textContent=s;ol.appendChild(li);});
+  detail.classList.add('show');
+  detail.scrollIntoView({behavior:'smooth',block:'nearest'});
+}
+
+buildTechs();
+
+// ── Mini-juego ──
+const questions=[
+  {q:"¿Cuál es la diferencia entre eustrés y distrés?",opts:["El eustrés es el estrés bueno que activa el rendimiento; el distrés es el estrés crónico que daña la salud","El eustrés ocurre en el trabajo y el distrés en casa","El distrés es temporal y el eustrés es permanente","No hay diferencia real entre ambos"],ans:0,exp:"El eustrés es el estrés positivo que nos motiva a actuar. El distrés es el estrés negativo y sostenido que deteriora la salud física y mental."},
+  {q:"¿A qué hace referencia la Curva de Yerkes-Dodson en el manejo del estrés?",opts:["A mayor estrés, siempre mayor rendimiento","El estrés óptimo mejora el desempeño; pasado ese punto, el rendimiento cae","El estrés nunca mejora el rendimiento","Solo aplica a deportistas, no a profesionales"],ans:1,exp:"La curva demuestra que un nivel moderado de estrés activa el rendimiento, pero el exceso lo degrada. El objetivo es mantenerse en la zona óptima."},
+  {q:"¿Cuál de las 4 A del manejo del estrés implica cambiar la propia perspectiva ante una situación?",opts:["Avoid (Evitar)","Alter (Modificar)","Adapt (Adaptarse)","Accept (Aceptar)"],ans:2,exp:"Adaptarse significa ajustar tus expectativas o reencuadrar la situación para verla de otra manera, lo cual reduce el impacto emocional del estresor."},
+  {q:"En la técnica de respiración 4-7-8, ¿qué número corresponde a la fase de exhalación?",opts:["4","7","8","3"],ans:2,exp:"La secuencia es: inhala 4 segundos, mantén 7 segundos, exhala 8 segundos. La exhalación prolongada activa la respuesta de relajación del sistema nervioso."},
+  {q:"¿Cuál es una señal de alerta del estrés crónico?",opts:["Energía alta y motivación constante","Mayor creatividad y productividad","Insomnio frecuente y dificultad para concentrarse","Mayor facilidad para tomar decisiones"],ans:2,exp:"El estrés crónico se manifiesta con insomnio, irritabilidad, errores frecuentes, dolores físicos y dificultad para concentrarse, entre otras señales."},
+  {q:"¿Cuál es el propósito principal de la técnica Pomodoro en la gestión del estrés?",opts:["Trabajar más horas sin cansarse","Dividir el trabajo en bloques con descansos para evitar el agotamiento","Eliminar todas las distracciones digitales para siempre","Completar una tarea en menos de 25 minutos siempre"],ans:1,exp:"El Pomodoro crea ciclos de trabajo-descanso que previenen el agotamiento mental, mantienen la concentración y hacen el trabajo más sostenible."}
+];
+
+let qIndex=0,score=0,answered=false;
+
+function loadQuestion(){
+  const q=questions[qIndex];
+  document.getElementById('quizProgress').textContent='Pregunta '+(qIndex+1)+' de '+questions.length;
+  document.getElementById('quizQ').textContent=q.q;
+  const opts=document.getElementById('quizOpts');
+  opts.innerHTML='';
+  q.opts.forEach((o,i)=>{
+    const btn=document.createElement('button');
+    btn.textContent=o;
+    btn.onclick=()=>selectAnswer(i,btn);
+    opts.appendChild(btn);
+  });
+  document.getElementById('quizFeedback').style.display='none';
+  document.getElementById('quizNext').style.display='none';
+  answered=false;
+}
+
+function selectAnswer(i,btn){
+  if(answered) return;
+  answered=true;
+  const q=questions[qIndex];
+  const fb=document.getElementById('quizFeedback');
+  document.querySelectorAll('.quiz-opts button').forEach((b,idx)=>{
+    b.disabled=true;
+    if(idx===q.ans) b.classList.add('correct');
+    else if(b===btn) b.classList.add('wrong');
+  });
+  if(i===q.ans){score++;fb.className='quiz-feedback correct';fb.textContent='✅ '+q.exp;}
+  else{fb.className='quiz-feedback wrong';fb.textContent='❌ '+q.exp;}
+  fb.style.display='block';
+  document.getElementById('quizNext').style.display='inline-block';
+}
+
+function nextQuestion(){
+  qIndex++;
+  if(qIndex>=questions.length) showResult();
+  else loadQuestion();
+}
+
+function showResult(){
+  document.getElementById('quizArea').style.display='none';
+  document.getElementById('quizProgress').style.display='none';
+  document.getElementById('quizResult').style.display='block';
+  document.getElementById('quizScore').textContent=score+'/'+questions.length;
+  const msgs=['Sigue aprendiendo: el manejo del estrés es una habilidad vital.','Buen inicio. La práctica diaria marca la diferencia.','¡Bien! Comprendes los fundamentos del manejo del estrés.','¡Muy bien! Tu conocimiento sobre el estrés es sólido.','¡Excelente! Eres un experto en control del estrés.'];
+  document.getElementById('quizMsg').textContent=msgs[Math.min(score,4)];
+}
+
+function restartQuiz(){
+  qIndex=0;score=0;answered=false;
+  document.getElementById('quizArea').style.display='block';
+  document.getElementById('quizProgress').style.display='block';
+  document.getElementById('quizResult').style.display='none';
+  loadQuestion();
+}
+
+loadQuestion();
+</script>
+</body>
+</html>
