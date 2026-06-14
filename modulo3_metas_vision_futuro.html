@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Habilidades Blandas | Módulo 3 – Metas y Visión de Futuro</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',sans-serif;background:#f5f0f5;color:#333;font-size:16px}
+header{background:linear-gradient(135deg,#8b1a3a,#b83255);color:#fff;padding:18px 20px;text-align:center}
+header h1{font-size:1.1em;font-weight:600;letter-spacing:1px;text-transform:uppercase;opacity:.85}
+header h2{font-size:1.6em;font-weight:700;margin-top:4px}
+nav{display:flex;justify-content:center;gap:8px;padding:12px 16px;background:#fff;border-bottom:2px solid #e8d0d8;flex-wrap:wrap}
+nav button{padding:10px 18px;border:2px solid #b83255;border-radius:24px;background:#fff;color:#b83255;font-weight:600;font-size:.9em;cursor:pointer;transition:all .2s;min-height:44px}
+nav button.active,nav button:hover{background:#b83255;color:#fff}
+section{display:none;max-width:860px;margin:24px auto;padding:0 16px 40px}
+section.active{display:block}
+.card{background:#fff;border-radius:12px;padding:24px;margin-bottom:20px;box-shadow:0 2px 8px rgba(0,0,0,.08)}
+.card h3{color:#8b1a3a;font-size:1.2em;margin-bottom:14px;border-bottom:2px solid #f0d0da;padding-bottom:8px}
+.card p,.card li{line-height:1.7;margin-bottom:8px}
+.card ul,.card ol{padding-left:20px}
+.highlight{background:#fdf0f4;border-left:4px solid #b83255;padding:12px 16px;border-radius:0 8px 8px 0;margin:12px 0}
+.btn{display:inline-block;padding:12px 28px;background:#b83255;color:#fff;border:none;border-radius:8px;font-size:1em;font-weight:600;cursor:pointer;min-height:48px;min-width:120px;margin:6px 4px;transition:background .2s}
+.btn:hover{background:#8b1a3a}
+.btn-outline{background:#fff;color:#b83255;border:2px solid #b83255}
+.btn-outline:hover{background:#fdf0f4}
+.badge{display:inline-block;background:#b83255;color:#fff;border-radius:50%;width:28px;height:28px;text-align:center;line-height:28px;font-weight:700;margin-right:8px;font-size:.9em}
+.nav-links{display:flex;justify-content:space-between;margin-top:20px;flex-wrap:wrap;gap:10px}
+.sim-panel{background:#fdf8f9;border:1.5px solid #e8c0cc;border-radius:10px;padding:20px;margin:14px 0}
+.sim-label{font-weight:700;color:#8b1a3a;font-size:.95em;margin-bottom:8px}
+.sim-sub{color:#666;font-size:.88em;margin-bottom:10px;font-style:italic}
+input[type=text],textarea{width:100%;padding:10px 14px;border:1.5px solid #ddd;border-radius:8px;font-size:.95em;font-family:inherit;transition:border .2s;resize:vertical}
+input[type=text]:focus,textarea:focus{outline:none;border-color:#b83255}
+.smart-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:10px}
+.smart-field label{font-size:.82em;font-weight:600;color:#8b1a3a;display:block;margin-bottom:4px}
+select{width:100%;padding:10px 14px;border:1.5px solid #ddd;border-radius:8px;font-size:.95em;font-family:inherit;background:#fff;cursor:pointer}
+select:focus{outline:none;border-color:#b83255}
+.resultado-box{background:linear-gradient(135deg,#8b1a3a,#b83255);color:#fff;border-radius:12px;padding:24px;text-align:center;margin-top:16px;display:none}
+.resultado-box.show{display:block}
+.emoji-big{font-size:3em;margin-bottom:8px}
+.meta-card{background:#fff;border:2px solid #b83255;border-radius:12px;padding:18px;margin:10px 0;text-align:left}
+.meta-card h4{color:#8b1a3a;margin-bottom:8px;font-size:1em}
+.meta-card p{font-size:.9em;color:#555;line-height:1.6}
+.question-card{background:#fdf8f9;border:1px solid #e8c0cc;border-radius:10px;padding:20px;margin-bottom:16px}
+.option-btn{display:block;width:100%;text-align:left;padding:12px 16px;margin:6px 0;background:#fff;border:1.5px solid #ddd;border-radius:8px;font-size:.95em;cursor:pointer;transition:all .2s;min-height:48px}
+.option-btn:hover{border-color:#b83255;background:#fdf0f4}
+.option-btn.correct{background:#d4edda;border-color:#28a745;color:#155724}
+.option-btn.wrong{background:#f8d7da;border-color:#dc3545;color:#721c24}
+.feedback{padding:10px 14px;border-radius:8px;margin-top:8px;font-weight:600;display:none}
+.feedback.show{display:block}
+.feedback.ok{background:#d4edda;color:#155724}
+.feedback.fail{background:#f8d7da;color:#721c24}
+.score-bar{background:#f0d0da;border-radius:8px;height:12px;margin:8px 0}
+.score-fill{background:linear-gradient(90deg,#b83255,#e0607a);height:100%;border-radius:8px;transition:width .6s}
+footer{text-align:center;padding:20px;color:#999;font-size:.85em;border-top:1px solid #e0d0d5;margin-top:20px}
+@media(max-width:600px){header h2{font-size:1.3em}nav button{font-size:.82em;padding:9px 14px}.smart-row{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<header>
+  <h1>HABILIDADES BLANDAS &middot; M&Oacute;DULO 3</h1>
+  <h2>Metas y Visi&oacute;n de Futuro</h2>
+</header>
+<nav>
+  <button class="active" onclick="showTab('concepto',this)">&#128218; Concepto</button>
+  <button onclick="showTab('simulacion',this)">&#127919; Simulaci&oacute;n</button>
+  <button onclick="showTab('juego',this)">&#127922; Mini-juego</button>
+</nav>
+
+<!-- TAB 1: CONCEPTO -->
+<section id="concepto" class="active">
+  <div class="card">
+    <h3>&#127775; Por qu&eacute; las Metas son el Motor del &Eacute;xito</h3>
+    <p>Las metas son el GPS del &eacute;xito: sin destino claro, cualquier camino lleva a ninguna parte. Las personas sin metas escritas trabajan inconscientemente para lograr las metas de otros. El poder de tener metas claras y escritas es uno de los hallazgos m&aacute;s s&oacute;lidos en la psicolog&iacute;a del rendimiento.</p>
+    <div class="highlight">
+      <strong>Dato comprobado:</strong> El c&eacute;lebre estudio de Yale (1953) encontr&oacute; que el 3% de los graduados que ten&iacute;an metas escritas acumularon m&aacute;s riqueza que el 97% restante combinado 20 a&ntilde;os despu&eacute;s. Escribir las metas las convierte en compromisos reales.
+    </div>
+  </div>
+  <div class="card">
+    <h3>&#128161; El Sistema SMART de Metas</h3>
+    <p>Una meta vaga no mueve a la acci&oacute;n. Una meta SMART s&iacute; lo hace. El m&eacute;todo SMART es el est&aacute;ndar de oro para definir objetivos accionables:</p>
+    <ol>
+      <li><strong>S &mdash; Espec&iacute;fica (Specific):</strong> &iquest;Qu&eacute; exactamente quieres lograr? En vez de "quiero ganar m&aacute;s dinero", escribe "quiero facturar L. 60,000 mensuales con mis servicios de consultor&iacute;a".</li>
+      <li><strong>M &mdash; Medible (Measurable):</strong> &iquest;C&oacute;mo sabes que lograste la meta? Define indicadores concretos: n&uacute;mero de clientes, ingresos, horas, certificaciones.</li>
+      <li><strong>A &mdash; Alcanzable (Achievable):</strong> &iquest;Es realista dado tu punto de partida? Una meta debe estar entre lo c&oacute;modo y lo imposible: retante pero posible.</li>
+      <li><strong>R &mdash; Relevante (Relevant):</strong> &iquest;Por qu&eacute; esta meta importa en tu vida? Si la respuesta no te emociona, la meta no sobrevivir&aacute; los momentos dif&iacute;ciles.</li>
+      <li><strong>T &mdash; Con tiempo definido (Time-bound):</strong> &iquest;Cu&aacute;ndo exactamente? "Para el 31 de diciembre de este a&ntilde;o" es una meta. "Alg&uacute;n d&iacute;a" es un sue&ntilde;o.</li>
+    </ol>
+  </div>
+  <div class="card">
+    <h3>&#128205; Las 7 &Aacute;reas Clave de Metas de Vida</h3>
+    <p>El &eacute;xito integral requiere metas en todas las dimensiones de la vida, no solo en la econ&oacute;mica. Las 7 &aacute;reas fundamentales son:</p>
+    <ul>
+      <li><strong>&#128188; Carrera y negocio:</strong> Posici&oacute;n, especializaci&oacute;n, emprendimiento, reconocimiento profesional.</li>
+      <li><strong>&#128176; Finanzas personales:</strong> Ahorro, inversiones, ingresos pasivos, eliminaci&oacute;n de deudas.</li>
+      <li><strong>&#10084; Familia y relaciones:</strong> Calidad del tiempo familiar, relaci&oacute;n de pareja, crianza.</li>
+      <li><strong>&#127942; Salud y energ&iacute;a:</strong> Peso, condici&oacute;n f&iacute;sica, h&aacute;bitos alimenticios, sue&ntilde;o.</li>
+      <li><strong>&#128218; Educaci&oacute;n y crecimiento:</strong> Libros al a&ntilde;o, cursos, maestr&iacute;as, idiomas.</li>
+      <li><strong>&#127758; Impacto social:</strong> Contribuci&oacute;n a la comunidad, voluntariado, legado.</li>
+      <li><strong>&#127774; Espiritualidad y prop&oacute;sito:</strong> Valores, pr&aacute;cticas de meditaci&oacute;n, sentido de vida.</li>
+    </ul>
+  </div>
+  <div class="card">
+    <h3>&#129504; C&oacute;mo Construir tu Visi&oacute;n de Futuro</h3>
+    <p>La visi&oacute;n de futuro es la imagen mental clara y detallada de c&oacute;mo quieres que sea tu vida en 3, 5 o 10 a&ntilde;os. Es m&aacute;s amplia que una meta: es el "para qu&eacute;" detr&aacute;s de todas tus metas.</p>
+    <div class="highlight">
+      <strong>Ejercicio de visi&oacute;n:</strong> Cierra los ojos e imagina que han pasado 5 a&ntilde;os y tu vida es exactamente como la so&ntilde;aste. &iquest;D&oacute;nde vives? &iquest;Qu&eacute; tipo de trabajo haces? &iquest;C&oacute;mo es tu econom&iacute;a? &iquest;Cu&aacute;l es tu reputaci&oacute;n profesional? Describe esa imagen con el mayor detalle posible.
+    </div>
+    <p>Los pasos para construir tu visi&oacute;n son: primero, proyect&aacute;te libremente sin l&iacute;mites. Luego, filtra por valores. Finalmente, traduce esa visi&oacute;n en metas SMART anuales con acciones semanales.</p>
+  </div>
+  <div class="card">
+    <h3>&#128200; Del Sue&ntilde;o a la Acci&oacute;n: El Puente</h3>
+    <p>El mayor error en el establecimiento de metas es detenerse en la escritura. El sistema completo requiere 4 niveles:</p>
+    <ol>
+      <li><strong>Visi&oacute;n (5-10 a&ntilde;os):</strong> La imagen grande de tu vida ideal.</li>
+      <li><strong>Metas anuales:</strong> Los logros concretos que este a&ntilde;o te acercan a la visi&oacute;n.</li>
+      <li><strong>Proyectos trimestrales:</strong> Los 3-5 proyectos prioritarios de los pr&oacute;ximos 90 d&iacute;as.</li>
+      <li><strong>Acciones semanales:</strong> Las tareas espec&iacute;ficas de esta semana que avanzan los proyectos.</li>
+    </ol>
+    <div class="highlight">
+      <strong>Regla de oro:</strong> Revisa tus metas escritas al menos dos veces al d&iacute;a: al despertar y antes de dormir. Esto programa el subconsciente para buscar oportunidades alineadas con tus objetivos.
+    </div>
+  </div>
+  <div class="nav-links">
+    <span></span>
+    <button class="btn" onclick="showTab('simulacion',document.querySelectorAll('nav button')[1])">Siguiente: Simulaci&oacute;n &#8594;</button>
+  </div>
+</section>
+<!-- TAB 2: SIMULACION - Generador de Meta SMART -->
+<section id="simulacion">
+  <div class="card">
+    <h3>&#127919; Generador de Meta SMART Personal</h3>
+    <p>Completa los campos para construir tu primera meta SMART. El simulador te dar&aacute; retroalimentaci&oacute;n y generar&aacute; tu meta formateada lista para escribir en tu agenda.</p>
+  </div>
+
+  <div class="sim-panel">
+    <div class="sim-label">1. &Aacute;rea de vida</div>
+    <div class="sim-sub">Elige el &aacute;rea donde quieres establecer tu meta prioritaria ahora.</div>
+    <select id="area" onchange="actualizarEjemplo()">
+      <option value="">-- Selecciona un &aacute;rea --</option>
+      <option value="carrera">&#128188; Carrera y negocio</option>
+      <option value="finanzas">&#128176; Finanzas personales</option>
+      <option value="familia">&#10084; Familia y relaciones</option>
+      <option value="salud">&#127942; Salud y energ&iacute;a</option>
+      <option value="educacion">&#128218; Educaci&oacute;n y crecimiento</option>
+      <option value="impacto">&#127758; Impacto social</option>
+    </select>
+    <div id="ejemploArea" style="margin-top:10px;font-size:.85em;color:#b83255;display:none"></div>
+  </div>
+
+  <div class="sim-panel">
+    <div class="sim-label">2. &iquest;Qu&eacute; quieres lograr exactamente? (Espec&iacute;fico)</div>
+    <div class="sim-sub">S&eacute; preciso. Evita frases vagas como "mejorar" o "m&aacute;s". Usa n&uacute;meros y descripciones concretas.</div>
+    <input type="text" id="especifico" placeholder="Ej: Conseguir 3 nuevos clientes de auditor&iacute;a para mi consultor&iacute;a independiente" maxlength="200">
+  </div>
+
+  <div class="sim-panel">
+    <div class="sim-label">3. &iquest;C&oacute;mo vas a medirlo? (Medible)</div>
+    <div class="smart-row">
+      <div class="smart-field">
+        <label>Indicador num&eacute;rico</label>
+        <input type="text" id="indicador" placeholder="Ej: 3 contratos firmados">
+      </div>
+      <div class="smart-field">
+        <label>Frecuencia de revisi&oacute;n</label>
+        <select id="frecuencia">
+          <option value="">-- Selecciona --</option>
+          <option value="diaria">Diaria</option>
+          <option value="semanal">Semanal</option>
+          <option value="mensual">Mensual</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <div class="sim-panel">
+    <div class="sim-label">4. Fecha l&iacute;mite (Con tiempo definido)</div>
+    <div class="sim-sub">Comprometerse con una fecha convierte el deseo en obligaci&oacute;n.</div>
+    <div class="smart-row">
+      <div class="smart-field">
+        <label>Plazo</label>
+        <select id="plazo">
+          <option value="">-- Selecciona --</option>
+          <option value="30">30 d&iacute;as</option>
+          <option value="90">90 d&iacute;as (trimestre)</option>
+          <option value="180">6 meses</option>
+          <option value="365">1 a&ntilde;o</option>
+        </select>
+      </div>
+      <div class="smart-field">
+        <label>Nivel de compromiso (1-10)</label>
+        <select id="compromiso">
+          <option value="">-- Selecciona --</option>
+          <option value="1-4">1-4 (Baja prioridad)</option>
+          <option value="5-7">5-7 (Prioridad media)</option>
+          <option value="8-10">8-10 (Alta prioridad)</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <div class="sim-panel">
+    <div class="sim-label">5. &iquest;Por qu&eacute; esta meta importa para ti? (Relevante)</div>
+    <div class="sim-sub">La motivaci&oacute;n interna es el combustible que sostiene el esfuerzo cuando los obst&aacute;culos aparecen.</div>
+    <textarea id="relevancia" rows="3" placeholder="Ej: Porque quiero independizarme de un solo empleador y construir un patrimonio para mi familia..."></textarea>
+  </div>
+
+  <div style="text-align:center;margin-top:20px">
+    <button class="btn" onclick="generarMeta()">&#127919; Generar mi Meta SMART</button>
+  </div>
+
+  <div class="resultado-box" id="metaResult">
+    <div class="emoji-big">&#127919;</div>
+    <h3 style="font-size:1.3em;margin-bottom:16px">&#10003; Tu Meta SMART generada</h3>
+    <div style="background:rgba(255,255,255,.15);border-radius:10px;padding:16px;text-align:left;line-height:1.8">
+      <div id="metaTexto"></div>
+    </div>
+    <p style="margin-top:16px;font-size:.9em;opacity:.85">&#128204; Copia esta meta y p&eacute;gala en tu agenda o cuaderno de metas. L&eacute;ela en voz alta cada ma&ntilde;ana.</p>
+  </div>
+
+  <div class="nav-links">
+    <button class="btn btn-outline" onclick="showTab('concepto',document.querySelectorAll('nav button')[0])">&#8592; Concepto</button>
+    <button class="btn" onclick="showTab('juego',document.querySelectorAll('nav button')[2])">Mini-juego &#8594;</button>
+  </div>
+</section>
+<!-- TAB 3: MINI-JUEGO -->
+<section id="juego">
+  <div class="card">
+    <h3>&#127922; Trivia: Metas y Visi&oacute;n de Futuro</h3>
+    <p>Pon a prueba tus conocimientos sobre el arte de establecer metas poderosas.</p>
+    <div id="quizArea"></div>
+    <div style="text-align:center;margin-top:20px">
+      <button class="btn" onclick="iniciarQuiz()" id="btnStart">&#9654; Iniciar Quiz</button>
+      <button class="btn btn-outline" onclick="reiniciarQuiz()" id="btnReset" style="display:none">&#8635; Intentar de nuevo</button>
+    </div>
+    <div class="resultado-box" id="quizResult">
+      <div class="emoji-big" id="quizEmoji"></div>
+      <h3 id="quizTitulo" style="font-size:1.4em;margin-bottom:8px"></h3>
+      <p>Respondiste correctamente <strong id="quizCorrectas"></strong> de <strong id="quizTotal"></strong> preguntas</p>
+      <div style="margin-top:12px"><div class="score-bar" style="background:rgba(255,255,255,.3)"><div class="score-fill" id="quizBarra" style="width:0%;background:#fff"></div></div></div>
+    </div>
+  </div>
+  <div class="nav-links">
+    <button class="btn btn-outline" onclick="showTab('simulacion',document.querySelectorAll('nav button')[1])">&#8592; Simulaci&oacute;n</button>
+    <a class="btn" href="modulo2_autoconcepto_confianza.html">&#8592; M&oacute;dulo 2</a>
+  </div>
+</section>
+<script>
+function showTab(id, btn) {
+  document.querySelectorAll('section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  if (btn) btn.classList.add('active');
+  window.scrollTo(0, 0);
+}
+
+const ejemplos = {
+  carrera:'Ej: Conseguir 2 nuevos clientes de consultoria tributaria en 90 dias.',
+  finanzas:'Ej: Ahorrar L. 5,000 mensuales en cuenta de ahorro durante 6 meses.',
+  familia:'Ej: Tener cena familiar sin telefonos los viernes por 3 meses.',
+  salud:'Ej: Caminar 30 minutos diarios, 5 dias a la semana, 60 dias.',
+  educacion:'Ej: Leer 1 libro de finanzas por mes y aplicar 1 idea en mi practica.',
+  impacto:'Ej: Dar 1 charla gratuita de contabilidad para emprendedores este trimestre.'
+};
+
+function actualizarEjemplo() {
+  const area = document.getElementById('area').value;
+  const div = document.getElementById('ejemploArea');
+  if (area && ejemplos[area]) {
+    div.innerHTML = '&#128161; ' + ejemplos[area];
+    div.style.display = 'block';
+  } else {
+    div.style.display = 'none';
+  }
+}
+
+function generarMeta() {
+  const area = document.getElementById('area').value;
+  const especifico = document.getElementById('especifico').value.trim();
+  const indicador = document.getElementById('indicador').value.trim();
+  const frecuencia = document.getElementById('frecuencia').value;
+  const plazo = document.getElementById('plazo').value;
+  const compromiso = document.getElementById('compromiso').value;
+  const relevancia = document.getElementById('relevancia').value.trim();
+  if (!area || !especifico || !indicador || !frecuencia || !plazo || !compromiso || !relevancia) {
+    alert('Por favor completa todos los campos para generar tu meta SMART.');
+    return;
+  }
+  const areas = {carrera:'Carrera y negocio',finanzas:'Finanzas personales',familia:'Familia y relaciones',salud:'Salud y energia',educacion:'Educacion y crecimiento',impacto:'Impacto social'};
+  const plazos = {'30':'30 dias','90':'90 dias (un trimestre)','180':'6 meses','365':'un anio'};
+  const compromisos = {'1-4':'baja prioridad','5-7':'prioridad media','8-10':'alta prioridad - comprometido al maximo'};
+  const ahora = new Date();
+  const fechaFin = new Date(ahora);
+  fechaFin.setDate(fechaFin.getDate() + parseInt(plazo));
+  const opciones = {day:'numeric', month:'long', year:'numeric'};
+  const fechaStr = fechaFin.toLocaleDateString('es-HN', opciones);
+  const metaHtml = '<p><strong>Area:</strong> ' + areas[area] + '</p>' +
+    '<p style="margin-top:8px"><strong>Mi meta:</strong> ' + especifico + '</p>' +
+    '<p style="margin-top:8px"><strong>Indicador:</strong> ' + indicador + ' (revision ' + frecuencia + ')</p>' +
+    '<p style="margin-top:8px"><strong>Fecha limite:</strong> ' + fechaStr + ' (en ' + plazos[plazo] + ')</p>' +
+    '<p style="margin-top:8px"><strong>Compromiso:</strong> ' + compromisos[compromiso] + '</p>' +
+    '<p style="margin-top:8px"><strong>Por que importa:</strong> ' + relevancia + '</p>';
+  document.getElementById('metaTexto').innerHTML = metaHtml;
+  const box = document.getElementById('metaResult');
+  box.classList.add('show');
+  box.scrollIntoView({ behavior: 'smooth', block: 'center' });
+}
+const preguntas = [
+  {pregunta:'Que significa la letra S en el metodo SMART de establecimiento de metas?',opciones:['Sencilla (Simple)','Especifica (Specific)','Sostenible (Sustainable)','Satisfactoria (Satisfying)'],correcta:1,explicacion:'La S en SMART significa Especifica. Una meta especifica responde claramente que, quien, donde y como, evitando la vaguedad que impide la accion concreta.'},
+  {pregunta:'Por que es fundamental definir una fecha limite para una meta?',opciones:['Para cumplir requisitos burocraticos de planificacion','Porque sin fecha limite la meta es solo un deseo sin urgencia real','Para poder monitorear el avance semanal','Porque los plazos motivan el trabajo en equipo'],correcta:1,explicacion:'La fecha limite crea urgencia psicologica. La ley de Parkinson dice que el trabajo se expande para llenar el tiempo disponible: sin limite, la meta se pospone indefinidamente.'},
+  {pregunta:'Cuantas areas de vida se recomiendan para un sistema de metas integrales?',opciones:['2-3 solo las mas importantes','4 trabajo familia dinero y salud','7 carrera finanzas familia salud educacion impacto y proposito','10 o mas para cubrir todos los aspectos'],correcta:2,explicacion:'El sistema de 7 areas de vida asegura el desarrollo integral. Enfocarse solo en 1-2 areas genera desequilibrios que terminan afectando las demas areas de la vida.'},
+  {pregunta:'Con que frecuencia se recomienda revisar las metas escritas para programar el subconsciente?',opciones:['Una vez a la semana en la planificacion semanal','Una vez al mes al hacer la revision mensual','Al menos dos veces al dia al despertar y antes de dormir','Solo cuando se siente desmotivado o estancado'],correcta:2,explicacion:'Revisar las metas dos veces al dia programa el subconsciente. El cerebro durante el suenio y las primeras horas del dia esta mas receptivo a la sugerencia interna.'},
+  {pregunta:'Cual es la diferencia entre una vision de futuro y una meta?',opciones:['No hay diferencia son terminos sinonimos en gestion personal','La vision es el destino global a largo plazo; las metas son los pasos concretos que llevan a esa vision','La vision es profesional; las metas son personales','Las metas son cuantitativas; la vision es solo cualitativa'],correcta:1,explicacion:'La vision es la imagen del futuro ideal a 5-10 anios: el para que profundo. Las metas SMART son los hitos anuales y trimestrales que convierten esa vision en realidad paso a paso.'},
+  {pregunta:'Que falla cometemos al establecer metas cuando nos detenemos solo en escribirlas?',opciones:['Ninguna: escribir las metas es suficiente segun la ciencia','No conectarlas con una vision de largo plazo y no definir acciones semanales concretas','No compartirlas con otras personas para que nos hagan responsables','No clasificarlas por area de vida antes de escribirlas'],correcta:1,explicacion:'El sistema completo requiere 4 niveles: vision, metas anuales, proyectos trimestrales y acciones semanales. Quedarse solo en escribir la meta sin definir los pasos semanales hace que no se ejecute.'}
+];
+let respuestas = [];
+function iniciarQuiz() {
+  respuestas = [];
+  document.getElementById('btnStart').style.display = 'none';
+  document.getElementById('btnReset').style.display = 'inline-block';
+  document.getElementById('quizResult').classList.remove('show');
+  let html = '';
+  preguntas.forEach(function(p,i){
+    html += '<div class="question-card" id="q'+i+'">';
+    html += '<p><span class="badge">'+(i+1)+'</span>'+p.pregunta+'</p>';
+    p.opciones.forEach(function(op,j){
+      html += '<button class="option-btn" onclick="responder('+i+','+j+',this)" id="opt'+i+'_'+j+'">'+op+'</button>';
+    });
+    html += '<div class="feedback" id="fb'+i+'"></div></div>';
+  });
+  document.getElementById('quizArea').innerHTML = html;
+}
+function responder(pregIdx, opIdx, btn) {
+  const p = preguntas[pregIdx];
+  const card = document.getElementById('q'+pregIdx);
+  const fb = document.getElementById('fb'+pregIdx);
+  card.querySelectorAll('.option-btn').forEach(function(b){b.disabled=true;});
+  if (opIdx === p.correcta) {
+    btn.classList.add('correct');
+    fb.className = 'feedback show ok';
+    fb.innerHTML = '&#9989; Correcto! ' + p.explicacion;
+    respuestas[pregIdx] = true;
+  } else {
+    btn.classList.add('wrong');
+    document.getElementById('opt'+pregIdx+'_'+p.correcta).classList.add('correct');
+    fb.className = 'feedback show fail';
+    fb.innerHTML = '&#10060; ' + p.explicacion;
+    respuestas[pregIdx] = false;
+  }
+  if (respuestas.filter(function(r){return r!==undefined;}).length === preguntas.length) {
+    setTimeout(mostrarResultado, 800);
+  }
+}
+function mostrarResultado() {
+  const correctas = respuestas.filter(function(r){return r===true;}).length;
+  const total = preguntas.length;
+  const pct = Math.round((correctas/total)*100);
+  document.getElementById('quizCorrectas').textContent = correctas;
+  document.getElementById('quizTotal').textContent = total;
+  document.getElementById('quizBarra').style.width = pct+'%';
+  let emoji, titulo;
+  if (pct>=83){emoji='&#127881;';titulo='Excelente dominio del tema!';}
+  else if(pct>=50){emoji='&#128077;';titulo='Buen resultado, sigue practicando';}
+  else{emoji='&#128218;';titulo='Repasa el material y vuelve a intentarlo';}
+  document.getElementById('quizEmoji').innerHTML = emoji;
+  document.getElementById('quizTitulo').innerHTML = titulo;
+  const box = document.getElementById('quizResult');
+  box.classList.add('show');
+  box.scrollIntoView({behavior:'smooth',block:'center'});
+}
+function reiniciarQuiz() {
+  document.getElementById('quizArea').innerHTML = '';
+  document.getElementById('quizResult').classList.remove('show');
+  document.getElementById('btnStart').style.display = 'inline-block';
+  document.getElementById('btnReset').style.display = 'none';
+}
+</script>
+<footer>Juan Carlos Reyes &middot; juancreyes.hn@gmail.com</footer>
+</body>
+</html>
