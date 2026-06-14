@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Habilidades Blandas | Módulo 2 – Autoconcepto y Confianza</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',sans-serif;background:#f5f0f5;color:#333;font-size:16px}
+header{background:linear-gradient(135deg,#8b1a3a,#b83255);color:#fff;padding:18px 20px;text-align:center}
+header h1{font-size:1.1em;font-weight:600;letter-spacing:1px;text-transform:uppercase;opacity:.85}
+header h2{font-size:1.6em;font-weight:700;margin-top:4px}
+nav{display:flex;justify-content:center;gap:8px;padding:12px 16px;background:#fff;border-bottom:2px solid #e8d0d8;flex-wrap:wrap}
+nav button{padding:10px 18px;border:2px solid #b83255;border-radius:24px;background:#fff;color:#b83255;font-weight:600;font-size:.9em;cursor:pointer;transition:all .2s;min-height:44px}
+nav button.active,nav button:hover{background:#b83255;color:#fff}
+section{display:none;max-width:860px;margin:24px auto;padding:0 16px 40px}
+section.active{display:block}
+.card{background:#fff;border-radius:12px;padding:24px;margin-bottom:20px;box-shadow:0 2px 8px rgba(0,0,0,.08)}
+.card h3{color:#8b1a3a;font-size:1.2em;margin-bottom:14px;border-bottom:2px solid #f0d0da;padding-bottom:8px}
+.card p,.card li{line-height:1.7;margin-bottom:8px}
+.card ul,.card ol{padding-left:20px}
+.highlight{background:#fdf0f4;border-left:4px solid #b83255;padding:12px 16px;border-radius:0 8px 8px 0;margin:12px 0}
+.btn{display:inline-block;padding:12px 28px;background:#b83255;color:#fff;border:none;border-radius:8px;font-size:1em;font-weight:600;cursor:pointer;min-height:48px;min-width:120px;margin:6px 4px;transition:background .2s}
+.btn:hover{background:#8b1a3a}
+.btn-outline{background:#fff;color:#b83255;border:2px solid #b83255}
+.btn-outline:hover{background:#fdf0f4}
+.badge{display:inline-block;background:#b83255;color:#fff;border-radius:50%;width:28px;height:28px;text-align:center;line-height:28px;font-weight:700;margin-right:8px;font-size:.9em}
+.sim-panel{background:#fdf8f9;border:1.5px solid #e8c0cc;border-radius:10px;padding:20px;margin:14px 0}
+.sim-label{font-weight:600;color:#8b1a3a;font-size:.95em;margin-bottom:10px}
+.choice-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:8px}
+.choice-btn{padding:14px 12px;border:2px solid #e8c0cc;border-radius:10px;background:#fff;color:#555;font-size:.9em;cursor:pointer;text-align:left;transition:all .2s;min-height:48px;line-height:1.4}
+.choice-btn:hover{border-color:#b83255;background:#fdf0f4}
+.choice-btn.selected{border-color:#b83255;background:#b83255;color:#fff}
+.choice-btn.disabled{cursor:default;opacity:.7}
+.meter{display:flex;align-items:center;gap:10px;margin:8px 0}
+.meter-bar{flex:1;background:#f0d0da;border-radius:6px;height:16px;overflow:hidden}
+.meter-fill{height:100%;border-radius:6px;background:linear-gradient(90deg,#b83255,#e0607a);transition:width .5s}
+.meter-val{font-weight:700;color:#b83255;min-width:40px;text-align:right;font-size:.9em}
+.resultado-box{background:linear-gradient(135deg,#8b1a3a,#b83255);color:#fff;border-radius:12px;padding:24px;text-align:center;margin-top:16px;display:none}
+.resultado-box.show{display:block}
+.emoji-big{font-size:3em;margin-bottom:8px}
+.nav-links{display:flex;justify-content:space-between;margin-top:20px;flex-wrap:wrap;gap:10px}
+.question-card{background:#fdf8f9;border:1px solid #e8c0cc;border-radius:10px;padding:20px;margin-bottom:16px}
+.option-btn{display:block;width:100%;text-align:left;padding:12px 16px;margin:6px 0;background:#fff;border:1.5px solid #ddd;border-radius:8px;font-size:.95em;cursor:pointer;transition:all .2s;min-height:48px}
+.option-btn:hover{border-color:#b83255;background:#fdf0f4}
+.option-btn.correct{background:#d4edda;border-color:#28a745;color:#155724}
+.option-btn.wrong{background:#f8d7da;border-color:#dc3545;color:#721c24}
+.feedback{padding:10px 14px;border-radius:8px;margin-top:8px;font-weight:600;display:none}
+.feedback.show{display:block}
+.feedback.ok{background:#d4edda;color:#155724}
+.feedback.fail{background:#f8d7da;color:#721c24}
+.score-bar{background:#f0d0da;border-radius:8px;height:12px;margin:8px 0}
+.score-fill{background:linear-gradient(90deg,#b83255,#e0607a);height:100%;border-radius:8px;transition:width .6s}
+footer{text-align:center;padding:20px;color:#999;font-size:.85em;border-top:1px solid #e0d0d5;margin-top:20px}
+@media(max-width:600px){header h2{font-size:1.3em}nav button{font-size:.82em;padding:9px 14px}.choice-grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<header>
+  <h1>HABILIDADES BLANDAS &middot; M&Oacute;DULO 2</h1>
+  <h2>Autoconcepto y Confianza</h2>
+</header>
+<nav>
+  <button class="active" onclick="showTab('concepto',this)">&#128218; Concepto</button>
+  <button onclick="showTab('simulacion',this)">&#129504; Simulaci&oacute;n</button>
+  <button onclick="showTab('juego',this)">&#127922; Mini-juego</button>
+</nav>
+
+<!-- TAB 1: CONCEPTO -->
+<section id="concepto" class="active">
+  <div class="card">
+    <h3>&#127775; &iquest;Qu&eacute; es el Autoconcepto?</h3>
+    <p>El autoconcepto es la imagen mental que tienes de ti mismo: c&oacute;mo te ves, en qu&eacute; crees que eres bueno, cu&aacute;les son tus l&iacute;mites y qu&eacute; mereces en la vida. Es el "programa" central que dirige todos tus comportamientos y decisiones.</p>
+    <div class="highlight">
+      <strong>Clave:</strong> No actuamos seg&uacute;n c&oacute;mo somos realmente, sino seg&uacute;n c&oacute;mo <em>creemos</em> que somos. Cambiar el autoconcepto cambia los resultados.
+    </div>
+    <p>El autoconcepto se forma desde la infancia a trav&eacute;s de experiencias, comentarios de figuras de autoridad y comparaciones con otros. La buena noticia: puede reprogramarse conscientemente a cualquier edad.</p>
+  </div>
+  <div class="card">
+    <h3>&#129504; Los 3 Componentes del Autoconcepto</h3>
+    <ol>
+      <li><strong>Autoimagen</strong> — C&oacute;mo te ves a ti mismo. Si te ves como una persona organizada, actuamos organizadamente. Si te ves como "alguien que siempre llega tarde", seguir&aacute;s llegando tarde hasta que cambies esa imagen interna.</li>
+      <li><strong>Autoestima</strong> — Cu&aacute;nto te valoras y respetas. Una alta autoestima genera resiliencia, capacidad de establecer l&iacute;mites saludables y bienestar emocional. La baja autoestima genera dependencia de la aprobaci&oacute;n externa.</li>
+      <li><strong>Autoeficacia</strong> — La confianza en tu capacidad para lograr resultados espec&iacute;ficos. Desarrollada por Albert Bandura: las personas con alta autoeficacia persisten ante los obst&aacute;culos; las de baja autoeficacia se rinden f&aacute;cilmente.</li>
+    </ol>
+  </div>
+  <div class="card">
+    <h3>&#128161; C&oacute;mo se Forma la Confianza</h3>
+    <p>La confianza no es un rasgo de personalidad fijo: es una <strong>habilidad que se desarrolla</strong> mediante experiencias de &eacute;xito acumuladas. El ciclo virtuoso de la confianza funciona as&iacute;:</p>
+    <div class="highlight">
+      <strong>Ciclo:</strong> Acci&oacute;n peque&ntilde;a &rarr; &Eacute;xito peque&ntilde;o &rarr; Confianza mayor &rarr; Acci&oacute;n m&aacute;s grande &rarr; &Eacute;xito mayor &rarr; Confianza a&uacute;n mayor...
+    </div>
+    <ul>
+      <li><strong>Actuaci&oacute;n directa:</strong> Hacer la tarea temida es la forma m&aacute;s r&aacute;pida de ganar confianza. "Act as if" &mdash; act&uacute;a como si ya fueras la persona que quieres ser.</li>
+      <li><strong>Modelado vicario:</strong> Ver a personas similares a ti tener &eacute;xito aumenta tu confianza propia. "Si ellos pudieron, yo tambi&eacute;n puedo."</li>
+      <li><strong>Persuasi&oacute;n social:</strong> El apoyo y aliento de personas que respetas fortalece la confianza, especialmente en etapas tempranas de aprendizaje.</li>
+      <li><strong>Estados fisiol&oacute;gicos:</strong> Tu postura, respiraci&oacute;n y lenguaje corporal afectan directamente tu nivel de confianza. La postura de poder (erguida, expansiva) activa hormonas de confianza.</li>
+    </ul>
+  </div>
+  <div class="card">
+    <h3>&#127919; Estrategias para Fortalecer el Autoconcepto</h3>
+    <ul>
+      <li><strong>Di&aacute;logo interno positivo:</strong> Reemplaza frases como "No puedo" por "A&uacute;n no domino esto, pero estoy aprendiendo." El cerebro responde literalmente a las palabras que te dices.</li>
+      <li><strong>Lista de logros:</strong> Escribe 25 &eacute;xitos de tu vida, desde los m&aacute;s peque&ntilde;os. R&eacute;lelos cuando la confianza flaquee. Recuerda: ya has superado dificultades antes.</li>
+      <li><strong>Zona de expansi&oacute;n:</strong> Haz algo inc&oacute;modo pero manejable cada semana. Cada peque&ntilde;o reto superado amplia tu zona de confort y refuerza la imagen de "persona capaz."</li>
+      <li><strong>Cuida tu entorno:</strong> R&oacute;dese de personas que te eleven, no que te disminuyan. Las cr&iacute;ticas destructivas frecuentes erosionan el autoconcepto, especialmente en ni&ntilde;os y adolescentes.</li>
+      <li><strong>Celebra el proceso:</strong> Reconoce el progreso, no solo el resultado final. "Hoy fui constante" es tan valioso como "hoy termin&eacute; el proyecto."</li>
+    </ul>
+  </div>
+  <div class="card">
+    <h3>&#128200; Autoconcepto y Rendimiento Profesional</h3>
+    <p>Investigaciones en psicolog&iacute;a organizacional muestran que el autoconcepto profesional es uno de los mejores predictores del &eacute;xito laboral, incluso por encima del coeficiente intelectual.</p>
+    <div class="highlight">
+      <strong>Para el profesional independiente:</strong> Tu autoconcepto como contador, consultor o docente determina los precios que cobras, los clientes que atraes y las oportunidades que reconoces. Quienes se ven como expertos de alto valor act&uacute;an como tales.
+    </div>
+  </div>
+  <div class="nav-links">
+    <span></span>
+    <button class="btn" onclick="showTab('simulacion',document.querySelectorAll('nav button')[1])">Siguiente: Simulaci&oacute;n &#8594;</button>
+  </div>
+</section>
+<!-- TAB 2: SIMULACION -->
+<section id="simulacion">
+  <div class="card">
+    <h3>&#129504; Simulador: Construye tu Autoconcepto Profesional</h3>
+    <p>Responde estas situaciones cotidianas. Seg&uacute;n tus respuestas, descubrir&aacute;s tu perfil de autoconcepto y confianza actuales, con recomendaciones personalizadas.</p>
+  </div>
+
+  <!-- Situaci&oacute;n 1 -->
+  <div class="sim-panel" id="sit1">
+    <div class="sim-label">&#128203; Situaci&oacute;n 1: Un cliente potencial te pregunta cu&aacute;nto cobras por una auditor&iacute;a. T&uacute; respondes:</div>
+    <div class="choice-grid">
+      <button class="choice-btn" onclick="elegir(1,'A',this)">A) Dices un precio bajo enseguida, por miedo a que diga que es mucho</button>
+      <button class="choice-btn" onclick="elegir(1,'B',this)">B) Preguntas qu&eacute; presupuesto tiene &eacute;l antes de decir nada</button>
+      <button class="choice-btn" onclick="elegir(1,'C',this)">C) Presentas tu propuesta de valor y luego dices el precio con seguridad</button>
+      <button class="choice-btn" onclick="elegir(1,'D',this)">D) Dices que lo piensas y le env&iacute;as el precio por escrito m&aacute;s tarde</button>
+    </div>
+  </div>
+
+  <!-- Situaci&oacute;n 2 -->
+  <div class="sim-panel" id="sit2">
+    <div class="sim-label">&#128483; Situaci&oacute;n 2: En una reuni&oacute;n de trabajo, tienes una idea que crees muy buena. &iquest;Qu&eacute; haces?</div>
+    <div class="choice-grid">
+      <button class="choice-btn" onclick="elegir(2,'A',this)">A) No la dices por miedo al ridículo o a ser criticado</button>
+      <button class="choice-btn" onclick="elegir(2,'B',this)">B) Esperas que alguien m&aacute;s la diga primero para apoyarla</button>
+      <button class="choice-btn" onclick="elegir(2,'C',this)">C) La planteas como pregunta: "&iquest;Han considerado...?"</button>
+      <button class="choice-btn" onclick="elegir(2,'D',this)">D) La presentas directamente con confianza y datos que la respaldan</button>
+    </div>
+  </div>
+
+  <!-- Situaci&oacute;n 3 -->
+  <div class="sim-panel" id="sit3">
+    <div class="sim-label">&#128269; Situaci&oacute;n 3: Cometes un error en un informe que ya enviaste al cliente. &iquest;C&oacute;mo reaccionas?</div>
+    <div class="choice-grid">
+      <button class="choice-btn" onclick="elegir(3,'A',this)">A) Te culpas severamente y te cuesta mucho seguir adelante ese d&iacute;a</button>
+      <button class="choice-btn" onclick="elegir(3,'B',this)">B) Esperas a ver si el cliente lo nota antes de actuar</button>
+      <button class="choice-btn" onclick="elegir(3,'C',this)">C) Te contactas enseguida, asumes la responsabilidad y propones la correcci&oacute;n</button>
+      <button class="choice-btn" onclick="elegir(3,'D',this)">D) Lo corriges internamente pero no se lo mencionas directamente al cliente</button>
+    </div>
+  </div>
+
+  <!-- Situaci&oacute;n 4 -->
+  <div class="sim-panel" id="sit4">
+    <div class="sim-label">&#127891; Situaci&oacute;n 4: Te invitan a dar una charla sobre NIIF para un grupo de empresarios. Jam&aacute;s has dado charlas formales. &iquest;Qu&eacute; haces?</div>
+    <div class="choice-grid">
+      <button class="choice-btn" onclick="elegir(4,'A',this)">A) Rechazas: "No soy lo suficientemente experto para eso"</button>
+      <button class="choice-btn" onclick="elegir(4,'B',this)">B) Aceptas pero te angustias durante semanas pensando que fracasar&aacute;s</button>
+      <button class="choice-btn" onclick="elegir(4,'C',this)">C) Aceptas, te preparas bien y usas el nerviosismo como energ&iacute;a positiva</button>
+      <button class="choice-btn" onclick="elegir(4,'D',this)">D) Pides que inviten a alguien con m&aacute;s experiencia y t&uacute; apoyas desde atr&aacute;s</button>
+    </div>
+  </div>
+
+  <div style="text-align:center;margin-top:20px">
+    <button class="btn" onclick="calcularPerfil()" id="btnPerfil" style="display:none">&#128269; Ver mi perfil de confianza</button>
+  </div>
+
+  <div class="resultado-box" id="perfilResult">
+    <div class="emoji-big" id="perfilEmoji">&#129504;</div>
+    <h3 id="perfilTitulo" style="font-size:1.3em;margin-bottom:10px"></h3>
+    <p id="perfilTexto" style="opacity:.9;line-height:1.6;margin-bottom:12px"></p>
+    <div style="background:rgba(255,255,255,.15);border-radius:8px;padding:14px;text-align:left">
+      <strong>&#128161; Tu pr&oacute;ximo paso concreto:</strong><br>
+      <span id="perfilAccion" style="opacity:.9"></span>
+    </div>
+  </div>
+
+  <div class="nav-links">
+    <button class="btn btn-outline" onclick="showTab('concepto',document.querySelectorAll('nav button')[0])">&#8592; Concepto</button>
+    <button class="btn" onclick="showTab('juego',document.querySelectorAll('nav button')[2])">Mini-juego &#8594;</button>
+  </div>
+</section>
+<!-- TAB 3: MINI-JUEGO -->
+<section id="juego">
+  <div class="card">
+    <h3>&#127922; Trivia: Autoconcepto y Confianza</h3>
+    <p>Pon a prueba tus conocimientos. Selecciona la respuesta correcta en cada pregunta.</p>
+    <div id="quizArea"></div>
+    <div style="text-align:center;margin-top:20px">
+      <button class="btn" onclick="iniciarQuiz()" id="btnStart">&#9654; Iniciar Quiz</button>
+      <button class="btn btn-outline" onclick="reiniciarQuiz()" id="btnReset" style="display:none">&#8635; Intentar de nuevo</button>
+    </div>
+    <div class="resultado-box" id="quizResult">
+      <div class="emoji-big" id="quizEmoji"></div>
+      <h3 id="quizTitulo" style="font-size:1.4em;margin-bottom:8px"></h3>
+      <p>Respondiste correctamente <strong id="quizCorrectas"></strong> de <strong id="quizTotal"></strong> preguntas</p>
+      <div style="margin-top:12px"><div class="score-bar" style="background:rgba(255,255,255,.3)"><div class="score-fill" id="quizBarra" style="width:0%;background:#fff"></div></div></div>
+    </div>
+  </div>
+  <div class="nav-links">
+    <button class="btn btn-outline" onclick="showTab('simulacion',document.querySelectorAll('nav button')[1])">&#8592; Simulaci&oacute;n</button>
+    <a class="btn" href="modulo1_psicologia_exito.html">&#8592; M&oacute;dulo 1</a>
+  </div>
+</section>
+
+<script>
+function showTab(id, btn) {
+  document.querySelectorAll('section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  if (btn) btn.classList.add('active');
+  window.scrollTo(0, 0);
+}
+
+// SIMULACION
+const respuestasSim = {};
+const puntajeOpciones = {A:1, B:2, C:4, D:3};
+
+function elegir(num, letra, btn) {
+  const panel = document.getElementById('sit' + num);
+  panel.querySelectorAll('.choice-btn').forEach(b => {
+    b.classList.remove('selected');
+    b.classList.add('disabled');
+    b.onclick = null;
+  });
+  btn.classList.add('selected');
+  respuestasSim[num] = letra;
+  if (Object.keys(respuestasSim).length === 4) {
+    document.getElementById('btnPerfil').style.display = 'inline-block';
+  }
+}
+
+function calcularPerfil() {
+  const total = Object.values(respuestasSim).reduce((s, l) => s + puntajeOpciones[l], 0);
+  const box = document.getElementById('perfilResult');
+  let emoji, titulo, texto, accion;
+  if (total <= 8) {
+    emoji = '&#127807;';
+    titulo = 'Autoconcepto en desarrollo &ndash; Punto de partida prometedor';
+    texto = 'Tu confianza a&uacute;n est&aacute; creciendo. Es muy com&uacute;n sentir inseguridad, especialmente en contextos nuevos. La clave est&aacute; en tomar peque&ntilde;as acciones valientes cada d&iacute;a y documentar tus logros.';
+    accion = 'Esta semana: Escribe 10 &eacute;xitos profesionales de tu vida (por peque&ntilde;os que sean). L&eacute;elos en voz alta cada ma&ntilde;ana durante 7 d&iacute;as.';
+  } else if (total <= 13) {
+    emoji = '&#127810;';
+    titulo = 'Confianza creciente &ndash; Vas por buen camino';
+    texto = 'Tienes una base s&oacute;lida de autoconcepto en algunas &aacute;reas, pero a&uacute;n hay situaciones donde la duda te frena. Con pr&aacute;ctica deliberada puedes consolidar una confianza genuina y consistente.';
+    accion = 'Esta semana: Identifica una situaci&oacute;n que normalmente evitas por inseguridad y enfr&eacute;ntala conscientemente. Obs&eacute;rvate: el miedo disminuye con la acci&oacute;n.';
+  } else {
+    emoji = '&#128081;';
+    titulo = '&iexcl;Autoconcepto s&oacute;lido! &ndash; Confianza bien fundamentada';
+    texto = 'Tienes un autoconcepto positivo y una confianza basada en competencia real. Enfrentas los retos con responsabilidad y no te paraliza el miedo al error. Tu pr&oacute;ximo nivel es ayudar a otros a desarrollar esta misma confianza.';
+    accion = 'Tu pr&oacute;ximo reto: Mentoriza a alguien en tu &aacute;rea o comparte tu conocimiento p&uacute;blicamente. Ense&ntilde;ar refuerza y profundiza la confianza propia.';
+  }
+  document.getElementById('perfilEmoji').innerHTML = emoji;
+  document.getElementById('perfilTitulo').innerHTML = titulo;
+  document.getElementById('perfilTexto').innerHTML = texto;
+  document.getElementById('perfilAccion').innerHTML = accion;
+  box.classList.add('show');
+  box.scrollIntoView({ behavior: 'smooth', block: 'center' });
+}
+
+// QUIZ
+const preguntas = [
+  {
+    pregunta: '&iquest;Cu&aacute;l es la definici&oacute;n m&aacute;s precisa del autoconcepto?',
+    opciones: ['La opini&oacute;n que los dem&aacute;s tienen de nosotros', 'La imagen mental que tenemos de nosotros mismos y nuestras capacidades', 'El nivel de inteligencia emocional medido por tests', 'La suma de nuestros logros acad&eacute;micos y profesionales'],
+    correcta: 1,
+    explicacion: 'El autoconcepto es la imagen mental interna de uno mismo: c&oacute;mo nos vemos, qu&eacute; creemos merecer y qu&eacute; somos capaces de lograr. No depende de la opini&oacute;n externa.'
+  },
+  {
+    pregunta: 'Seg&uacute;n la psicolog&iacute;a del &eacute;xito, &iquest;cu&aacute;l es la forma m&aacute;s efectiva de ganar confianza en una habilidad nueva?',
+    opciones: ['Leer libros sobre el tema hasta sentirse preparado', 'Esperar a tener la experiencia suficiente antes de actuar', 'Practicar directamente la habilidad, incluso con incomodidad inicial', 'Observar a expertos hasta sentirse listo'],
+    correcta: 2,
+    explicacion: 'La acci&oacute;n directa es la fuente m&aacute;s poderosa de confianza. La confianza no viene antes de la acci&oacute;n; generalmente viene despu&eacute;s de ella.'
+  },
+  {
+    pregunta: '&iquest;Qu&eacute; es la "autoeficacia" seg&uacute;n Albert Bandura?',
+    opciones: ['La capacidad de completar tareas sin ayuda de otros', 'La creencia en la propia capacidad para lograr resultados espec&iacute;ficos', 'El nivel de autonomía financiera de una persona', 'La habilidad para automotivarse sin est&iacute;mulos externos'],
+    correcta: 1,
+    explicacion: 'La autoeficacia es la creencia en tu propia capacidad para ejecutar comportamientos necesarios para producir resultados espec&iacute;ficos. Es diferente de la autoestima general.'
+  },
+  {
+    pregunta: 'Una persona tiene baja autoestima cuando...',
+    opciones: ['Trabaja muchas horas al d&iacute;a', 'Depende principalmente de la aprobaci&oacute;n externa para sentirse bien', 'Tiene altos est&aacute;ndares de calidad en su trabajo', 'Prefiere trabajar sola en vez de en equipo'],
+    correcta: 1,
+    explicacion: 'La baja autoestima se caracteriza por la necesidad excesiva de validaci&oacute;n externa. La persona siente que su valor depende de lo que otros piensen, lo que genera inseguridad y ansiedad.'
+  },
+  {
+    pregunta: '&iquest;Qu&eacute; efecto tiene adoptar una postura corporal erguida y expansiva sobre la confianza?',
+    opciones: ['Ning&uacute;n efecto: la confianza es puramente mental', 'Disminuye el cortisol (hormona del estr&eacute;s) y aumenta la testosterona, generando mayor confianza', 'S&oacute;lo afecta c&oacute;mo nos perciben los dem&aacute;s, no c&oacute;mo nos sentimos', 'Solo funciona si ya se tiene alta autoestima previa'],
+    correcta: 1,
+    explicacion: 'Investigaciones en psicolog&iacute;a social muestran que la postura corporal afecta directamente nuestra bioqu&iacute;mica. Las posturas de poder reducen el cortisol y aumentan la testosterona, generando sensaciones reales de confianza.'
+  },
+  {
+    pregunta: 'Para un profesional independiente como un contador consultor, &iquest;qu&eacute; impacto tiene el autoconcepto profesional en su negocio?',
+    opciones: ['Ning&uacute;no: el precio lo fija el mercado, no la autopercepci&oacute;n', 'Determina los precios que cobra, los clientes que atrae y las oportunidades que reconoce', 'Solo afecta la presentaci&oacute;n personal en reuniones', 'Impacta solo la velocidad con que trabaja, no los resultados econ&oacute;micos'],
+    correcta: 1,
+    explicacion: 'El autoconcepto profesional es determinante: quienes se ven como expertos de alto valor cobran m&aacute;s, atraen mejores clientes y se posicionan diferente en el mercado. La tarifa que cobras refleja c&oacute;mo te ves a ti mismo.'
+  }
+];
+
+let respuestas = [];
+
+function iniciarQuiz() {
+  respuestas = [];
+  document.getElementById('btnStart').style.display = 'none';
+  document.getElementById('btnReset').style.display = 'inline-block';
+  document.getElementById('quizResult').classList.remove('show');
+  let html = '';
+  preguntas.forEach((p, i) => {
+    html += '<div class="question-card" id="q' + i + '">';
+    html += '<p><span class="badge">' + (i+1) + '</span>' + p.pregunta + '</p>';
+    p.opciones.forEach((op, j) => {
+      html += '<button class="option-btn" onclick="responder(' + i + ',' + j + ',this)" id="opt' + i + '_' + j + '">' + op + '</button>';
+    });
+    html += '<div class="feedback" id="fb' + i + '"></div></div>';
+  });
+  document.getElementById('quizArea').innerHTML = html;
+}
+
+function responder(pregIdx, opIdx, btn) {
+  const p = preguntas[pregIdx];
+  const card = document.getElementById('q' + pregIdx);
+  const fb = document.getElementById('fb' + pregIdx);
+  card.querySelectorAll('.option-btn').forEach(b => b.disabled = true);
+  if (opIdx === p.correcta) {
+    btn.classList.add('correct');
+    fb.className = 'feedback show ok';
+    fb.innerHTML = '&#9989; &iexcl;Correcto! ' + p.explicacion;
+    respuestas[pregIdx] = true;
+  } else {
+    btn.classList.add('wrong');
+    document.getElementById('opt' + pregIdx + '_' + p.correcta).classList.add('correct');
+    fb.className = 'feedback show fail';
+    fb.innerHTML = '&#10060; ' + p.explicacion;
+    respuestas[pregIdx] = false;
+  }
+  if (respuestas.filter(r => r !== undefined).length === preguntas.length) {
+    setTimeout(mostrarResultado, 800);
+  }
+}
+
+function mostrarResultado() {
+  const correctas = respuestas.filter(r => r === true).length;
+  const total = preguntas.length;
+  const pct = Math.round((correctas / total) * 100);
+  const box = document.getElementById('quizResult');
+  document.getElementById('quizCorrectas').textContent = correctas;
+  document.getElementById('quizTotal').textContent = total;
+  document.getElementById('quizBarra').style.width = pct + '%';
+  let emoji, titulo;
+  if (pct >= 83) { emoji = '&#127881;'; titulo = '&iexcl;Excelente dominio del tema!'; }
+  else if (pct >= 50) { emoji = '&#128077;'; titulo = 'Buen resultado &ndash; sigue practicando'; }
+  else { emoji = '&#128218;'; titulo = 'Repasa el material y vuelve a intentarlo'; }
+  document.getElementById('quizEmoji').innerHTML = emoji;
+  document.getElementById('quizTitulo').innerHTML = titulo;
+  box.classList.add('show');
+  box.scrollIntoView({ behavior: 'smooth', block: 'center' });
+}
+
+function reiniciarQuiz() {
+  document.getElementById('quizArea').innerHTML = '';
+  document.getElementById('quizResult').classList.remove('show');
+  document.getElementById('btnStart').style.display = 'inline-block';
+  document.getElementById('btnReset').style.display = 'none';
+}
+</script>
+
+<footer>Juan Carlos Reyes &middot; juancreyes.hn@gmail.com</footer>
+</body>
+</html>
