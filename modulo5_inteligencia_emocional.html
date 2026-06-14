@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Habilidades Blandas | Módulo 5 – Inteligencia Emocional</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',Arial,sans-serif;background:#f5f0f5;color:#2d2d2d;font-size:16px}
+header{background:linear-gradient(135deg,#8b1a3a 0%,#b83255 100%);color:#fff;padding:20px;text-align:center}
+header small{display:block;font-size:13px;letter-spacing:2px;opacity:.85;text-transform:uppercase}
+header h1{font-size:1.5rem;margin-top:4px}
+nav{display:flex;background:#6d1430;overflow-x:auto}
+nav button{flex:1;min-width:110px;padding:14px 10px;background:none;border:none;color:#f5c6d3;font-size:15px;cursor:pointer;border-bottom:3px solid transparent;transition:all .2s;white-space:nowrap}
+nav button.active,nav button:hover{color:#fff;border-bottom-color:#f7b2c4;background:rgba(255,255,255,.08)}
+.section{display:none;padding:20px;max-width:900px;margin:0 auto}
+.section.active{display:block}
+.card{background:#fff;border-radius:12px;padding:20px;margin-bottom:16px;box-shadow:0 2px 8px rgba(0,0,0,.07)}
+.card h3{color:#8b1a3a;font-size:1.1rem;margin-bottom:8px}
+.card p{line-height:1.7;color:#444}
+.card ul{padding-left:20px;line-height:1.9;color:#444}
+.badge{display:inline-block;background:#f5e6ea;color:#8b1a3a;border-radius:20px;padding:4px 12px;font-size:13px;font-weight:600;margin:4px 4px 4px 0}
+/* Simulación */
+.sim-area{background:#fff;border-radius:12px;padding:24px;box-shadow:0 2px 8px rgba(0,0,0,.07);margin-bottom:16px}
+.sim-area h3{color:#8b1a3a;font-size:1.1rem;margin-bottom:16px}
+.emo-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin-bottom:20px}
+.emo-btn{padding:14px 8px;border:2px solid #e0c8d0;border-radius:10px;background:#fff;font-size:14px;cursor:pointer;text-align:center;transition:all .2s;line-height:1.4}
+.emo-btn:hover,.emo-btn.selected{background:#f5e6ea;border-color:#b83255;color:#8b1a3a;font-weight:600}
+.emo-name{display:block;font-size:1.3rem;margin-bottom:4px}
+.response-box{background:#f5e6ea;border-left:4px solid #b83255;padding:16px;border-radius:8px;margin-top:16px;display:none}
+.response-box h4{color:#8b1a3a;margin-bottom:8px}
+.response-box p{color:#444;line-height:1.6}
+.strategy-list{margin-top:10px;padding-left:18px}
+.strategy-list li{margin-bottom:6px;color:#555;line-height:1.5}
+/* Regulación emocional */
+.regula-steps{display:flex;flex-direction:column;gap:10px}
+.step-item{display:flex;align-items:flex-start;gap:12px;background:#fdf0f4;border-radius:10px;padding:14px}
+.step-num{background:#b83255;color:#fff;border-radius:50%;width:32px;height:32px;min-width:32px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px}
+.step-text{line-height:1.5;color:#444;font-size:14px}
+.step-text strong{color:#8b1a3a}
+/* Mini-juego */
+.quiz-box{background:#fff;border-radius:12px;padding:24px;box-shadow:0 2px 8px rgba(0,0,0,.07)}
+.quiz-box h3{color:#8b1a3a;font-size:1.1rem;margin-bottom:6px}
+.quiz-progress{font-size:13px;color:#888;margin-bottom:16px}
+.quiz-q{font-size:1rem;font-weight:600;margin-bottom:16px;line-height:1.5;color:#2d2d2d}
+.quiz-opts{display:flex;flex-direction:column;gap:10px;margin-bottom:16px}
+.quiz-opts button{padding:13px 16px;border:2px solid #ddd;border-radius:8px;background:#fff;font-size:15px;cursor:pointer;text-align:left;transition:all .2s;line-height:1.3}
+.quiz-opts button:hover{border-color:#b83255;background:#f9f0f3}
+.quiz-opts button.correct{background:#d4edda;border-color:#28a745;color:#155724}
+.quiz-opts button.wrong{background:#f8d7da;border-color:#dc3545;color:#721c24}
+.quiz-feedback{display:none;padding:12px 16px;border-radius:8px;margin-bottom:14px;font-size:14px;line-height:1.5}
+.quiz-feedback.correct{background:#d4edda;color:#155724}
+.quiz-feedback.wrong{background:#f8d7da;color:#721c24}
+.quiz-next{padding:12px 28px;background:#b83255;color:#fff;border:none;border-radius:8px;font-size:15px;cursor:pointer;display:none}
+.quiz-next:hover{background:#8b1a3a}
+.quiz-result{display:none;text-align:center;padding:20px}
+.quiz-result .score{font-size:2.5rem;font-weight:700;color:#b83255}
+.quiz-result p{color:#555;margin-top:8px;font-size:1rem}
+.quiz-result button{margin-top:16px;padding:12px 28px;background:#b83255;color:#fff;border:none;border-radius:8px;font-size:15px;cursor:pointer}
+footer{text-align:center;padding:20px;color:#888;font-size:13px;margin-top:20px}
+@media(max-width:600px){header h1{font-size:1.2rem}nav button{font-size:13px;padding:12px 8px}.emo-grid{grid-template-columns:repeat(2,1fr)}}
+</style>
+</head>
+<body>
+<header>
+  <small>Habilidades Blandas · Módulo 5 · Bloque 2</small>
+  <h1>Inteligencia Emocional</h1>
+</header>
+<nav>
+  <button class="active" onclick="showTab('concepto',this)">📖 Concepto</button>
+  <button onclick="showTab('simulacion',this)">🎭 Regulación</button>
+  <button onclick="showTab('juego',this)">🎯 Mini-juego</button>
+</nav>
+
+<div id="concepto" class="section active">
+  <div class="card">
+    <h3>¿Qué es la Inteligencia Emocional?</h3>
+    <p>La inteligencia emocional (IE) es la capacidad de identificar, comprender y gestionar nuestras propias emociones y las de los demás de forma efectiva. A diferencia del coeficiente intelectual (CI), la IE se puede desarrollar y fortalecer con práctica consciente.</p>
+    <p style="margin-top:10px">Investigaciones muestran que las personas con alta IE logran mejores resultados laborales, relaciones más sólidas y mayor bienestar personal que aquellas que solo tienen habilidades técnicas.</p>
+  </div>
+  <div class="card">
+    <h3>Los 5 Componentes Clave</h3>
+    <ul>
+      <li><strong>Autoconciencia:</strong> Reconocer y entender tus propias emociones en tiempo real.</li>
+      <li><strong>Autorregulación:</strong> Controlar impulsos y reorientar emociones disruptivas.</li>
+      <li><strong>Motivación intrínseca:</strong> Actuar por metas internas, no solo por recompensas externas.</li>
+      <li><strong>Empatía:</strong> Comprender las emociones de otras personas y responder apropiadamente.</li>
+      <li><strong>Habilidades sociales:</strong> Gestionar relaciones y construir redes de manera efectiva.</li>
+    </ul>
+  </div>
+  <div class="card">
+    <h3>Por Qué Importa en el Trabajo</h3>
+    <p>En entornos profesionales, la IE determina cómo manejamos las presiones, resolvemos conflictos y lideramos equipos. Un contador con alta IE comunica resultados financieros complejos con claridad, gestiona el estrés de los cierres fiscales y negocia soluciones con clientes difíciles.</p>
+    <div style="margin-top:12px">
+      <span class="badge">Liderazgo efectivo</span>
+      <span class="badge">Trabajo en equipo</span>
+      <span class="badge">Resolución de conflictos</span>
+      <span class="badge">Comunicación asertiva</span>
+    </div>
+  </div>
+  <div class="card">
+    <h3>La Brecha Emocional: Estímulo → Respuesta</h3>
+    <p>Entre todo estímulo (lo que ocurre) y tu respuesta (lo que haces) existe un espacio de tiempo. La inteligencia emocional te permite ampliar ese espacio para elegir conscientemente tu reacción, en lugar de actuar por impulso. Este principio, conocido como "la pausa", es la base del autocontrol emocional.</p>
+  </div>
+  <div class="card">
+    <h3>Emociones Comunes y su Mensaje</h3>
+    <ul>
+      <li><strong>Miedo:</strong> Señala un peligro o amenaza percibida; invita a evaluar el riesgo.</li>
+      <li><strong>Enojo:</strong> Indica que un límite fue cruzado; invita a establecer límites sanos.</li>
+      <li><strong>Tristeza:</strong> Señala una pérdida; invita al duelo y a la reflexión.</li>
+      <li><strong>Alegría:</strong> Confirma que algo es valioso para ti; invita a disfrutarlo y replicarlo.</li>
+      <li><strong>Ansiedad:</strong> Anticipa un reto futuro; invita a la preparación y planificación.</li>
+    </ul>
+  </div>
+</div>
+
+<div id="simulacion" class="section">
+  <div class="sim-area">
+    <h3>🎭 ¿Cómo reaccionas ante estas situaciones?</h3>
+    <p style="color:#666;font-size:14px;margin-bottom:16px">Selecciona la emoción que predominaría en ti y descubre estrategias de regulación.</p>
+    <div id="scenarios"></div>
+    <div class="response-box" id="responseBox">
+      <h4 id="responseTitle"></h4>
+      <p id="responseText"></p>
+      <ul class="strategy-list" id="strategyList"></ul>
+    </div>
+  </div>
+  <div class="sim-area">
+    <h3>🔄 Protocolo de Regulación Emocional (5 Pasos)</h3>
+    <div class="regula-steps">
+      <div class="step-item"><div class="step-num">1</div><div class="step-text"><strong>DETECTA:</strong> Nombra la emoción exactamente. "Estoy sintiendo frustración" es más poderoso que "me siento mal".</div></div>
+      <div class="step-item"><div class="step-num">2</div><div class="step-text"><strong>PAUSA:</strong> Respira profundo 3 veces antes de responder. Esto activa el sistema nervioso parasimpático.</div></div>
+      <div class="step-item"><div class="step-num">3</div><div class="step-text"><strong>ANALIZA:</strong> Pregúntate: ¿Esta emoción es proporcional a lo que ocurrió? ¿Qué información me está dando?</div></div>
+      <div class="step-item"><div class="step-num">4</div><div class="step-text"><strong>ELIGE:</strong> Decide conscientemente tu respuesta. ¿Cómo respondería la mejor versión de ti mismo?</div></div>
+      <div class="step-item"><div class="step-num">5</div><div class="step-text"><strong>ACTÚA:</strong> Ejecuta la respuesta elegida y observa el resultado. Aprende para la próxima vez.</div></div>
+    </div>
+  </div>
+</div>
+<div id="juego" class="section">
+  <div class="quiz-box">
+    <h3>🎯 Mini-juego: Inteligencia Emocional</h3>
+    <div class="quiz-progress" id="quizProgress">Pregunta 1 de 6</div>
+    <div id="quizArea">
+      <div class="quiz-q" id="quizQ"></div>
+      <div class="quiz-opts" id="quizOpts"></div>
+      <div class="quiz-feedback" id="quizFeedback"></div>
+      <button class="quiz-next" id="quizNext" onclick="nextQuestion()">Siguiente →</button>
+    </div>
+    <div class="quiz-result" id="quizResult">
+      <div class="score" id="quizScore"></div>
+      <p id="quizMsg"></p>
+      <button onclick="restartQuiz()">Jugar de nuevo</button>
+    </div>
+  </div>
+</div>
+
+<footer>Juan Carlos Reyes · juancreyes.hn@gmail.com</footer>
+
+<script>
+// ── Tab navigation ──
+function showTab(id, btn){
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  btn.classList.add('active');
+}
+
+// ── Simulación: Scenarios ──
+const scenarios = [
+  {
+    situation:"Un cliente se queja agresivamente en tu oficina por un error en su declaración.",
+    emotions:[
+      {name:"😤 Enojo", key:"enojo"},
+      {name:"😰 Miedo", key:"miedo"},
+      {name:"😌 Calma", key:"calma"},
+      {name:"😟 Culpa", key:"culpa"}
+    ]
+  },
+  {
+    situation:"Tu jefe cambia los criterios del proyecto a última hora antes de la presentación.",
+    emotions:[
+      {name:"😤 Frustración", key:"frustracion"},
+      {name:"😟 Ansiedad", key:"ansiedad"},
+      {name:"😌 Calma", key:"calma"},
+      {name:"😔 Resignación", key:"resignacion"}
+    ]
+  }
+];
+
+const responses = {
+  enojo:{title:"Enojo detectado",text:"El enojo te señala que un límite fue cruzado. Es válido, pero actuar desde el enojo puede escalar el conflicto.",strategies:["Respira 3 veces antes de responder","Usa frases en primera persona: 'Yo entiendo que está molesto...'","Propón una solución concreta en lugar de defenderte"]},
+  miedo:{title:"Miedo detectado",text:"El miedo a consecuencias negativas es natural. Transformarlo en acción constructiva es la clave.",strategies:["Evalúa el peor escenario realista (no catastrófico)","Prepara un plan de corrección antes de la conversación","Recuerda errores pasados que resolviste exitosamente"]},
+  calma:{title:"¡Excelente regulación!",text:"Mantener la calma en situaciones difíciles es una señal de alta inteligencia emocional. Esta postura facilita la solución.",strategies:["Confirma que la calma viene del autocontrol, no de la indiferencia","Comunica empatía verbalmente: 'Entiendo su preocupación'","Lidera la situación hacia una resolución concreta"]},
+  culpa:{title:"Culpa detectada",text:"La culpa constructiva impulsa a corregir errores. La culpa destructiva paraliza. La diferencia está en la acción que tomas.",strategies:["Distingue el error del fracaso personal: fallaste, no eres un fracaso","Pide disculpas una vez y ofrece una solución","Establece un sistema para evitar el error en el futuro"]},
+  frustracion:{title:"Frustración detectada",text:"La frustración ante cambios inesperados es natural. Canalizarla te permite adaptarte más rápido.",strategies:["Acepta que el cambio ya ocurrió (no luches contra lo inevitable)","Pregunta el 'por qué' del cambio para entender el contexto","Ajusta tu plan y comunica lo que necesitas para lograrlo"]},
+  ansiedad:{title:"Ansiedad detectada",text:"La ansiedad anticipa un reto. Usarla bien significa prepararse, no paralizarse.",strategies:["Haz una lista de lo que sí controlas en la situación","Actúa en lo inmediato: divide el problema en pasos pequeños","Practica respiración diafragmática para bajar la activación"]},
+  resignacion:{title:"Resignación detectada",text:"La resignación apaga tu proactividad. Cuestiona si realmente no tienes opciones o si solo las opciones conocidas no funcionan.",strategies:["Busca una perspectiva externa: ¿qué haría alguien que admiras?","Identifica al menos una acción que sí depende de ti","Recuerda que adaptarse no es rendirse: es ser flexible"]}
+};
+
+let currentScenario = 0;
+
+function buildScenarios(){
+  const container = document.getElementById('scenarios');
+  container.innerHTML = '';
+  const sc = scenarios[currentScenario];
+  const situDiv = document.createElement('div');
+  situDiv.style.cssText='background:#fdf0f4;border-radius:8px;padding:14px;margin-bottom:14px;font-weight:600;color:#555;font-size:15px';
+  situDiv.textContent = (currentScenario+1)+'. '+sc.situation;
+  container.appendChild(situDiv);
+  const grid = document.createElement('div');
+  grid.className='emo-grid';
+  sc.emotions.forEach(e=>{
+    const btn=document.createElement('button');
+    btn.className='emo-btn';
+    btn.innerHTML='<span class="emo-name">'+e.name+'</span>';
+    btn.onclick=()=>showResponse(e.key, btn, grid);
+    grid.appendChild(btn);
+  });
+  container.appendChild(grid);
+  const nav = document.createElement('div');
+  nav.style.cssText='display:flex;gap:10px;margin-top:12px';
+  if(currentScenario>0){
+    const prev=document.createElement('button');
+    prev.textContent='← Anterior';
+    prev.style.cssText='padding:10px 20px;background:#eee;border:none;border-radius:8px;cursor:pointer;font-size:14px';
+    prev.onclick=()=>{currentScenario--;buildScenarios();document.getElementById('responseBox').style.display='none';};
+    nav.appendChild(prev);
+  }
+  if(currentScenario<scenarios.length-1){
+    const next=document.createElement('button');
+    next.textContent='Siguiente situación →';
+    next.style.cssText='padding:10px 20px;background:#b83255;color:#fff;border:none;border-radius:8px;cursor:pointer;font-size:14px';
+    next.onclick=()=>{currentScenario++;buildScenarios();document.getElementById('responseBox').style.display='none';};
+    nav.appendChild(next);
+  }
+  container.appendChild(nav);
+}
+
+function showResponse(key, btn, grid){
+  grid.querySelectorAll('.emo-btn').forEach(b=>b.classList.remove('selected'));
+  btn.classList.add('selected');
+  const r=responses[key];
+  const box=document.getElementById('responseBox');
+  document.getElementById('responseTitle').textContent=r.title;
+  document.getElementById('responseText').textContent=r.text;
+  const ul=document.getElementById('strategyList');
+  ul.innerHTML='';
+  r.strategies.forEach(s=>{const li=document.createElement('li');li.textContent=s;ul.appendChild(li);});
+  box.style.display='block';
+  box.scrollIntoView({behavior:'smooth',block:'nearest'});
+}
+
+buildScenarios();
+
+// ── Mini-juego ──
+const questions = [
+  {q:"¿Cuál es el primer componente de la inteligencia emocional según la teoría de Goleman?",opts:["Empatía","Autoconciencia","Motivación intrínseca","Habilidades sociales"],ans:1,exp:"La autoconciencia es la base: sin poder identificar tus propias emociones, no puedes gestionarlas ni entender las de los demás."},
+  {q:"Cuando un colega te critica en público, la respuesta más inteligente emocionalmente es:",opts:["Responder de inmediato para defender tu postura","Ignorar completamente la situación","Hacer una pausa, evaluar la crítica y responder con calma","Guardar el enojo para después",""],ans:2,exp:"La pausa consciente activa el razonamiento y evita que el impulso emocional tome el control de tu respuesta."},
+  {q:"La 'brecha entre estímulo y respuesta' se refiere a:",opts:["El tiempo que tardas en hablar","El espacio donde puedes elegir tu reacción conscientemente","La distancia emocional con tus colegas","El estrés acumulado durante el día"],ans:1,exp:"Ampliar ese espacio es el núcleo del autocontrol emocional. Ahí reside tu libertad de elegir cómo actuar."},
+  {q:"¿Qué emoción indica que un límite personal fue cruzado?",opts:["Tristeza","Alegría","Enojo","Ansiedad"],ans:2,exp:"El enojo es una señal de que algo importante para ti fue violado. Entenderlo así permite manejarlo constructivamente."},
+  {q:"¿Cuál de los siguientes NO es un componente de la inteligencia emocional?",opts:["Empatía","Autorregulación","Coeficiente intelectual alto","Motivación intrínseca"],ans:2,exp:"El CI (coeficiente intelectual) es una habilidad cognitiva separada. La IE involucra autoconciencia, autorregulación, motivación, empatía y habilidades sociales."},
+  {q:"En el Protocolo de Regulación de 5 pasos, ¿cuál es el paso inmediato después de detectar la emoción?",opts:["Actuar de inmediato","Analizar el problema","Hacer una pausa (respirar)","Buscar apoyo externo"],ans:2,exp:"La pausa (respiración) activa el sistema nervioso parasimpático, reduciendo la reactividad y permitiendo un análisis más claro."}
+];
+
+let qIndex=0, score=0, answered=false;
+
+function loadQuestion(){
+  const q=questions[qIndex];
+  document.getElementById('quizProgress').textContent='Pregunta '+(qIndex+1)+' de '+questions.length;
+  document.getElementById('quizQ').textContent=q.q;
+  const opts=document.getElementById('quizOpts');
+  opts.innerHTML='';
+  q.opts.forEach((o,i)=>{
+    if(!o) return;
+    const btn=document.createElement('button');
+    btn.textContent=o;
+    btn.onclick=()=>selectAnswer(i,btn);
+    opts.appendChild(btn);
+  });
+  const fb=document.getElementById('quizFeedback');
+  fb.style.display='none';fb.className='quiz-feedback';
+  document.getElementById('quizNext').style.display='none';
+  answered=false;
+}
+
+function selectAnswer(i,btn){
+  if(answered) return;
+  answered=true;
+  const q=questions[qIndex];
+  const fb=document.getElementById('quizFeedback');
+  document.querySelectorAll('.quiz-opts button').forEach((b,idx)=>{
+    b.disabled=true;
+    if(idx===q.ans) b.classList.add('correct');
+    else if(b===btn) b.classList.add('wrong');
+  });
+  if(i===q.ans){score++;fb.className='quiz-feedback correct';fb.textContent='✅ '+q.exp;}
+  else{fb.className='quiz-feedback wrong';fb.textContent='❌ '+q.exp;}
+  fb.style.display='block';
+  document.getElementById('quizNext').style.display='inline-block';
+}
+
+function nextQuestion(){
+  qIndex++;
+  if(qIndex>=questions.length){showResult();}
+  else{loadQuestion();}
+}
+
+function showResult(){
+  document.getElementById('quizArea').style.display='none';
+  document.getElementById('quizProgress').style.display='none';
+  const r=document.getElementById('quizResult');
+  r.style.display='block';
+  document.getElementById('quizScore').textContent=score+'/'+questions.length;
+  const msgs=['Sigue practicando la IE con constancia.','Buen inicio. Cada reflexión te hace más consciente.','¡Muy bien! Tu IE está en desarrollo activo.','¡Excelente! Dominas los fundamentos de la IE.','¡Sobresaliente! Eres un referente de inteligencia emocional.'];
+  const idx=score<=1?0:score===2?1:score===3?2:score===4?3:4;
+  document.getElementById('quizMsg').textContent=msgs[idx];
+}
+
+function restartQuiz(){
+  qIndex=0;score=0;answered=false;
+  document.getElementById('quizArea').style.display='block';
+  document.getElementById('quizProgress').style.display='block';
+  document.getElementById('quizResult').style.display='none';
+  loadQuestion();
+}
+
+loadQuestion();
+</script>
+</body>
+</html>
