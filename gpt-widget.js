@@ -1,11 +1,8 @@
-/* GPT Widget - Asistente Habilidades Blandas v1.0 */
+/* GPT Widget - Asistente Habilidades Blandas v2.0 */
 (function(){
-const _a = 'REEMPLAZA';
-const _b = '_CON_TU';
-const _c = '_API';
-const _d = '_KEY';
-const API_KEY = _a + _b + _c + _d;
-const MODEL = 'gpt-4o-mini';
+
+const WORKER_URL = 'https://habilidades-blandas-proxy.juancreyes-hn.workers.dev';
+const MODEL = 'claude-haiku-4-5';
 const SYSTEM_PROMPT = `Eres el Asistente de Habilidades Blandas del Seminario Fénix de Juan Carlos Reyes. Ayudas a estudiantes y participantes del seminario a comprender y aplicar los contenidos de los 26 módulos del programa.
 
 ENFOQUE EXCLUSIVO: Solo respondes sobre los temas del Seminario Fénix de Habilidades Blandas. Si preguntan fuera de este ámbito di: "Mi especialidad es el desarrollo personal y las habilidades blandas del Seminario Fénix. Para esa pregunta te recomiendo buscar otra fuente."
@@ -185,94 +182,126 @@ COMPORTAMIENTO AL RESPONDER:
 - Termina con una pregunta motivadora cuando sea apropiado
 ============================================================`;
 
-let messages = [{ role: 'system', content: SYSTEM_PROMPT }];
+let messages = [];
 let isOpen = false;
+let waiting = false;
 
 const css = `
 #gpt-fab-wrap {
-position: fixed; bottom: 24px; right: 20px;
-z-index: 99999; font-family: 'Nunito', sans-serif;
-display: flex; flex-direction: column; align-items: flex-end; gap: 10px;
+  position: fixed; bottom: 24px; right: 20px;
+  z-index: 99999; font-family: 'Nunito', sans-serif;
+  display: flex; flex-direction: column; align-items: flex-end; gap: 10px;
 }
 #gpt-chat-box {
-width: 340px; height: 480px;
-background: #1e1e2e; border-radius: 16px;
-box-shadow: 0 8px 40px rgba(0,0,0,.55);
-display: none; flex-direction: column; overflow: hidden;
-border: 1px solid #2e2e4e;
+  width: 340px; height: 520px;
+  background: #1e1e2e; border-radius: 16px;
+  box-shadow: 0 8px 40px rgba(0,0,0,.55);
+  display: none; flex-direction: column; overflow: hidden;
+  border: 1px solid #2e2e4e;
 }
 #gpt-chat-box.open { display: flex; }
 #gpt-chat-header {
-background: #c0392b; padding: 12px 16px;
-display: flex; align-items: center; justify-content: space-between;
-flex-shrink: 0;
+  background: #c0392b; padding: 12px 16px;
+  display: flex; align-items: center; justify-content: space-between;
+  flex-shrink: 0;
 }
 #gpt-chat-header-left { display: flex; align-items: center; gap: 8px; }
+#gpt-chat-header-left .gpt-header-title { display: flex; flex-direction: column; }
 #gpt-chat-header-left span { color:#fff; font-size:14px; font-weight:700; }
+#gpt-chat-header-left small { color:rgba(255,255,255,0.8); font-size:11px; }
 #gpt-chat-close {
-background: none; border: none; color: #fff;
-font-size: 20px; cursor: pointer; line-height:1; padding:0;
+  background: none; border: none; color: #fff;
+  font-size: 20px; cursor: pointer; line-height:1; padding:0;
 }
 #gpt-chat-messages {
-flex: 1; overflow-y: auto; padding: 14px 12px;
-display: flex; flex-direction: column; gap: 10px;
+  flex: 1; overflow-y: auto; padding: 14px 12px;
+  display: flex; flex-direction: column; gap: 10px;
 }
 #gpt-chat-messages::-webkit-scrollbar { width: 4px; }
 #gpt-chat-messages::-webkit-scrollbar-thumb { background:#444; border-radius:4px; }
 .gpt-msg {
-max-width: 88%; padding: 9px 13px; border-radius: 14px;
-font-size: 13px; line-height: 1.55; word-wrap: break-word;
+  max-width: 88%; padding: 9px 13px; border-radius: 14px;
+  font-size: 13px; line-height: 1.55; word-wrap: break-word;
 }
 .gpt-msg.bot {
-background: #2a2a3e; color: #e0e0f0; align-self: flex-start;
-border-bottom-left-radius: 4px;
+  background: #2a2a3e; color: #e0e0f0; align-self: flex-start;
+  border-bottom-left-radius: 4px;
 }
 .gpt-msg.user {
-background: #c0392b; color: #fff; align-self: flex-end;
-border-bottom-right-radius: 4px;
+  background: #c0392b; color: #fff; align-self: flex-end;
+  border-bottom-right-radius: 4px;
 }
-.gpt-msg.typing { color: #888; font-style: italic; }
+.gpt-typing {
+  display: flex; align-items: flex-end; gap: 8px; align-self: flex-start;
+}
+.gpt-dots {
+  background: #2a2a3e; border-radius: 14px;
+  border-bottom-left-radius: 4px; padding: 10px 14px;
+  display: flex; gap: 5px;
+}
+.gpt-dots span {
+  width: 7px; height: 7px; background: #c0392b;
+  border-radius: 50%; animation: gptBounce 1.2s infinite ease-in-out;
+}
+.gpt-dots span:nth-child(2) { animation-delay: .2s; }
+.gpt-dots span:nth-child(3) { animation-delay: .4s; }
+@keyframes gptBounce {
+  0%,80%,100% { transform: translateY(0); }
+  40% { transform: translateY(-7px); }
+}
+#gpt-chat-suggestions {
+  padding: 6px 10px 4px; display: flex; flex-wrap: wrap;
+  gap: 5px; background: #16162a; border-top: 1px solid #2e2e4e;
+  flex-shrink: 0;
+}
+.gpt-suggestion {
+  background: transparent; border: 1px solid #c0392b;
+  color: #e0a0a0; border-radius: 20px; padding: 3px 10px;
+  font-size: 11px; cursor: pointer; transition: all .15s;
+  white-space: nowrap; font-family: 'Nunito', sans-serif;
+}
+.gpt-suggestion:hover { background: #c0392b; color: #fff; }
 #gpt-chat-footer {
-padding: 10px 12px; background: #16162a;
-display: flex; gap: 8px; flex-shrink: 0;
-border-top: 1px solid #2e2e4e;
+  padding: 10px 12px; background: #16162a;
+  display: flex; gap: 8px; flex-shrink: 0;
+  border-top: 1px solid #2e2e4e;
 }
 #gpt-chat-input {
-flex: 1; background: #2a2a3e; border: 1px solid #3e3e5e;
-border-radius: 10px; padding: 9px 12px; color: #e0e0f0;
-font-size: 13px; outline: none; resize: none;
-font-family: 'Nunito', sans-serif; max-height: 80px;
+  flex: 1; background: #2a2a3e; border: 1px solid #3e3e5e;
+  border-radius: 10px; padding: 9px 12px; color: #e0e0f0;
+  font-size: 13px; outline: none; resize: none;
+  font-family: 'Nunito', sans-serif; max-height: 80px;
 }
 #gpt-chat-input::placeholder { color: #666; }
 #gpt-chat-send {
-width: 38px; height: 38px; border-radius: 10px;
-background: #c0392b; border: none; cursor: pointer;
-display: flex; align-items: center; justify-content: center;
-flex-shrink: 0; transition: background .2s;
+  width: 38px; height: 38px; border-radius: 10px;
+  background: #c0392b; border: none; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0; transition: background .2s;
 }
 #gpt-chat-send:hover { background: #a93226; }
 #gpt-chat-send:disabled { background: #444; cursor: not-allowed; }
 #gpt-fab-btn {
-width: 56px; height: 56px; border-radius: 50%;
-background: linear-gradient(135deg, #c0392b, #a93226);
-border: none; cursor: pointer;
-display: flex; align-items: center; justify-content: center;
-box-shadow: 0 4px 20px rgba(192,57,43,.5);
-transition: transform .2s, box-shadow .2s;
+  width: 56px; height: 56px; border-radius: 50%;
+  background: linear-gradient(135deg, #c0392b, #a93226);
+  border: none; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 4px 20px rgba(192,57,43,.5);
+  transition: transform .2s, box-shadow .2s;
 }
 #gpt-fab-btn:hover { transform: scale(1.08); box-shadow: 0 6px 28px rgba(192,57,43,.7); }
 #gpt-fab-btn svg { width: 28px; height: 28px; }
 #gpt-fab-tooltip {
-background: #1a1a2e; color: #fff; padding: 7px 13px;
-border-radius: 20px; font-size: 12px; font-weight: 600;
-white-space: nowrap; box-shadow: 0 4px 15px rgba(0,0,0,.3);
-opacity: 0; transform: translateX(10px);
-transition: opacity .25s, transform .25s; pointer-events: none;
+  background: #1a1a2e; color: #fff; padding: 7px 13px;
+  border-radius: 20px; font-size: 12px; font-weight: 600;
+  white-space: nowrap; box-shadow: 0 4px 15px rgba(0,0,0,.3);
+  opacity: 0; transform: translateX(10px);
+  transition: opacity .25s, transform .25s; pointer-events: none;
 }
 #gpt-fab-wrap:hover #gpt-fab-tooltip { opacity: 1; transform: translateX(0); }
 @media (max-width: 420px) {
-#gpt-chat-box { width: calc(100vw - 24px); height: 60vh; }
-#gpt-fab-wrap { bottom: 16px; right: 12px; }
+  #gpt-chat-box { width: calc(100vw - 24px); height: 60vh; }
+  #gpt-fab-wrap { bottom: 16px; right: 12px; }
 }
 `;
 
@@ -284,33 +313,42 @@ const wrap = document.createElement('div');
 wrap.id = 'gpt-fab-wrap';
 wrap.innerHTML = `
 <div id="gpt-chat-box">
-<div id="gpt-chat-header">
-<div id="gpt-chat-header-left">
-<svg width="20" height="20" viewBox="0 0 41 41" fill="none">
-<path d="M37.532 16.87a9.963 9.963 0 0 0-.856-8.184 10.078 10.078 0 0 0-10.855-4.835A9.964 9.964 0 0 0 18.306.5a10.079 10.079 0 0 0-9.614 6.977 9.967 9.967 0 0 0-6.664 4.834 10.08 10.08 0 0 0 1.24 11.817 9.965 9.965 0 0 0 .856 8.185 10.079 10.079 0 0 0 10.855 4.835 9.965 9.965 0 0 0 7.516 3.35 10.078 10.078 0 0 0 9.617-6.981 9.967 9.967 0 0 0 6.663-4.834 10.079 10.079 0 0 0-1.243-11.813z" fill="#fff"/>
-</svg>
-<span>Asistente de Habilidades Blandas</span>
+  <div id="gpt-chat-header">
+    <div id="gpt-chat-header-left">
+      <svg width="20" height="20" viewBox="0 0 41 41" fill="none">
+        <path d="M37.532 16.87a9.963 9.963 0 0 0-.856-8.184 10.078 10.078 0 0 0-10.855-4.835A9.964 9.964 0 0 0 18.306.5a10.079 10.079 0 0 0-9.614 6.977 9.967 9.967 0 0 0-6.664 4.834 10.08 10.08 0 0 0 1.24 11.817 9.965 9.965 0 0 0 .856 8.185 10.079 10.079 0 0 0 10.855 4.835 9.965 9.965 0 0 0 7.516 3.35 10.078 10.078 0 0 0 9.617-6.981 9.967 9.967 0 0 0 6.663-4.834 10.079 10.079 0 0 0-1.243-11.813z" fill="#fff"/>
+      </svg>
+      <div class="gpt-header-title">
+        <span>Asistente Seminario Fénix</span>
+        <small>IA · Habilidades Blandas</small>
+      </div>
+    </div>
+    <button id="gpt-chat-close" title="Cerrar">✕</button>
+  </div>
+  <div id="gpt-chat-messages"></div>
+  <div id="gpt-chat-suggestions">
+    <button class="gpt-suggestion" data-msg="¿Qué es la inteligencia emocional?">Inteligencia Emocional</button>
+    <button class="gpt-suggestion" data-msg="¿Cómo puedo mejorar mis hábitos?">Hábitos</button>
+    <button class="gpt-suggestion" data-msg="¿Cómo manejar el estrés?">Estrés</button>
+    <button class="gpt-suggestion" data-msg="¿Qué es la resiliencia?">Resiliencia</button>
+    <button class="gpt-suggestion" data-msg="¿Cómo establecer metas efectivas?">Metas SMART</button>
+    <button class="gpt-suggestion" data-msg="¿Qué es el Ikigai?">Propósito Ikigai</button>
+  </div>
+  <div id="gpt-chat-footer">
+    <textarea id="gpt-chat-input" placeholder="Pregunta sobre el Seminario Fénix..." rows="1"></textarea>
+    <button id="gpt-chat-send" title="Enviar">
+      <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" width="18" height="18">
+        <line x1="22" y1="2" x2="11" y2="13"></line>
+        <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+      </svg>
+    </button>
+  </div>
 </div>
-<button id="gpt-chat-close" title="Cerrar">✕</button>
-</div>
-<div id="gpt-chat-messages">
-<div class="gpt-msg bot">¡Hola! 🙌 Soy tu Asistente de Habilidades Blandas del Seminario Fénix. Puedo ayudarte con los 26 módulos del programa. ¿En qué tema quieres trabajar hoy?</div>
-</div>
-<div id="gpt-chat-footer">
-<textarea id="gpt-chat-input" placeholder="Pregunta sobre el Seminario Fénix..." rows="1"></textarea>
-<button id="gpt-chat-send" title="Enviar">
-<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" width="18" height="18">
-<line x1="22" y1="2" x2="11" y2="13"></line>
-<polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
-</svg>
-</button>
-</div>
-</div>
-<div id="gpt-fab-tooltip">Asistente de Habilidades Blandas</div>
+<div id="gpt-fab-tooltip">Asistente Habilidades Blandas</div>
 <button id="gpt-fab-btn" title="Abrir asistente de habilidades blandas">
-<svg viewBox="0 0 41 41" fill="none">
-<path d="M37.532 16.87a9.963 9.963 0 0 0-.856-8.184 10.078 10.078 0 0 0-10.855-4.835A9.964 9.964 0 0 0 18.306.5a10.079 10.079 0 0 0-9.614 6.977 9.967 9.967 0 0 0-6.664 4.834 10.08 10.08 0 0 0 1.24 11.817 9.965 9.965 0 0 0 .856 8.185 10.079 10.079 0 0 0 10.855 4.835 9.965 9.965 0 0 0 7.516 3.35 10.078 10.078 0 0 0 9.617-6.981 9.967 9.967 0 0 0 6.663-4.834 10.079 10.079 0 0 0-1.243-11.813z" fill="#fff"/>
-</svg>
+  <svg viewBox="0 0 41 41" fill="none">
+    <path d="M37.532 16.87a9.963 9.963 0 0 0-.856-8.184 10.078 10.078 0 0 0-10.855-4.835A9.964 9.964 0 0 0 18.306.5a10.079 10.079 0 0 0-9.614 6.977 9.967 9.967 0 0 0-6.664 4.834 10.08 10.08 0 0 0 1.24 11.817 9.965 9.965 0 0 0 .856 8.185 10.079 10.079 0 0 0 10.855 4.835 9.965 9.965 0 0 0 7.516 3.35 10.078 10.078 0 0 0 9.617-6.981 9.967 9.967 0 0 0 6.663-4.834 10.079 10.079 0 0 0-1.243-11.813z" fill="#fff"/>
+  </svg>
 </button>
 `;
 document.body.appendChild(wrap);
@@ -321,11 +359,19 @@ const closeBtn = document.getElementById('gpt-chat-close');
 const input = document.getElementById('gpt-chat-input');
 const sendBtn = document.getElementById('gpt-chat-send');
 const msgContainer = document.getElementById('gpt-chat-messages');
+const suggestionsEl = document.getElementById('gpt-chat-suggestions');
+
+function addWelcome() {
+  addMessage('¡Hola! 🙌 Soy tu Asistente del Seminario Fénix de Habilidades Blandas. Puedo ayudarte con los 26 módulos del programa. ¿En qué tema quieres trabajar hoy?', 'bot');
+}
 
 fabBtn.addEventListener('click', function() {
   isOpen = !isOpen;
   chatBox.classList.toggle('open', isOpen);
-  if (isOpen) input.focus();
+  if (isOpen) {
+    if (messages.length === 0) addWelcome();
+    input.focus();
+  }
 });
 
 closeBtn.addEventListener('click', function() {
@@ -346,40 +392,71 @@ function addMessage(text, role) {
   return div;
 }
 
-async function sendMessage() {
-  const text = input.value.trim();
-  if (!text) return;
+function showTyping() {
+  const div = document.createElement('div');
+  div.className = 'gpt-typing';
+  div.id = 'gpt-typing-indicator';
+  div.innerHTML = '<div class="gpt-dots"><span></span><span></span><span></span></div>';
+  msgContainer.appendChild(div);
+  scrollToBottom();
+}
+
+function hideTyping() {
+  const t = document.getElementById('gpt-typing-indicator');
+  if (t) t.remove();
+}
+
+async function sendMessage(text) {
+  text = (text || input.value).trim();
+  if (!text || waiting) return;
   input.value = '';
   input.style.height = 'auto';
+  waiting = true;
   sendBtn.disabled = true;
+  suggestionsEl.style.display = 'none';
+
   addMessage(text, 'user');
   messages.push({ role: 'user', content: text });
-  const typingDiv = addMessage('Escribiendo...', 'bot typing');
+  showTyping();
+
   try {
-    const res = await fetch('https://api.openai.com/v1/chat/completions', {
+    const res = await fetch(WORKER_URL, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + API_KEY },
-      body: JSON.stringify({ model: MODEL, messages: messages, max_tokens: 700, temperature: 0.7 })
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: MODEL,
+        max_tokens: 700,
+        system: SYSTEM_PROMPT,
+        messages: messages.slice(-12)
+      })
     });
     const data = await res.json();
-    const reply = data.choices[0].message.content;
-    typingDiv.classList.remove('typing');
-    typingDiv.textContent = reply;
+    hideTyping();
+    if (!res.ok) throw new Error(data.error ? data.error.message : 'HTTP ' + res.status);
+    const reply = data.content[0].text;
+    addMessage(reply, 'bot');
     messages.push({ role: 'assistant', content: reply });
   } catch(e) {
-    typingDiv.classList.remove('typing');
-    typingDiv.textContent = 'Error al conectar. Por favor intenta de nuevo.';
+    hideTyping();
+    addMessage('Lo siento, hubo un error al conectar. Por favor intenta de nuevo.', 'bot');
   }
+
+  waiting = false;
   sendBtn.disabled = false;
   scrollToBottom();
 }
 
-sendBtn.addEventListener('click', sendMessage);
+sendBtn.addEventListener('click', function() { sendMessage(); });
+
+document.querySelectorAll('.gpt-suggestion').forEach(btn => {
+  btn.addEventListener('click', function() {
+    sendMessage(this.dataset.msg);
+  });
+});
 
 input.addEventListener('keydown', function(e) {
   if (e.key === 'Enter' && !e.shiftKey) {
     e.preventDefault();
-    e.stopPropagation();
     sendMessage();
   }
 });
@@ -388,4 +465,5 @@ input.addEventListener('input', function() {
   this.style.height = 'auto';
   this.style.height = Math.min(this.scrollHeight, 80) + 'px';
 });
+
 })();
