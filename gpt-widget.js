@@ -1,469 +1,235 @@
-/* GPT Widget - Asistente Habilidades Blandas v2.0 */
+/* GPT Widget - Asistente Habilidades Blandas v3.0 - Contextual por Módulo */
 (function(){
 
 const WORKER_URL = 'https://habilidades-blandas-proxy.juancreyes-hn.workers.dev';
 const MODEL = 'claude-haiku-4-5';
-const SYSTEM_PROMPT = `Eres el Asistente de Habilidades Blandas del Seminario Fénix de Juan Carlos Reyes. Ayudas a estudiantes y participantes del seminario a comprender y aplicar los contenidos de los 26 módulos del programa.
 
-ENFOQUE EXCLUSIVO: Solo respondes sobre los temas del Seminario Fénix de Habilidades Blandas. Si preguntan fuera de este ámbito di: "Mi especialidad es el desarrollo personal y las habilidades blandas del Seminario Fénix. Para esa pregunta te recomiendo buscar otra fuente."
+// Detectar módulo actual por el título de la página
+const pageTitle = document.title || '';
+const pagePath = window.location.pathname || '';
 
-============================================================
-CONTENIDO DEL SEMINARIO FÉNIX — 26 MÓDULOS
-============================================================
+// Mapa de módulos con sus quick-replies específicos
+const MODULE_DATA = {
+  'modulo1': { nombre: 'Psicología del Éxito', preguntas: ['¿Qué es la mentalidad de crecimiento?','¿Cómo cambiar mis creencias?','Explícame el ciclo del éxito'] },
+  'modulo2': { nombre: 'Autoconcepto y Confianza', preguntas: ['¿Cómo mejorar mi autoconcepto?','¿Qué es la autoestima?','Ejercicios para ganar confianza'] },
+  'modulo3': { nombre: 'Metas y Visión de Futuro', preguntas: ['¿Cómo definir mis metas?','¿Qué es la visualización?','Cómo construir mi visión de vida'] },
+  'modulo4': { nombre: 'Hábitos de Personas Exitosas', preguntas: ['¿Cómo crear un hábito?','Hábitos de personas exitosas','¿Qué es el efecto compuesto?'] },
+  'modulo5': { nombre: 'Inteligencia Emocional', preguntas: ['¿Qué es la inteligencia emocional?','¿Cómo gestionar mis emociones?','Empatía y autoconocimiento'] },
+  'modulo6': { nombre: 'Control del Estrés', preguntas: ['Técnicas para reducir el estrés','¿Qué es el cortisol?','Cómo manejar la presión'] },
+  'modulo7': { nombre: 'Creencias Limitantes', preguntas: ['¿Cómo identificar creencias limitantes?','¿Cómo eliminar bloqueos mentales?','Ejemplos de creencias limitantes'] },
+  'modulo8': { nombre: 'Comunicación Asertiva', preguntas: ['¿Qué es la asertividad?','Cómo decir no con respeto','Técnicas de comunicación efectiva'] },
+  'modulo9': { nombre: 'Manejo de Conflictos', preguntas: ['¿Cómo resolver conflictos?','Estilos de manejo de conflictos','Negociación win-win'] },
+  'modulo10': { nombre: 'Motivación y Actitud', preguntas: ['¿Cómo mantenerme motivado?','¿Qué es el GRIT?','Teorías de la motivación'] },
+  'modulo11': { nombre: 'Resiliencia', preguntas: ['¿Qué es la resiliencia?','Cómo superar la adversidad','Las 7 características de personas resilientes'] },
+  'modulo12': { nombre: 'Software para el Cerebro', preguntas: ['¿Cómo funciona el cerebro?','¿Qué es la PNL?','Cómo reprogramar mi mente'] },
+  'modulo13': { nombre: 'Aprendizaje Rápido', preguntas: ['Técnicas de estudio efectivo','¿Cómo aprender más rápido?','Método Feynman explicado'] },
+  'modulo14': { nombre: 'Relajación Progresiva', preguntas: ['¿Cómo hacer relajación progresiva?','Beneficios de la meditación','Técnicas de respiración'] },
+  'modulo15': { nombre: 'Establecimiento de Metas', preguntas: ['¿Qué son las metas SMART?','5 claves para mis metas','Cómo priorizar mis objetivos'] },
+  'modulo16': { nombre: 'Consecución de Metas', preguntas: ['Los 12 pasos hacia mis metas','¿Cómo mantener el enfoque?','Del deseo a la realidad'] },
+  'modulo17': { nombre: 'Administración del Tiempo', preguntas: ['Técnicas de gestión del tiempo','¿Qué es la matriz de Eisenhower?','Cómo eliminar procrastinación'] },
+  'modulo18': { nombre: 'Poder Mental', preguntas: ['¿Cómo duplicar mi poder mental?','Los 6 pilares del cerebro','Cómo mejorar mi concentración'] },
+  'modulo19': { nombre: 'Genio Interno', preguntas: ['¿Cómo descubrir mi genio?','¿Qué es la zona de flujo?','Cómo desarrollar mi creatividad'] },
+  'modulo20': { nombre: 'Solución de Problemas', preguntas: ['Técnicas de resolución creativa','¿Qué es el brainstorming?','Los 6 Sombreros de De Bono'] },
+  'modulo21': { nombre: 'Energía Mente-Cuerpo', preguntas: ['¿Cómo aumentar mi energía?','Gestión de energía emocional','Conexión mente-cuerpo'] },
+  'modulo22': { nombre: 'Eliminando el Estrés', preguntas: ['8 estrategias anti-estrés','¿Cómo reducir la tensión?','Mindfulness para principiantes'] },
+  'modulo23': { nombre: 'Personalidad de Éxito', preguntas: ['Los 10 rasgos de personalidad exitosa','Cómo transformar mi carácter','¿Qué es la integridad?'] },
+  'modulo24': { nombre: 'Relaciones Superiores', preguntas: ['Las 7 reglas de Carnegie','¿Cómo hacer amigos?','Cómo influir en las personas'] },
+  'modulo25': { nombre: 'SúperNiños', preguntas: ['¿Cómo educar niños exitosos?','Desarrollo emocional infantil','8 prácticas para padres'] },
+  'modulo26': { nombre: 'Propósito de Vida', preguntas: ['¿Qué es el Ikigai?','¿Cómo encontrar mi propósito?','Las 5 preguntas de la misión de vida'] },
+};
 
-── BLOQUE 1: FUNDAMENTOS DEL ÉXITO PERSONAL ───────────────
-Módulo 1 – La Psicología del Éxito
-• Mentalidad de crecimiento vs mentalidad fija (Carol Dweck)
-• Las creencias limitantes y cómo superarlas
-• El ciclo del éxito: pensamientos → emociones → acciones → resultados
-• Principios de Viktor Frankl, Napoleon Hill y Tony Robbins
-
-Módulo 2 – Autoconcepto y Confianza
-• Cómo te ves a ti mismo determina lo que logras
-• Autoestima vs autoconfianza: diferencias clave
-• Técnicas para fortalecer la imagen propia
-• El efecto Pigmalión y las profecías autocumplidas
-
-Módulo 3 – Metas y Visión de Futuro
-• Objetivos SMART: Específicos, Medibles, Alcanzables, Relevantes, Temporales
-• Cómo construir una visión de vida clara
-• El tablero de visualización (vision board)
-• Diferencia entre sueños, metas y planes de acción
-
-Módulo 4 – Hábitos de Personas Exitosas
-• El poder del hábito (Charles Duhigg): ciclo señal-rutina-recompensa
-• Las 7 reglas de los hábitos atómicos (James Clear)
-• Cómo instalar hábitos positivos y eliminar los negativos
-• La regla de los 21 días y la neuroplasticidad
-
-Módulo 5 – Inteligencia Emocional
-• Las 5 dimensiones de Daniel Goleman: autoconciencia, autorregulación, motivación, empatía, habilidades sociales
-• Cómo gestionar emociones en situaciones de presión
-• El cociente emocional (CE) vs el cociente intelectual (CI)
-• Técnicas de regulación emocional
-
-Módulo 6 – Control del Estrés
-• Diferencia entre estrés y eustrés
-• Las 8 estrategias científicamente probadas anti-estrés
-• Técnicas de respiración y mindfulness básico
-• Gestión de la presión y el agotamiento
-
-── BLOQUE 2: COMUNICACIÓN, CONFLICTOS Y RESILIENCIA ───────
-Módulo 7 – Creencias Limitantes
-• Identificación y transformación de creencias que frenan
-• El mapa no es el territorio (PNL)
-• Técnicas de reencuadre cognitivo
-• Cómo instalar creencias potenciadoras
-
-Módulo 8 – Comunicación Asertiva
-• Los 4 estilos de comunicación: pasivo, agresivo, pasivo-agresivo, asertivo
-• Técnicas de comunicación asertiva: disco rayado, banco de niebla, aserción negativa
-• Escucha activa y comunicación no violenta (Marshall Rosenberg)
-• Lenguaje corporal y comunicación no verbal
-
-Módulo 9 – Manejo de Conflictos
-• Los 5 estilos de manejo de conflictos (Thomas-Kilmann)
-• Negociación basada en intereses (Fisher y Ury)
-• Cómo llegar a acuerdos efectivos
-• Mediación y resolución de disputas
-
-Módulo 10 – Motivación y Actitud
-• Las 3 teorías de la motivación: Maslow, Herzberg, McClelland
-• Motivación intrínseca vs extrínseca
-• Cómo mantener la actitud positiva en tiempos difíciles
-• El GRIT: pasión y perseverancia (Angela Duckworth)
-
-Módulo 11 – Resiliencia
-• Definición y componentes de la resiliencia
-• Las 7 características de las personas resilientes
-• Cómo superar la adversidad y salir fortalecido
-• Post-traumatic growth: crecimiento postraumático
-
-── BLOQUE 3: PRODUCTIVIDAD Y APRENDIZAJE ──────────────────
-Módulo 12 – Software Mental del Cerebro
-• Cómo funciona el cerebro: cerebro reptiliano, límbico y neocórtex
-• Programación Neurolingüística (PNL) básica
-• Los sistemas representacionales: visual, auditivo, kinestésico
-• Anclas y estados mentales
-
-Módulo 13 – Aprendizaje Rápido
-• El método Feynman para aprender cualquier cosa
-• Lectura rápida y comprensión lectora
-• Mapas mentales (Tony Buzan)
-• Técnica Pomodoro y gestión del tiempo de estudio
-
-Módulo 14 – Relajación Progresiva
-• Técnica de relajación muscular progresiva (Jacobson)
-• Meditación guiada y visualización creativa
-• Coherencia cardíaca y respiración diafragmática
-• Sueño reparador y recuperación mental
-
-Módulo 15 – Establecimiento de Metas
-• Sistema OKR (Objectives and Key Results)
-• Planificación por trimestres y revisión semanal
-• El método WOOP: Wish, Outcome, Obstacle, Plan
-• Seguimiento y ajuste de metas
-
-Módulo 16 – Consecución de Metas
-• Los 12 pasos para lograr cualquier meta
-• Cómo superar los obstáculos y las recaídas
-• Accountability y sistemas de rendición de cuentas
-• Celebración de logros y refuerzo positivo
-
-Módulo 17 – Administración del Tiempo
-• La Matriz de Eisenhower: urgente/importante
-• Técnica de time blocking y deep work (Cal Newport)
-• Cómo eliminar los ladrones del tiempo
-• Productividad personal: planificación diaria y semanal
-
-── BLOQUE 4: ÉXITO PROFESIONAL ────────────────────────────
-Módulo 18 – Cómo Duplicar el Poder Mental
-• Los 6 pilares para un cerebro de alto rendimiento
-• Neuroplasticidad: cómo reprogramar el cerebro
-• Hábitos cognitivos de personas brillantes
-• Nutrición, ejercicio y sueño para el rendimiento mental
-
-Módulo 19 – Cómo Explotar su Genio Interno
-• Las 8 inteligencias múltiples (Howard Gardner)
-• Cómo descubrir y potenciar tu zona de genio
-• El estado de flow (Mihaly Csikszentmihalyi)
-• Creatividad aplicada al trabajo y la vida
-
-Módulo 20 – Técnicas Creadoras para Resolver Problemas
-• Brainstorming y sus variantes
-• Método De Bono: Seis Sombreros para Pensar
-• Técnica SCAMPER para la innovación
-• Pensamiento lateral y resolución creativa
-
-Módulo 21 – Nivel de Energía y Mente-Cuerpo
-• Los 4 niveles de energía: física, emocional, mental, espiritual
-• Cómo gestionar y renovar tu energía
-• La conexión mente-cuerpo en el rendimiento
-• Hábitos de bienestar integral
-
-── BLOQUE 5: LIDERAZGO Y PROPÓSITO DE VIDA ────────────────
-Módulo 22 – Eliminando el Estrés y la Tensión
-• 8 estrategias científicamente probadas anti-estrés
-• Técnicas de descompresión mental
-• Cómo manejar la presión laboral y personal
-• Bienestar emocional sostenible
-
-Módulo 23 – Desarrollar una Personalidad de Éxito
-• Los 10 rasgos de la personalidad exitosa
-• Las 5 estrategias para transformar tu carácter
-• Cómo proyectar confianza y carisma
-• Autoimagen y marca personal
-
-Módulo 24 – Construyendo Relaciones Superiores
-• Las 7 reglas de Carnegie para el éxito relacional
-• Cómo ganar amigos e influir sobre las personas
-• Networking efectivo y relaciones de alto valor
-• Empatía y conexión emocional profunda
-
-Módulo 25 – Cómo Formar SúperNiños
-• 8 prácticas para el desarrollo integral de los hijos
-• Inteligencia emocional en la crianza
-• Comunicación efectiva padres-hijos
-• Hábitos de estudio y disciplina positiva
-
-Módulo 26 – Encontrar el Propósito de su Vida
-• El Ikigai: la razón de ser japonesa
-• Las 5 preguntas para descubrir tu misión de vida
-• Cómo alinear valores, talentos y vocación
-• El legado: vivir una vida con sentido
-
-============================================================
-COMPORTAMIENTO AL RESPONDER:
-- Sé cálido, motivador y práctico en tu lenguaje
-- Relaciona siempre las respuestas con ejemplos concretos de aplicación
-- Menciona el módulo específico cuando sea relevante
-- Si el usuario pregunta sobre técnicas, explica los pasos de forma clara
-- Sé conciso pero completo; máximo 400 palabras por respuesta
-- Termina con una pregunta motivadora cuando sea apropiado
-============================================================`;
-
-let messages = [];
-let isOpen = false;
-let waiting = false;
-
-const css = `
-#gpt-fab-wrap {
-  position: fixed; bottom: 24px; right: 20px;
-  z-index: 99999; font-family: 'Nunito', sans-serif;
-  display: flex; flex-direction: column; align-items: flex-end; gap: 10px;
-}
-#gpt-chat-box {
-  width: 340px; height: 520px;
-  background: #1e1e2e; border-radius: 16px;
-  box-shadow: 0 8px 40px rgba(0,0,0,.55);
-  display: none; flex-direction: column; overflow: hidden;
-  border: 1px solid #2e2e4e;
-}
-#gpt-chat-box.open { display: flex; }
-#gpt-chat-header {
-  background: #c0392b; padding: 12px 16px;
-  display: flex; align-items: center; justify-content: space-between;
-  flex-shrink: 0;
-}
-#gpt-chat-header-left { display: flex; align-items: center; gap: 8px; }
-#gpt-chat-header-left .gpt-header-title { display: flex; flex-direction: column; }
-#gpt-chat-header-left span { color:#fff; font-size:14px; font-weight:700; }
-#gpt-chat-header-left small { color:rgba(255,255,255,0.8); font-size:11px; }
-#gpt-chat-close {
-  background: none; border: none; color: #fff;
-  font-size: 20px; cursor: pointer; line-height:1; padding:0;
-}
-#gpt-chat-messages {
-  flex: 1; overflow-y: auto; padding: 14px 12px;
-  display: flex; flex-direction: column; gap: 10px;
-}
-#gpt-chat-messages::-webkit-scrollbar { width: 4px; }
-#gpt-chat-messages::-webkit-scrollbar-thumb { background:#444; border-radius:4px; }
-.gpt-msg {
-  max-width: 88%; padding: 9px 13px; border-radius: 14px;
-  font-size: 13px; line-height: 1.55; word-wrap: break-word;
-}
-.gpt-msg.bot {
-  background: #2a2a3e; color: #e0e0f0; align-self: flex-start;
-  border-bottom-left-radius: 4px;
-}
-.gpt-msg.user {
-  background: #c0392b; color: #fff; align-self: flex-end;
-  border-bottom-right-radius: 4px;
-}
-.gpt-typing {
-  display: flex; align-items: flex-end; gap: 8px; align-self: flex-start;
-}
-.gpt-dots {
-  background: #2a2a3e; border-radius: 14px;
-  border-bottom-left-radius: 4px; padding: 10px 14px;
-  display: flex; gap: 5px;
-}
-.gpt-dots span {
-  width: 7px; height: 7px; background: #c0392b;
-  border-radius: 50%; animation: gptBounce 1.2s infinite ease-in-out;
-}
-.gpt-dots span:nth-child(2) { animation-delay: .2s; }
-.gpt-dots span:nth-child(3) { animation-delay: .4s; }
-@keyframes gptBounce {
-  0%,80%,100% { transform: translateY(0); }
-  40% { transform: translateY(-7px); }
-}
-#gpt-chat-suggestions {
-  padding: 6px 10px 4px; display: flex; flex-wrap: wrap;
-  gap: 5px; background: #16162a; border-top: 1px solid #2e2e4e;
-  flex-shrink: 0;
-}
-.gpt-suggestion {
-  background: transparent; border: 1px solid #c0392b;
-  color: #e0a0a0; border-radius: 20px; padding: 3px 10px;
-  font-size: 11px; cursor: pointer; transition: all .15s;
-  white-space: nowrap; font-family: 'Nunito', sans-serif;
-}
-.gpt-suggestion:hover { background: #c0392b; color: #fff; }
-#gpt-chat-footer {
-  padding: 10px 12px; background: #16162a;
-  display: flex; gap: 8px; flex-shrink: 0;
-  border-top: 1px solid #2e2e4e;
-}
-#gpt-chat-input {
-  flex: 1; background: #2a2a3e; border: 1px solid #3e3e5e;
-  border-radius: 10px; padding: 9px 12px; color: #e0e0f0;
-  font-size: 13px; outline: none; resize: none;
-  font-family: 'Nunito', sans-serif; max-height: 80px;
-}
-#gpt-chat-input::placeholder { color: #666; }
-#gpt-chat-send {
-  width: 38px; height: 38px; border-radius: 10px;
-  background: #c0392b; border: none; cursor: pointer;
-  display: flex; align-items: center; justify-content: center;
-  flex-shrink: 0; transition: background .2s;
-}
-#gpt-chat-send:hover { background: #a93226; }
-#gpt-chat-send:disabled { background: #444; cursor: not-allowed; }
-#gpt-fab-btn {
-  width: 56px; height: 56px; border-radius: 50%;
-  background: linear-gradient(135deg, #c0392b, #a93226);
-  border: none; cursor: pointer;
-  display: flex; align-items: center; justify-content: center;
-  box-shadow: 0 4px 20px rgba(192,57,43,.5);
-  transition: transform .2s, box-shadow .2s;
-}
-#gpt-fab-btn:hover { transform: scale(1.08); box-shadow: 0 6px 28px rgba(192,57,43,.7); }
-#gpt-fab-btn svg { width: 28px; height: 28px; }
-#gpt-fab-tooltip {
-  background: #1a1a2e; color: #fff; padding: 7px 13px;
-  border-radius: 20px; font-size: 12px; font-weight: 600;
-  white-space: nowrap; box-shadow: 0 4px 15px rgba(0,0,0,.3);
-  opacity: 0; transform: translateX(10px);
-  transition: opacity .25s, transform .25s; pointer-events: none;
-}
-#gpt-fab-wrap:hover #gpt-fab-tooltip { opacity: 1; transform: translateX(0); }
-@media (max-width: 420px) {
-  #gpt-chat-box { width: calc(100vw - 24px); height: 60vh; }
-  #gpt-fab-wrap { bottom: 16px; right: 12px; }
-}
-`;
-
-const styleEl = document.createElement('style');
-styleEl.textContent = css;
-document.head.appendChild(styleEl);
-
-const wrap = document.createElement('div');
-wrap.id = 'gpt-fab-wrap';
-wrap.innerHTML = `
-<div id="gpt-chat-box">
-  <div id="gpt-chat-header">
-    <div id="gpt-chat-header-left">
-      <svg width="20" height="20" viewBox="0 0 41 41" fill="none">
-        <path d="M37.532 16.87a9.963 9.963 0 0 0-.856-8.184 10.078 10.078 0 0 0-10.855-4.835A9.964 9.964 0 0 0 18.306.5a10.079 10.079 0 0 0-9.614 6.977 9.967 9.967 0 0 0-6.664 4.834 10.08 10.08 0 0 0 1.24 11.817 9.965 9.965 0 0 0 .856 8.185 10.079 10.079 0 0 0 10.855 4.835 9.965 9.965 0 0 0 7.516 3.35 10.078 10.078 0 0 0 9.617-6.981 9.967 9.967 0 0 0 6.663-4.834 10.079 10.079 0 0 0-1.243-11.813z" fill="#fff"/>
-      </svg>
-      <div class="gpt-header-title">
-        <span>Asistente Seminario Fénix</span>
-        <small>IA · Habilidades Blandas</small>
-      </div>
-    </div>
-    <button id="gpt-chat-close" title="Cerrar">✕</button>
-  </div>
-  <div id="gpt-chat-messages"></div>
-  <div id="gpt-chat-suggestions">
-    <button class="gpt-suggestion" data-msg="¿Qué es la inteligencia emocional?">Inteligencia Emocional</button>
-    <button class="gpt-suggestion" data-msg="¿Cómo puedo mejorar mis hábitos?">Hábitos</button>
-    <button class="gpt-suggestion" data-msg="¿Cómo manejar el estrés?">Estrés</button>
-    <button class="gpt-suggestion" data-msg="¿Qué es la resiliencia?">Resiliencia</button>
-    <button class="gpt-suggestion" data-msg="¿Cómo establecer metas efectivas?">Metas SMART</button>
-    <button class="gpt-suggestion" data-msg="¿Qué es el Ikigai?">Propósito Ikigai</button>
-  </div>
-  <div id="gpt-chat-footer">
-    <textarea id="gpt-chat-input" placeholder="Pregunta sobre el Seminario Fénix..." rows="1"></textarea>
-    <button id="gpt-chat-send" title="Enviar">
-      <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" width="18" height="18">
-        <line x1="22" y1="2" x2="11" y2="13"></line>
-        <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
-      </svg>
-    </button>
-  </div>
-</div>
-<div id="gpt-fab-tooltip">Asistente Habilidades Blandas</div>
-<button id="gpt-fab-btn" title="Abrir asistente de habilidades blandas">
-  <svg viewBox="0 0 41 41" fill="none">
-    <path d="M37.532 16.87a9.963 9.963 0 0 0-.856-8.184 10.078 10.078 0 0 0-10.855-4.835A9.964 9.964 0 0 0 18.306.5a10.079 10.079 0 0 0-9.614 6.977 9.967 9.967 0 0 0-6.664 4.834 10.08 10.08 0 0 0 1.24 11.817 9.965 9.965 0 0 0 .856 8.185 10.079 10.079 0 0 0 10.855 4.835 9.965 9.965 0 0 0 7.516 3.35 10.078 10.078 0 0 0 9.617-6.981 9.967 9.967 0 0 0 6.663-4.834 10.079 10.079 0 0 0-1.243-11.813z" fill="#fff"/>
-  </svg>
-</button>
-`;
-document.body.appendChild(wrap);
-
-const chatBox = document.getElementById('gpt-chat-box');
-const fabBtn = document.getElementById('gpt-fab-btn');
-const closeBtn = document.getElementById('gpt-chat-close');
-const input = document.getElementById('gpt-chat-input');
-const sendBtn = document.getElementById('gpt-chat-send');
-const msgContainer = document.getElementById('gpt-chat-messages');
-const suggestionsEl = document.getElementById('gpt-chat-suggestions');
-
-function addWelcome() {
-  addMessage('¡Hola! 🙌 Soy tu Asistente del Seminario Fénix de Habilidades Blandas. Puedo ayudarte con los 26 módulos del programa. ¿En qué tema quieres trabajar hoy?', 'bot');
-}
-
-fabBtn.addEventListener('click', function() {
-  isOpen = !isOpen;
-  chatBox.classList.toggle('open', isOpen);
-  if (isOpen) {
-    if (messages.length === 0) addWelcome();
-    input.focus();
+// Detectar módulo actual
+function detectarModulo() {
+  for (const key of Object.keys(MODULE_DATA)) {
+    if (pagePath.includes(key) || pageTitle.toLowerCase().includes(MODULE_DATA[key].nombre.toLowerCase().split(' ')[0].toLowerCase())) {
+      return { key, ...MODULE_DATA[key] };
+    }
   }
+  return { key: 'general', nombre: 'Habilidades Blandas', preguntas: ['¿De qué trata este módulo?','Resúmeme los puntos clave','¿Cómo aplico esto en mi vida?'] };
+}
+
+const modulo = detectarModulo();
+
+const SYSTEM_PROMPT = `Eres el Asistente de Habilidades Blandas del Seminario Fénix de Juan Carlos Reyes. Ayudas a estudiantes y participantes a comprender y aplicar los temas del seminario en su vida personal y profesional.
+
+MÓDULO ACTUAL: ${modulo.nombre}
+
+ENFOQUE: Cuando estás en un módulo específico, prioriza responder sobre ese tema. Usa ejemplos prácticos, ejercicios aplicables y conecta con otros módulos cuando sea relevante. Si preguntan sobre algo fuera del seminario, redirige amablemente al contenido.
+
+ESTILO: Cálido, motivador, práctico. Usa ejemplos concretos. Respuestas concisas (máx 200 palabras) a menos que pidan más detalle.`;
+
+// =================== ESTILOS ===================
+const style = document.createElement('style');
+style.textContent = `
+  #hb-chat-btn {
+    position: fixed; bottom: 24px; right: 24px; z-index: 9998;
+    background: linear-gradient(135deg, #8b1a3a, #b83255);
+    color: white; border: none; border-radius: 50px;
+    padding: 14px 20px; cursor: pointer; font-size: 15px; font-weight: 600;
+    box-shadow: 0 4px 20px rgba(139,26,58,0.4);
+    display: flex; align-items: center; gap: 8px;
+    transition: all .3s ease; font-family: 'Segoe UI', sans-serif;
+    white-space: nowrap;
+  }
+  #hb-chat-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 24px rgba(139,26,58,0.5); }
+  #hb-chat-btn .hb-pulse {
+    width: 8px; height: 8px; background: #4ade80; border-radius: 50%;
+    animation: hbPulse 2s infinite;
+  }
+  @keyframes hbPulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.6;transform:scale(1.3)} }
+  #hb-chat-box {
+    position: fixed; bottom: 90px; right: 24px; z-index: 9999;
+    width: 360px; max-height: 520px;
+    background: white; border-radius: 16px;
+    box-shadow: 0 8px 40px rgba(0,0,0,0.18);
+    display: none; flex-direction: column; overflow: hidden;
+    font-family: 'Segoe UI', Arial, sans-serif;
+    border: 1px solid rgba(139,26,58,0.1);
+  }
+  #hb-chat-box.open { display: flex; animation: hbSlideUp .3s ease; }
+  @keyframes hbSlideUp { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
+  #hb-chat-header {
+    background: linear-gradient(135deg, #8b1a3a, #b83255);
+    color: white; padding: 14px 16px;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  #hb-chat-header .hb-header-info h4 { margin: 0; font-size: 14px; font-weight: 700; }
+  #hb-chat-header .hb-header-info span { font-size: 11px; opacity: .8; }
+  #hb-chat-close {
+    background: rgba(255,255,255,.2); border: none; color: white;
+    border-radius: 50%; width: 28px; height: 28px; cursor: pointer;
+    font-size: 16px; display: flex; align-items: center; justify-content: center;
+    transition: .2s;
+  }
+  #hb-chat-close:hover { background: rgba(255,255,255,.35); }
+  #hb-chat-msgs {
+    flex: 1; overflow-y: auto; padding: 16px 14px; display: flex;
+    flex-direction: column; gap: 10px; min-height: 180px;
+  }
+  .hb-msg { max-width: 88%; padding: 10px 13px; border-radius: 12px; font-size: 13.5px; line-height: 1.5; }
+  .hb-msg.bot { background: #f5f0f5; color: #2d2d2d; align-self: flex-start; border-bottom-left-radius: 4px; }
+  .hb-msg.user { background: linear-gradient(135deg,#8b1a3a,#b83255); color: white; align-self: flex-end; border-bottom-right-radius: 4px; }
+  .hb-msg.typing { color: #999; font-style: italic; }
+  #hb-quick-replies {
+    display: flex; flex-wrap: wrap; gap: 6px; padding: 8px 14px 6px;
+    border-top: 1px solid #f0edf3;
+  }
+  .hb-qr {
+    background: #f5f0f5; border: 1px solid #d4607a; color: #8b1a3a;
+    border-radius: 20px; padding: 5px 12px; font-size: 11.5px; cursor: pointer;
+    transition: .2s; font-family: inherit;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 200px;
+  }
+  .hb-qr:hover { background: #8b1a3a; color: white; }
+  #hb-chat-footer {
+    padding: 10px 12px; border-top: 1px solid #f0edf3;
+    display: flex; gap: 8px; align-items: center;
+  }
+  #hb-chat-input {
+    flex: 1; border: 1.5px solid #ddd; border-radius: 22px;
+    padding: 9px 14px; font-size: 13.5px; outline: none;
+    font-family: inherit; resize: none; line-height: 1.4;
+    max-height: 80px; overflow-y: auto;
+    transition: border-color .2s;
+  }
+  #hb-chat-input:focus { border-color: #b83255; }
+  #hb-send-btn {
+    background: linear-gradient(135deg,#8b1a3a,#b83255);
+    border: none; color: white; border-radius: 50%;
+    width: 38px; height: 38px; cursor: pointer; font-size: 16px;
+    display: flex; align-items: center; justify-content: center;
+    transition: .2s; flex-shrink: 0;
+  }
+  #hb-send-btn:hover { transform: scale(1.1); }
+  #hb-send-btn:disabled { opacity: .5; cursor: not-allowed; transform: none; }
+  @media(max-width:420px){
+    #hb-chat-box{width:calc(100vw - 32px);right:16px;bottom:80px;}
+    #hb-chat-btn{right:16px;bottom:16px;padding:12px 16px;font-size:14px;}
+  }
+`;
+document.head.appendChild(style);
+
+// =================== HTML ===================
+const btn = document.createElement('button');
+btn.id = 'hb-chat-btn';
+btn.innerHTML = `<span class="hb-pulse"></span>💬 Asistente IA`;
+btn.title = `Chat - Módulo: ${modulo.nombre}`;
+document.body.appendChild(btn);
+
+const box = document.createElement('div');
+box.id = 'hb-chat-box';
+box.innerHTML = `
+  <div id="hb-chat-header">
+    <div class="hb-header-info">
+      <h4>🎓 Asistente Habilidades Blandas</h4>
+      <span>${modulo.nombre}</span>
+    </div>
+    <button id="hb-chat-close">✕</button>
+  </div>
+  <div id="hb-chat-msgs">
+    <div class="hb-msg bot">¡Hola! Soy tu asistente para el módulo <strong>${modulo.nombre}</strong>. ¿En qué te puedo ayudar? 😊</div>
+  </div>
+  <div id="hb-quick-replies">
+    ${modulo.preguntas.map(p => `<button class="hb-qr">${p}</button>`).join('')}
+  </div>
+  <div id="hb-chat-footer">
+    <textarea id="hb-chat-input" placeholder="Escribe tu pregunta..." rows="1"></textarea>
+    <button id="hb-send-btn">➤</button>
+  </div>
+`;
+document.body.appendChild(box);
+
+// =================== LÓGICA ===================
+const msgs = document.getElementById('hb-chat-msgs');
+const input = document.getElementById('hb-chat-input');
+const sendBtn = document.getElementById('hb-send-btn');
+const history = [];
+
+btn.addEventListener('click', () => { box.classList.toggle('open'); if(box.classList.contains('open')) input.focus(); });
+document.getElementById('hb-chat-close').addEventListener('click', () => box.classList.remove('open'));
+
+document.querySelectorAll('.hb-qr').forEach(qr => {
+  qr.addEventListener('click', () => enviar(qr.textContent));
 });
 
-closeBtn.addEventListener('click', function() {
-  isOpen = false;
-  chatBox.classList.remove('open');
-});
+input.addEventListener('keydown', e => { if(e.key === 'Enter' && !e.shiftKey){ e.preventDefault(); enviar(input.value.trim()); } });
+sendBtn.addEventListener('click', () => enviar(input.value.trim()));
 
-function scrollToBottom() {
-  msgContainer.scrollTop = msgContainer.scrollHeight;
+input.addEventListener('input', () => { input.style.height = 'auto'; input.style.height = Math.min(input.scrollHeight, 80) + 'px'; });
+
+function addMsg(text, role) {
+  const d = document.createElement('div');
+  d.className = 'hb-msg ' + role;
+  d.innerHTML = text.replace(/\n/g, '<br>');
+  msgs.appendChild(d);
+  msgs.scrollTop = msgs.scrollHeight;
+  return d;
 }
 
-function addMessage(text, role) {
-  const div = document.createElement('div');
-  div.className = 'gpt-msg ' + role;
-  div.textContent = text;
-  msgContainer.appendChild(div);
-  scrollToBottom();
-  return div;
-}
-
-function showTyping() {
-  const div = document.createElement('div');
-  div.className = 'gpt-typing';
-  div.id = 'gpt-typing-indicator';
-  div.innerHTML = '<div class="gpt-dots"><span></span><span></span><span></span></div>';
-  msgContainer.appendChild(div);
-  scrollToBottom();
-}
-
-function hideTyping() {
-  const t = document.getElementById('gpt-typing-indicator');
-  if (t) t.remove();
-}
-
-async function sendMessage(text) {
-  text = (text || input.value).trim();
-  if (!text || waiting) return;
+async function enviar(text) {
+  if (!text) return;
+  addMsg(text, 'user');
   input.value = '';
   input.style.height = 'auto';
-  waiting = true;
   sendBtn.disabled = true;
-  suggestionsEl.style.display = 'none';
-
-  addMessage(text, 'user');
-  messages.push({ role: 'user', content: text });
-  showTyping();
-
+  history.push({ role: 'user', content: text });
+  const typing = addMsg('Escribiendo...', 'bot typing');
   try {
     const res = await fetch(WORKER_URL, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        model: MODEL,
-        max_tokens: 700,
-        system: SYSTEM_PROMPT,
-        messages: messages.slice(-12)
-      })
+      body: JSON.stringify({ messages: history, system: SYSTEM_PROMPT })
     });
     const data = await res.json();
-    hideTyping();
-    if (!res.ok) throw new Error(data.error ? data.error.message : 'HTTP ' + res.status);
-    const reply = data.content[0].text;
-    addMessage(reply, 'bot');
-    messages.push({ role: 'assistant', content: reply });
+    const reply = data?.content?.[0]?.text || 'Lo siento, no pude procesar tu mensaje.';
+    typing.remove();
+    addMsg(reply, 'bot');
+    history.push({ role: 'assistant', content: reply });
   } catch(e) {
-    hideTyping();
-    addMessage('Lo siento, hubo un error al conectar. Por favor intenta de nuevo.', 'bot');
+    typing.remove();
+    addMsg('Error al conectar. Por favor recarga la página e intenta de nuevo.', 'bot');
   }
-
-  waiting = false;
   sendBtn.disabled = false;
-  scrollToBottom();
 }
-
-sendBtn.addEventListener('click', function() { sendMessage(); });
-
-document.querySelectorAll('.gpt-suggestion').forEach(btn => {
-  btn.addEventListener('click', function() {
-    sendMessage(this.dataset.msg);
-  });
-});
-
-input.addEventListener('keydown', function(e) {
-  if (e.key === 'Enter' && !e.shiftKey) {
-    e.preventDefault();
-    sendMessage();
-  }
-});
-
-input.addEventListener('input', function() {
-  this.style.height = 'auto';
-  this.style.height = Math.min(this.scrollHeight, 80) + 'px';
-});
 
 })();
